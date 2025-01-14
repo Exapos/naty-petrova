@@ -1,0 +1,38 @@
+{
+  "Navigation": {
+    "home": "Startseite",
+    "services": "Dienstleistungen",
+    "projects": "Projekte",
+    "about": "Über uns",
+    "contact": "Kontakt"
+  },
+  "Footer": {
+    "description": "Planungsbüro für Ihre Bauprojekte",
+    "contact": "Kontakt",
+    "followUs": "Folgen Sie uns",
+    "address": "Adresse",
+    "rights": "Alle Rechte vorbehalten"
+  },
+  "HomePage": {
+    "title": "title",
+    "about": "naturlich"
+  },
+  "Main": {
+    "title": "MaxProjekty - Ihre Vision, unsere Umsetzung",
+    "subtitle": "Wir sind spezialisiert auf architektonische Entwürfe und Planungsaktivitäten für alle Arten von Gebäuden",
+    "contactUs": "Kontaktieren Sie uns",
+    "ourServices": "Unsere Leistungen",
+    "service1": {
+      "title": "Projektplanung",
+      "description": "Vollständige Projektdokumentation für alle Phasen des Bauverfahrens"
+    },
+    "service2": {
+      "title": "Architekturstudien",
+      "description": "Entwürfe und Visualisierungen für Wohn- und Gewerbeprojekte"
+    },
+    "service3": {
+      "title": "Bauüberwachung",
+      "description": "Professionelle Überwachung bei der Umsetzung Ihres Projekts"
+    }
+  }
+}

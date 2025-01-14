@@ -1,0 +1,38 @@
+{
+  "Navigation": {
+    "home": "Domů",
+    "services": "Služby",
+    "projects": "Projekty",
+    "about": "O nás",
+    "contact": "Kontakt"
+  },
+  "Footer": {
+    "description": "Projekční kancelář pro vaše stavební plány",
+    "contact": "Kontakt",
+    "followUs": "Sledujte nás",
+    "address": "Adresa",
+    "rights": "Všechna práva vyhrazena"
+  },
+  "HomePage": {
+    "title": "title",
+    "about": "O nás"
+  },
+  "Main": {
+    "title": "MaxProjekty - Vaše vize, naše realizace",
+    "subtitle": "Specializujeme se na architektonické návrhy a projekční činnost pro všechny typy staveb",
+    "contactUs": "Kontaktujte nás",
+    "ourServices": "Naše služby",
+    "service1": {
+      "title": "Projekční činnost",
+      "description": "Kompletní projektová dokumentace pro všechny fáze stavebního řízení"
+    },
+    "service2": {
+      "title": "Architektonické studie",
+      "description": "Návrhy a vizualizace pro rezidenční i komerční projekty"
+    },
+    "service3": {
+      "title": "Stavební dozor",
+      "description": "Odborný dohled nad realizací vašeho projektu"
+    }
+  }
+}

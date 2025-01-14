@@ -1,0 +1,38 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "services": "Services",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "Footer": {
+    "description": "Architectural design office for your construction plans",
+    "contact": "Contact",
+    "followUs": "Follow us",
+    "address": "Address",
+    "rights": "All rights reserved"
+  },
+  "HomePage": {
+    "title": "title",
+    "about": "About us"
+  },
+  "Main": {
+    "title": "MaxProjekty - Your Vision, Our Implementation",
+    "subtitle": "We specialize in architectural design and planning activities for all types of buildings",
+    "contactUs": "Contact Us",
+    "ourServices": "Our Services",
+    "service1": {
+      "title": "Project Planning",
+      "description": "Complete project documentation for all phases of building proceedings"
+    },
+    "service2": {
+      "title": "Architectural Studies",
+      "description": "Designs and visualizations for residential and commercial projects"
+    },
+    "service3": {
+      "title": "Construction Supervision",
+      "description": "Professional supervision over your project implementation"
+    }
+  }
+}
