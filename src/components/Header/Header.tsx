@@ -13,7 +13,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full bg-white/95 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold">
-          MaxProjekty
+          Maxprojekty
         </Link>
 
         {/* Desktop Navigation */}

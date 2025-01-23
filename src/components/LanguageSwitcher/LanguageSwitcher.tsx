@@ -1,23 +1,40 @@
 // src/components/LanguageSwitcher/LanguageSwitcher.tsx
-import { useLocale } from 'next-intl'
-import { Link } from '@/navigation'
+'use client';
+
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter } from '@/navigation';
 
 export default function LanguageSwitcher() {
-  const locale = useLocale()
-  
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleChange = (newLocale: string) => {
+    router.replace(pathname, {locale: newLocale});
+  };
+
   return (
     <div className="flex gap-2 items-center">
-      <Link href="/" locale="cs" className={`${locale === 'cs' ? 'font-bold' : ''}`}>
+      <button 
+        onClick={() => handleChange('cs')}
+        className={`${locale === 'cs' ? 'font-bold' : ''}`}
+      >
         CZ
-      </Link>
+      </button>
       <span>|</span>
-      <Link href="/" locale="en" className={`${locale === 'en' ? 'font-bold' : ''}`}>
+      <button 
+        onClick={() => handleChange('en')}
+        className={`${locale === 'en' ? 'font-bold' : ''}`}
+      >
         EN
-      </Link>
+      </button>
       <span>|</span>
-      <Link href="/" locale="de" className={`${locale === 'de' ? 'font-bold' : ''}`}>
+      <button 
+        onClick={() => handleChange('de')}
+        className={`${locale === 'de' ? 'font-bold' : ''}`}
+      >
         DE
-      </Link>
+      </button>
     </div>
-  )
+  );
 }

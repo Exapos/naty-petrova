@@ -7,7 +7,7 @@
     "contact": "Kontakt"
   },
   "Footer": {
-    "description": "Planungsbüro für Ihre Bauprojekte",
+    "description": "Planungsbüro für Ihre Bauvorhaben",
     "contact": "Kontakt",
     "followUs": "Folgen Sie uns",
     "address": "Adresse",
@@ -15,24 +15,64 @@
   },
   "HomePage": {
     "title": "title",
-    "about": "naturlich"
+    "about": "Über uns"
   },
   "Main": {
     "title": "MaxProjekty - Ihre Vision, unsere Umsetzung",
-    "subtitle": "Wir sind spezialisiert auf architektonische Entwürfe und Planungsaktivitäten für alle Arten von Gebäuden",
+    "subtitle": "Wir spezialisieren uns auf architektonische Entwürfe und Projektarbeiten für alle Arten von Bauten",
     "contactUs": "Kontaktieren Sie uns",
-    "ourServices": "Unsere Leistungen",
+    "ourServices": "Unsere Dienstleistungen",
     "service1": {
-      "title": "Projektplanung",
-      "description": "Vollständige Projektdokumentation für alle Phasen des Bauverfahrens"
+      "title": "Projektarbeit",
+      "description": "Komplette Projektdokumentation für alle Bauphasen"
     },
     "service2": {
       "title": "Architekturstudien",
-      "description": "Entwürfe und Visualisierungen für Wohn- und Gewerbeprojekte"
+      "description": "Entwürfe und Visualisierungen für Wohn- und Gewerbeobjekte"
     },
     "service3": {
-      "title": "Bauüberwachung",
-      "description": "Professionelle Überwachung bei der Umsetzung Ihres Projekts"
+      "title": "Bauaufsicht",
+      "description": "Fachgerechte Überwachung bei der Umsetzung Ihres Projekts"
+    }
+  },
+  "About": {
+    "title": "Über uns",
+    "history": {
+      "title": "Unsere Geschichte",
+      "description": "MaxProjekty wurde 2010 gegründet, um umfassende Projektdienstleistungen auf höchstem Niveau anzubieten. Seit über einem Jahrzehnt haben wir erfolgreich Hunderte von Projekten unterschiedlicher Größe realisiert."
+    },
+    "values": {
+      "quality": {
+        "title": "Qualität",
+        "description": "Wir legen Wert auf Präzision und Detail in jedem Projekt."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Wir verfolgen die neuesten Trends und Technologien im Bauwesen."
+      },
+      "responsibility": {
+        "title": "Verantwortung",
+        "description": "Wir gehen jedes Projekt mit größter Sorgfalt und Verantwortung an."
+      }
+    },
+    "team": {
+      "title": "Unser Team",
+      "member1": {
+        "name": "Ing. Jan Novák",
+        "position": "Leitender Projektant"
+      },
+      "member2": {
+        "name": "Ing. Marie Svobodová",
+        "position": "Architektin"
+      },
+      "member3": {
+        "name": "Ing. Petr Dvořák",
+        "position": "Bauingenieur"
+      },
+      "member4": {
+        "name": "Ing. Anna Černá",
+        "position": "Projektmanagerin"
+      }
     }
   }
 }

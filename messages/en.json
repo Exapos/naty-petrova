@@ -3,11 +3,11 @@
     "home": "Home",
     "services": "Services",
     "projects": "Projects",
-    "about": "About",
+    "about": "About us",
     "contact": "Contact"
   },
   "Footer": {
-    "description": "Architectural design office for your construction plans",
+    "description": "Design office for your construction plans",
     "contact": "Contact",
     "followUs": "Follow us",
     "address": "Address",
@@ -18,13 +18,13 @@
     "about": "About us"
   },
   "Main": {
-    "title": "MaxProjekty - Your Vision, Our Implementation",
-    "subtitle": "We specialize in architectural design and planning activities for all types of buildings",
-    "contactUs": "Contact Us",
-    "ourServices": "Our Services",
+    "title": "MaxProjekty - Your Vision, Our Realization",
+    "subtitle": "We specialize in architectural designs and project planning for all types of buildings",
+    "contactUs": "Contact us",
+    "ourServices": "Our services",
     "service1": {
       "title": "Project Planning",
-      "description": "Complete project documentation for all phases of building proceedings"
+      "description": "Complete project documentation for all stages of construction"
     },
     "service2": {
       "title": "Architectural Studies",
@@ -32,7 +32,47 @@
     },
     "service3": {
       "title": "Construction Supervision",
-      "description": "Professional supervision over your project implementation"
+      "description": "Professional oversight during the implementation of your project"
+    }
+  },
+  "About": {
+    "title": "About us",
+    "history": {
+      "title": "Our History",
+      "description": "MaxProjekty was established in 2010 with a vision to provide comprehensive project services at the highest level. Over more than a decade, we have successfully completed hundreds of projects of various sizes."
+    },
+    "values": {
+      "quality": {
+        "title": "Quality",
+        "description": "We emphasize precision and attention to detail in every project."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We follow the newest trends and technologies in the construction sector."
+      },
+      "responsibility": {
+        "title": "Responsibility",
+        "description": "We approach each project with the utmost diligence and care."
+      }
+    },
+    "team": {
+      "title": "Our Team",
+      "member1": {
+        "name": "Ing. Jan Novák",
+        "position": "Lead Project Engineer"
+      },
+      "member2": {
+        "name": "Ing. Marie Svobodová",
+        "position": "Architect"
+      },
+      "member3": {
+        "name": "Ing. Petr Dvořák",
+        "position": "Civil Engineer"
+      },
+      "member4": {
+        "name": "Ing. Anna Černá",
+        "position": "Project Manager"
+      }
     }
   }
 }
