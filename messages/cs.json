@@ -4,7 +4,9 @@
     "services": "Služby",
     "projects": "Projekty",
     "about": "O nás",
-    "contact": "Kontakt"
+    "contact": "Kontakty",
+    "career": "Kariéra",
+    "references": "Reference"
   },
   "Footer": {
     "description": "Projekční kancelář pro vaše stavební plány",
@@ -18,7 +20,7 @@
     "about": "O nás"
   },
   "Main": {
-    "title": "MaxProjekty - Vaše vize, naše realizace",
+    "title": "Maxprojekty - Vaše vize, naše realizace",
     "subtitle": "Specializujeme se na architektonické návrhy a projekční činnost pro všechny typy staveb",
     "contactUs": "Kontaktujte nás",
     "ourServices": "Naše služby",
@@ -38,7 +40,7 @@
     "title": "O nás",
     "history": {
       "title": "Naše historie",
-      "description": "MaxProjekty vznikly v roce 2010 s vizí poskytovat komplexní projekční služby na nejvyšší úrovni. Za více než desetiletí jsme úspěšně realizovali stovky projektů různých velikostí."
+      "description": "Maxprojekty vznikly v roce 2010 s vizí poskytovat komplexní projekční služby na nejvyšší úrovni. Za více než desetiletí jsme úspěšně realizovali stovky projektů různých velikostí."
     },
     "values": {
       "quality": {
@@ -71,6 +73,97 @@
       "member4": {
         "name": "Ing. Anna Černá",
         "position": "Projektová manažerka"
+      }
+    }
+  },
+  "Career": {
+    "hero": {
+      "title": "Připojte se k našemu týmu",
+      "subtitle": "Hledáme talentované profesionály do našeho týmu. Buďte součástí inspirativních projektů.",
+      "contactUs": "Kontaktujte nás"
+    },
+    "benefits": {
+      "title": "Proč pracovat s námi?",
+      "flexibility": {
+        "title": "Flexibilní pracovní doba",
+        "description": "Pracuj kdykoliv a odkudkoliv podle tvých potřeb."
+      },
+      "projects": {
+        "title": "Mezinárodní projekty",
+        "description": "Podílej se na zajímavých projektech po celém světě."
+      },
+      "office": {
+        "title": "Moderní kanceláře",
+        "description": "Inspirativní pracovní prostředí s veškerým vybavením."
+      }
+    },
+    "jobs": {
+      "title": "Aktuální nabídka pozic",
+      "job1": {
+        "title": "Architekt / Designér",
+        "location": "Praha / Remote",
+        "type": "Plný úvazek",
+        "description": "Hledáme talentovaného architekta se zkušenostmi s návrhy moderních staveb."
+      },
+      "job2": {
+        "title": "Projektový manažer",
+        "location": "Brno",
+        "type": "Částečný úvazek",
+        "description": "Jste zkušený projektový manažer s přehledem o stavebních procesech?"
+      }
+    }
+  },
+ "Contact": {
+    "hero": {
+      "title": "Kontaktujte nás",
+      "subtitle": "Jsme tu pro vás! Neváhejte se na nás obrátit."
+    },
+    "contact": {
+      "email": {
+        "title": "Email",
+        "description": "info@loremipsum.cz"
+      },
+      "phone": {
+        "title": "Telefon",
+        "description": "+420 123 456 789"
+      },
+      "address": {
+        "title": "Adresa",
+        "description": "Lorem City, Ulice Ipsumova 1234/56"
+      }
+    },
+    "form": {
+      "title": "Napište nám",
+      "name": "Vaše jméno",
+      "namePlaceholder": "Zadejte vaše jméno",
+      "email": "Váš email",
+      "emailPlaceholder": "Zadejte váš email",
+      "message": "Vaše zpráva",
+      "messagePlaceholder": "Sem napište vaši zprávu...",
+      "submit": "Odeslat zprávu"
+    },
+    "additionalInfo": {
+      "offices": {
+        "title": "Kde sídlíme",
+        "locations": ["Lorem City", "Ipsum Town", "Dolor Village"]
+      },
+      "representation": {
+        "title": "Zastoupení",
+        "details": [
+          "+420 111 222 333 - Region A (kontakt@firma.cz)",
+          "+420 444 555 666 - Region B (info@firma.cz)"
+        ]
+      },
+      "billing": {
+        "title": "Fakturační údaje",
+        "details": [
+          "Firma s.r.o.",
+          "Ulice Fakturační 123",
+          "Město Fakturace",
+          "IČO: 12345678",
+          "DIČ: CZ12345678",
+          "Datová schránka: abc123x"
+        ]
       }
     }
   }

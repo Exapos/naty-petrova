@@ -25,16 +25,22 @@ export default function Header() {
             {t('services')}
           </Link>
           <Link 
-            href="/projekty" 
+            href="/reference" 
             className="text-gray-700 hover:text-gray-900 transition-colors"
           >
-            {t('projects')}
+            {t('references')}
           </Link>
           <Link 
             href="/o-nas" 
             className="text-gray-700 hover:text-gray-900 transition-colors"
           >
             {t('about')}
+          </Link>
+          <Link 
+            href="/kariera" 
+            className="text-gray-700 hover:text-gray-900 transition-colors"
+          >
+            {t('career')}
           </Link>
           <Link 
             href="/kontakt" 
