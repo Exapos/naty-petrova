@@ -1,9 +1,9 @@
 // src/components/Footer.tsx
-import {useTranslations} from 'next-intl';
+//import {useTranslations} from 'next-intl';
 import Link from 'next/link'
 
 export default function Footer() {
-  const t = useTranslations('Footer');
+//  const t = useTranslations('Footer');
   
   return (
       <footer className="bg-gray-900 text-white py-12">

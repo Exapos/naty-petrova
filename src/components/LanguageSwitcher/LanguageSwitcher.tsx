@@ -1,7 +1,7 @@
 // src/components/LanguageSwitcher/LanguageSwitcher.tsx
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/navigation';
 
 export default function LanguageSwitcher() {
@@ -9,7 +9,7 @@ export default function LanguageSwitcher() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleChange = (newLocale: string) => {
+  const handleChange = (newLocale) => {
     router.replace(pathname, {locale: newLocale});
   };
 
