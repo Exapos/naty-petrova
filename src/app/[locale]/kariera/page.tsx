@@ -2,6 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { MapPin, Clock } from 'lucide-react';
 import { Briefcase, Globe, Building2 } from 'lucide-react';
+import Link from 'next/link'
 
 export default function CareerPage() {
   const t = useTranslations('Career');
@@ -30,9 +31,9 @@ export default function CareerPage() {
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">{t('hero.title')}</h1>
           <p className="text-xl md:text-2xl mb-8">{t('hero.subtitle')}</p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition-colors">
+          <Link href="/kontakt" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition-colors">
             {t('hero.contactUs')}
-          </button>
+          </Link>
         </div>
       </header>
 
