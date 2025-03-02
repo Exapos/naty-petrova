@@ -15,13 +15,13 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Kontakt</h4>
             <p>info@maxprojekty.cz</p>
-            <p>+420 XXX XXX XXX</p>
+            <p>+420 775 312 614</p>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4">Sledujte nás</h4>
             <div className="flex gap-4">
-              <Link href="#">LinkedIn</Link>
-              <Link href="#">Facebook</Link>
+              <Link href="https://www.instagram.com/maxprojekty.cz/">Instragram</Link>
+              <Link href="https://www.facebook.com/maxprojekty">Facebook</Link>
             </div>
           </div>
         </div>

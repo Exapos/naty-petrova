@@ -121,15 +121,15 @@
     "contact": {
       "email": {
         "title": "Email",
-        "description": "info@loremipsum.cz"
+        "description": "info@maxprojekty.cz"
       },
       "phone": {
         "title": "Telefon",
-        "description": "+420 123 456 789"
+        "description": "+420 775 312 614"
       },
       "address": {
         "title": "Adresa",
-        "description": "Lorem City, Ulice Ipsumova 1234/56"
+        "description": "Zemská 818, Teplice 415 01"
       }
     },
     "form": {
@@ -145,24 +145,20 @@
     "additionalInfo": {
       "offices": {
         "title": "Kde sídlíme",
-        "locations": ["Lorem City", "Ipsum Town", "Dolor Village"]
+        "locations": ["Zesmká 818, Teplice"]
       },
       "representation": {
         "title": "Zastoupení",
         "details": [
-          "+420 111 222 333 - Region A (kontakt@firma.cz)",
-          "+420 444 555 666 - Region B (info@firma.cz)"
+          "+420 775 312 614"
         ]
       },
       "billing": {
         "title": "Fakturační údaje",
         "details": [
-          "Firma s.r.o.",
-          "Ulice Fakturační 123",
-          "Město Fakturace",
-          "IČO: 12345678",
-          "DIČ: CZ12345678",
-          "Datová schránka: abc123x"
+          "Stavby srdcem s.r.o.",
+          "Zelenkova 544/1, 419 01 Duchcov",
+          "IČO: 21933791"
         ]
       }
     }

@@ -2,9 +2,55 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast } from 'react-toastify';
+
+const FormSchema = z.object({
+  name: z.string()
+    .min(2, { message: 'Jméno musí mít alespoň 2 znaky' })
+    .regex(/^[a-zA-Zá-žÁ-Ž ]+$/, { message: 'Použijte platné znaky' }),
+  email: z.string()
+    .email({ message: 'Neplatný emailový formát' })
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: 'Neplatná emailová adresa' }),
+  message: z.string()
+    .min(10, { message: 'Zpráva musí mít alespoň 10 znaků' })
+    .max(500, { message: 'Maximální délka zprávy je 500 znaků' }),
+  website: z.string().max(0) // Honeypot
+});
+
+type FormData = z.infer<typeof FormSchema>;
 
 export default function ContactPage() {
   const t = useTranslations('Contact');
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors, isSubmitting }, 
+    reset 
+  } = useForm<FormData>({
+    resolver: zodResolver(FormSchema)
+  });
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      if (data.website) throw new Error('Spam detected');
+      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) throw new Error('Odesílání selhalo');
+      
+      toast.success('Zpráva úspěšně odeslána!');
+      reset();
+    } catch (error) {
+      toast.error('Chyba při odesílání zprávy');
+    }
+  };
 
   return (
     <div className="relative min-h-screen bg-gray-50 overflow-hidden">
@@ -34,6 +80,7 @@ export default function ContactPage() {
         </motion.header>
 
         <section className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Levý sloupec - kontaktní informace */}
           <motion.div
             className="space-y-8 bg-white p-8 rounded-xl shadow-lg grid"
             initial={{ opacity: 0, x: -50 }}
@@ -72,66 +119,82 @@ export default function ContactPage() {
             </div>
           </motion.div>
 
+          {/* Pravý sloupec - formulář */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
             <form
-              action="#"
-              method="POST"
-              className="bg-white p-12 rounded-2xl shadow-xl space-y-8 relative overflow-hidden"
+              onSubmit={handleSubmit(onSubmit)}
+              className="bg-white p-12 rounded-2xl shadow-xl space-y-6 relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br opacity-10 pointer-events-none"></div>
-          
-              <h2 className="text-3xl font-bold text-gray-800 text-center">
+
+              {/* Honeypot field */}
+              <div className="hidden">
+                <label htmlFor="website">Web</label>
+                <input {...register('website')} type="text" id="website" />
+              </div>
+
+              <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
                 {t('form.title')}
               </h2>
-          
+
               <div>
-                <label htmlFor="name" className="block text-base font-semibold text-gray-700">
+                <label htmlFor="name" className="block text-base font-semibold text-gray-700 mb-2">
                   {t('form.name')}
                 </label>
                 <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="mt-2 block w-full rounded-lg border-gray-300 shadow-md focus:border-blue-500 focus:ring-blue-500 placeholder-gray-500 text-white px-4 py-3 text-lg"
+                  {...register('name')}
+                  className={`w-full px-4 py-3 rounded-lg border text-white ${
+                    errors.name ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  } shadow-md text-lg`}
                 />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                )}
               </div>
-          
+
               <div>
-                <label htmlFor="email" className="block text-base font-semibold text-gray-700">
+                <label htmlFor="email" className="block text-base font-semibold text-gray-700 mb-2">
                   {t('form.email')}
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="mt-2 block w-full rounded-lg border-gray-300 shadow-md focus:border-blue-500 focus:ring-blue-500 placeholder-gray-500 text-white px-4 py-3 text-lg"
+                  {...register('email')}
+                  className={`w-full px-4 py-3 rounded-lg border text-white ${
+                    errors.email ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  } shadow-md text-lg`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                )}
               </div>
-          
+
               <div>
-                <label htmlFor="message" className="block text-base font-semibold text-gray-700">
+                <label htmlFor="message" className="block text-base font-semibold text-gray-700 mb-2">
                   {t('form.message')}
                 </label>
                 <textarea
-                  id="message"
-                  name="message"
+                  {...register('message')}
                   rows={5}
-                  required
-                  className="mt-2 block w-full rounded-lg border-gray-300 shadow-md focus:border-blue-500 focus:ring-blue-500 placeholder-gray-500 text-white px-4 py-3 text-lg"
+                  className={`w-full px-4 py-3 rounded-lg border text-white ${
+                    errors.message ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  } shadow-md text-lg`}
                 ></textarea>
+                {errors.message && (
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                )}
               </div>
-          
+
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-[1.03]"
+                disabled={isSubmitting}
+                className={`w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'
+                }`}
               >
-                {t('form.submit')}
+                {isSubmitting ? 'Odesílání...' : t('form.submit')}
               </button>
             </form>
           </motion.div>
