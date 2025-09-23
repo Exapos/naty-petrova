@@ -36,24 +36,35 @@
       "title": "Stavební dozor",
       "description": "Odborný dohled nad realizací vašeho projektu"
     }
-  },"About": {
+  },
+  "About": {
     "title": "O nás",
+    "meta": {
+      "title": "O nás | Maxprojekty",
+      "description": "Seznamte se s týmem Maxprojekty, naší historií, vizí a hodnotami. Projekční kancelář s důrazem na kvalitu, inovace a zodpovědnost."
+    },
+    "subtitle": "Seznamte se s naším týmem, hodnotami a vizí.",
     "history": {
       "title": "Naše historie",
-      "description": "Maxprojekty vznikly v roce 2010 s vizí poskytovat komplexní projekční služby na nejvyšší úrovni. Za více než desetiletí jsme úspěšně realizovali stovky projektů různých velikostí."
+      "text": "Maxprojekty vznikly v roce 2010 s vizí poskytovat komplexní projekční služby na nejvyšší úrovni. Za více než desetiletí jsme úspěšně realizovali stovky projektů různých velikostí."
+    },
+    "vision": {
+      "title": "Naše vize",
+      "text": "Naším cílem je být lídrem v oblasti inovativních a udržitelných stavebních řešení, která přinášejí hodnotu klientům i společnosti."
     },
     "values": {
-      "quality": {
+      "title": "Naše hodnoty",
+      "value1": {
         "title": "Kvalita",
-        "description": "Klademe důraz na preciznost a detail v každém projektu."
+        "text": "Klademe důraz na preciznost a detail v každém projektu."
       },
-      "innovation": {
+      "value2": {
         "title": "Inovace",
-        "description": "Sledujeme nejnovější trendy a technologie v oblasti stavebnictví."
+        "text": "Sledujeme nejnovější trendy a technologie v oblasti stavebnictví."
       },
-      "responsibility": {
+      "value3": {
         "title": "Zodpovědnost",
-        "description": "Ke každému projektu přistupujeme s maximální odpovědností."
+        "text": "Ke každému projektu přistupujeme s maximální odpovědností."
       }
     },
     "team": {
@@ -74,6 +85,35 @@
         "name": "Ing. Anna Černá",
         "position": "Projektová manažerka"
       }
+    },
+    "mission": {
+      "title": "Naše mise",
+      "text": "Naší misí je přinášet klientům inovativní, udržitelná a kvalitní řešení v oblasti projektování staveb. Každý projekt vnímáme jako příležitost tvořit hodnoty pro společnost i budoucí generace."
+    },
+    "timeline": {
+      "title": "Milníky naší historie",
+      "events": [
+        { "year": "2010", "text": "Založení společnosti Maxprojekty." },
+        { "year": "2013", "text": "První velký rezidenční projekt." },
+        { "year": "2017", "text": "Rozšíření týmu o nové specialisty." },
+        { "year": "2021", "text": "Získání ocenění za inovace v projektování." }
+      ]
+    },
+    "references": {
+      "title": "Naši klienti a reference",
+      "logos": ["logo1.png", "logo2.png", "logo3.png"],
+      "quotes": [
+        { "author": "Jan Kovář, investor", "text": "Spolupráce s Maxprojekty byla profesionální a bezproblémová." },
+        { "author": "Petra Malá, developer", "text": "Oceňuji inovativní přístup a komunikaci týmu." }
+      ]
+    },
+    "certificates": {
+      "title": "Certifikace a ocenění",
+      "list": ["Člen ČKAIT", "ISO 9001:2015", "Cena za inovace 2021"]
+    },
+    "technologies": {
+      "title": "Naše technologie a postupy",
+      "list": ["BIM modelování", "3D vizualizace", "Ekologické materiály", "Moderní softwarové nástroje"]
     }
   },
   "Career": {
@@ -113,7 +153,7 @@
       }
     }
   },
- "Contact": {
+  "Contact": {
     "hero": {
       "title": "Kontaktujte nás",
       "subtitle": "Jsme tu pro vás! Neváhejte se na nás obrátit."
@@ -140,7 +180,11 @@
       "emailPlaceholder": "Zadejte váš email",
       "message": "Vaše zpráva",
       "messagePlaceholder": "Sem napište vaši zprávu...",
-      "submit": "Odeslat zprávu"
+      "submit": "Odeslat zprávu",
+      "success": "Zpráva byla úspěšně odeslána.",
+      "error": "Nastala chyba při odesílání. Zkuste to prosím znovu.",
+      "spamError": "Zpráva byla označena jako spam.",
+      "sending": "Odesílání..."
     },
     "additionalInfo": {
       "offices": {
@@ -162,5 +206,11 @@
         ]
       }
     }
+  },
+  "Blog": {
+    "title": "Blog",
+    "readMore": "Číst dál",
+    "unknownAuthor": "Neznámý autor",
+    "featured": "Doporučeno"
   }
 }

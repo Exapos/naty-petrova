@@ -7,6 +7,7 @@ import Footer from '@/components/Footer/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '@/app/[locale]/globals.css'
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 
 export function generateStaticParams() {
@@ -29,14 +30,22 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <head />
-      <body className="flex min-h-screen flex-col">
-        <NextIntlClientProvider messages={messages}>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <ToastContainer position="bottom-right" />
-          <Footer />
-        </NextIntlClientProvider>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Maxprojekty - Projekční kancelář pro vaše stavební plány. Architektura, projekce, stavební dozor a více." />
+        <meta name="theme-color" content="#18181b" />
+        <title>Maxprojekty</title>
+      </head>
+      <body className="flex min-h-screen flex-col bg-background text-foreground dark:bg-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <ToastContainer position="bottom-right" />
+            <Footer />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'react-toastify';
+import Head from 'next/head';
 
 const FormSchema = z.object({
   name: z.string()
@@ -43,17 +44,27 @@ export default function ContactPage() {
         body: JSON.stringify(data)
       });
 
-      if (!response.ok) throw new Error('Odesílání selhalo');
+      if (!response.ok) throw new Error('SEND_FAILED');
       
-      toast.success('Zpráva úspěšně odeslána!');
+      toast.success(t('form.success'));
       reset();
     } catch (error) {
-      toast.error('Chyba při odesílání zprávy');
+      if ((error as Error).message === 'Spam detected') {
+        toast.error(t('form.spamError'));
+      } else {
+        toast.error(t('form.error'));
+      }
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-50 overflow-hidden">
+    <div className="relative min-h-screen bg-gray-50 dark:bg-zinc-900 transition-colors overflow-hidden">
+      <Head>
+        <title>Kontakt | Maxprojekty</title>
+        <meta name="description" content="Kontaktujte projekční kancelář Maxprojekty. Rychlý formulář, email, telefon, fakturační údaje." />
+        <meta property="og:title" content="Kontakt | Maxprojekty" />
+        <meta property="og:description" content="Kontaktujte projekční kancelář Maxprojekty. Rychlý formulář, email, telefon, fakturační údaje." />
+      </Head>
       <motion.div
         className="absolute inset-0 bg-gradient-to-r from-blue-800 to-indigo-900"
         initial={{ opacity: 0 }}
@@ -82,39 +93,40 @@ export default function ContactPage() {
         <section className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Levý sloupec - kontaktní informace */}
           <motion.div
-            className="space-y-8 bg-white p-8 rounded-xl shadow-lg grid"
+            className="space-y-8 bg-white dark:bg-zinc-800 p-8 rounded-xl shadow-lg grid"
             initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8 }}
           >
             <div className="flex items-center space-x-4">
-              <MapPin className="w-12 h-12 text-blue-600" />
+              <MapPin className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               <div>
-                <h3 className="text-xl font-semibold text-gray-800">{t('contact.address.title')}</h3>
-                <p className="text-gray-600">{t('contact.address.description')}</p>
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{t('contact.address.title')}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{t('contact.address.description')}</p>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <Mail className="w-12 h-12 text-blue-600" />
+              <Mail className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               <div>
-                <h3 className="text-xl font-semibold text-gray-800">{t('contact.email.title')}</h3>
-                <p className="text-gray-600">{t('contact.email.description')}</p>
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{t('contact.email.title')}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{t('contact.email.description')}</p>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <Phone className="w-12 h-12 text-blue-600" />
+              <Phone className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               <div>
-                <h3 className="text-xl font-semibold text-gray-800">{t('contact.phone.title')}</h3>
-                <p className="text-gray-600">{t('contact.phone.description')}</p>
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{t('contact.phone.title')}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{t('contact.phone.description')}</p>
               </div>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-gray-800">{t('additionalInfo.billing.title')}</h3>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{t('additionalInfo.billing.title')}</h3>
               {t.raw('additionalInfo.billing.details').map((detail, index) => (
-                <p key={index} className="text-gray-600">{detail}</p>
+                <p key={index} className="text-gray-600 dark:text-gray-300">{detail}</p>
               ))}
             </div>
           </motion.div>
@@ -122,12 +134,13 @@ export default function ContactPage() {
           {/* Pravý sloupec - formulář */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8 }}
           >
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="bg-white p-12 rounded-2xl shadow-xl space-y-6 relative overflow-hidden"
+              className="bg-white dark:bg-zinc-800 p-12 rounded-2xl shadow-xl space-y-6 relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br opacity-10 pointer-events-none"></div>
 
@@ -137,18 +150,18 @@ export default function ContactPage() {
                 <input {...register('website')} type="text" id="website" />
               </div>
 
-              <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-8">
                 {t('form.title')}
               </h2>
 
               <div>
-                <label htmlFor="name" className="block text-base font-semibold text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-base font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   {t('form.name')}
                 </label>
                 <input
                   {...register('name')}
-                  className={`w-full px-4 py-3 rounded-lg border text-white ${
-                    errors.name ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  className={`w-full px-4 py-3 rounded-lg border bg-white dark:bg-zinc-900 text-gray-900 dark:text-white ${
+                    errors.name ? 'border-red-500' : 'border-gray-300 dark:border-zinc-700 focus:border-blue-500'
                   } shadow-md text-lg`}
                 />
                 {errors.name && (
@@ -157,13 +170,13 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-base font-semibold text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-base font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   {t('form.email')}
                 </label>
                 <input
                   {...register('email')}
-                  className={`w-full px-4 py-3 rounded-lg border text-white ${
-                    errors.email ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  className={`w-full px-4 py-3 rounded-lg border bg-white dark:bg-zinc-900 text-gray-900 dark:text-white ${
+                    errors.email ? 'border-red-500' : 'border-gray-300 dark:border-zinc-700 focus:border-blue-500'
                   } shadow-md text-lg`}
                 />
                 {errors.email && (
@@ -172,14 +185,14 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-base font-semibold text-gray-700 mb-2">
+                <label htmlFor="message" className="block text-base font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   {t('form.message')}
                 </label>
                 <textarea
                   {...register('message')}
                   rows={5}
-                  className={`w-full px-4 py-3 rounded-lg border text-white ${
-                    errors.message ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  className={`w-full px-4 py-3 rounded-lg border bg-white dark:bg-zinc-900 text-gray-900 dark:text-white ${
+                    errors.message ? 'border-red-500' : 'border-gray-300 dark:border-zinc-700 focus:border-blue-500'
                   } shadow-md text-lg`}
                 ></textarea>
                 {errors.message && (
@@ -187,15 +200,17 @@ export default function ContactPage() {
                 )}
               </div>
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all ${
-                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'
+                className={`w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90 scale-100 active:scale-95'
                 }`}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
-                {isSubmitting ? 'Odesílání...' : t('form.submit')}
-              </button>
+                {isSubmitting ? t('form.sending') : t('form.submit')}
+              </motion.button>
             </form>
           </motion.div>
         </section>

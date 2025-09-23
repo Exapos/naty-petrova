@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 export default function MainSection() {
   const t = useTranslations('Main')
@@ -43,39 +44,58 @@ export default function MainSection() {
               className="object-cover"
             />
             {/* Překryv pro ztmavení pozadí, aby text zůstal čitelný */}
-            <div className="absolute inset-0 bg-gray-900/60" />
+            <div className="absolute inset-0 bg-gray-900/60 dark:bg-black/70" />
           </div>
         ))}
 
         {/* Text ve vlastní vrstvě, aby nebyl průhledný při animaci */}
         <div className="absolute inset-0 flex items-center justify-center z-20">
           <div className="text-center text-white p-4">
-            <h1 className="text-5xl font-bold mb-6">{t('title')}</h1>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">{t('subtitle')}</p>
-            <button className="bg-white text-gray-900 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-500 transition">
+            <motion.h1
+              className="text-5xl font-bold mb-6"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              {t('title')}
+            </motion.h1>
+            <motion.p
+              className="text-xl mb-8 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              {t('subtitle')}
+            </motion.p>
+            <motion.button
+              whileHover={{ scale: 1.08, backgroundColor: '#2563eb', color: '#fff' }}
+              whileTap={{ scale: 0.97 }}
+              className="bg-white text-gray-900 px-8 py-3 rounded-lg text-lg font-semibold shadow-lg hover:bg-blue-500 hover:text-white transition"
+            >
               {t('contactUs')}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
 
-      {/* Služby jako "kartičky" */}
-      <div className="py-20 bg-white">
+      {/* Služby jako "kartičky" s animací při scrollování */}
+      <div className="py-20 bg-white dark:bg-zinc-900 transition-colors duration-300">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">{t('ourServices')}</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">{t('ourServices')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 bg-gray-50 rounded-lg shadow-lg border border-gray-200">
-              <h3 className="text-xl font-semibold mb-4">{t('service1.title')}</h3>
-              <p>{t('service1.description')}</p>
-            </div>
-            <div className="p-6 bg-gray-50 rounded-lg shadow-lg border border-gray-200">
-              <h3 className="text-xl font-semibold mb-4">{t('service2.title')}</h3>
-              <p>{t('service2.description')}</p>
-            </div>
-            <div className="p-6 bg-gray-50 rounded-lg shadow-lg border border-gray-200">
-              <h3 className="text-xl font-semibold mb-4">{t('service3.title')}</h3>
-              <p>{t('service3.description')}</p>
-            </div>
+            {[1,2,3].map((idx) => (
+              <motion.div
+                key={idx}
+                className="p-6 bg-gray-50 dark:bg-zinc-800 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-700"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, delay: idx * 0.15 }}
+              >
+                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">{t(`service${idx}.title`)}</h3>
+                <p className="text-gray-700 dark:text-gray-300">{t(`service${idx}.description`)}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

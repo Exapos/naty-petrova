@@ -20,22 +20,78 @@
 # production
 /build
 
-# misc
-.DS_Store
-*.pem
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# debug
+# OS
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Build output
+/dist
+/build
+
+# Sensitive files
 .env*
+.env.*
+*.local
+*.secret
+*.bak
 
-# vercel
-.vercel
+# Prisma
+/prisma/dev.db
+/prisma/dev.db-journal
 
-# typescript
+# Misc
+*.tgz
+*.zip
+*.7z
+*.bak
+*.tmp
+
+# Next.js static export
+/out/
+
+# Test snapshots
+__snapshots__/
+
+# Coverage
+coverage/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# npm
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Vercel
+.vercel
+
+# EditorConfig
+.editorconfig
+
+# Admin setup/readme
+README-ADMIN-SETUP.md

@@ -1,0 +1,38 @@
+// Prisma schema for Next.js admin/blog app with PostgreSQL
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  posts     BlogPost[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model BlogPost {
+  id        String   @id @default(uuid())
+  title     String
+  slug      String   @unique
+  content   String
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

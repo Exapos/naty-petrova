@@ -4,7 +4,9 @@
     "services": "Services",
     "projects": "Projects",
     "about": "About us",
-    "contact": "Contact"
+    "contact": "Contact",
+    "career": "Career",
+    "references": "References"
   },
   "Footer": {
     "description": "Design office for your construction plans",
@@ -37,42 +39,185 @@
   },
   "About": {
     "title": "About us",
+    "meta": {
+      "title": "About us | MaxProjekty",
+      "description": "Meet the MaxProjekty team, our history, vision and values. A design office focused on quality, innovation and responsibility."
+    },
+    "subtitle": "Meet our team, values and vision.",
     "history": {
       "title": "Our History",
-      "description": "MaxProjekty was established in 2010 with a vision to provide comprehensive project services at the highest level. Over more than a decade, we have successfully completed hundreds of projects of various sizes."
+      "text": "MaxProjekty was established in 2010 with a vision to provide comprehensive project services at the highest level. Over more than a decade, we have successfully completed hundreds of projects of various sizes."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "text": "Our goal is to be a leader in innovative and sustainable construction solutions that bring value to clients and society."
     },
     "values": {
-      "quality": {
+      "title": "Our Values",
+      "value1": {
         "title": "Quality",
-        "description": "We emphasize precision and attention to detail in every project."
+        "text": "We emphasize precision and detail in every project."
       },
-      "innovation": {
+      "value2": {
         "title": "Innovation",
-        "description": "We follow the newest trends and technologies in the construction sector."
+        "text": "We follow the latest trends and technologies in construction."
       },
-      "responsibility": {
+      "value3": {
         "title": "Responsibility",
-        "description": "We approach each project with the utmost diligence and care."
+        "text": "We approach every project with maximum responsibility."
       }
+    },
+    "mission": {
+      "title": "Our Mission",
+      "text": "Our mission is to bring clients innovative, sustainable and high-quality solutions in building design. We see every project as an opportunity to create value for society and future generations."
+    },
+    "timeline": {
+      "title": "Milestones of our history",
+      "events": [
+        { "year": "2010", "text": "Company MaxProjekty founded." },
+        { "year": "2013", "text": "First major residential project." },
+        { "year": "2017", "text": "Team expanded with new specialists." },
+        { "year": "2021", "text": "Award for innovation in design." }
+      ]
+    },
+    "references": {
+      "title": "Our Clients and References",
+      "logos": ["logo1.png", "logo2.png", "logo3.png"],
+      "quotes": [
+        { "author": "Jan Kovář, investor", "text": "Cooperation with MaxProjekty was professional and smooth." },
+        { "author": "Petra Malá, developer", "text": "I appreciate the innovative approach and communication of the team." }
+      ]
+    },
+    "certificates": {
+      "title": "Certificates and Awards",
+      "list": ["ČKAIT member", "ISO 9001:2015", "Innovation Award 2021"]
+    },
+    "technologies": {
+      "title": "Our Technologies and Methods",
+      "list": ["BIM modeling", "3D visualization", "Eco-friendly materials", "Modern software tools"]
     },
     "team": {
       "title": "Our Team",
       "member1": {
         "name": "Ing. Jan Novák",
-        "position": "Lead Project Engineer"
+        "position": "Lead Project Engineer",
+        "bio": "Expert in project management and technical supervision."
       },
       "member2": {
         "name": "Ing. Marie Svobodová",
-        "position": "Architect"
+        "position": "Architect",
+        "bio": "Specialist in architectural design and visualization."
       },
       "member3": {
         "name": "Ing. Petr Dvořák",
-        "position": "Civil Engineer"
+        "position": "Civil Engineer",
+        "bio": "Responsible for structural solutions and construction processes."
       },
       "member4": {
         "name": "Ing. Anna Černá",
-        "position": "Project Manager"
+        "position": "Project Manager",
+        "bio": "Coordinates projects and communication with clients."
+      }
+    },
+    "cta": {
+      "title": "Join our team!",
+      "text": "We are looking for new colleagues who want to participate in interesting projects.",
+      "button": "See open positions"
+    }
+  },
+  "Career": {
+    "hero": {
+      "title": "Join our team",
+      "subtitle": "We are looking for talented professionals to join our team. Be part of inspiring projects.",
+      "contactUs": "Contact us"
+    },
+    "benefits": {
+      "title": "Why work with us?",
+      "flexibility": {
+        "title": "Flexible working hours",
+        "description": "Work anytime and anywhere according to your needs."
+      },
+      "projects": {
+        "title": "International projects",
+        "description": "Participate in interesting projects all over the world."
+      },
+      "office": {
+        "title": "Modern offices",
+        "description": "Inspiring work environment with all amenities."
+      }
+    },
+    "jobs": {
+      "title": "Current job offers",
+      "job1": {
+        "title": "Architect / Designer",
+        "location": "Prague / Remote",
+        "type": "Full-time",
+        "description": "We are looking for a talented architect with experience in modern building design."
+      },
+      "job2": {
+        "title": "Project Manager",
+        "location": "Brno",
+        "type": "Part-time",
+        "description": "Are you an experienced project manager with an overview of construction processes?"
       }
     }
+  },
+  "Contact": {
+    "hero": {
+      "title": "Contact us",
+      "subtitle": "We are here for you! Do not hesitate to contact us."
+    },
+    "contact": {
+      "email": {
+        "title": "Email",
+        "description": "info@maxprojekty.cz"
+      },
+      "phone": {
+        "title": "Phone",
+        "description": "+420 775 312 614"
+      },
+      "address": {
+        "title": "Address",
+        "description": "Zemská 818, Teplice 415 01"
+      }
+    },
+    "form": {
+      "title": "Write to us",
+      "name": "Your name",
+      "namePlaceholder": "Enter your name",
+      "email": "Your email",
+      "emailPlaceholder": "Enter your email",
+      "message": "Your message",
+      "messagePlaceholder": "Type your message here...",
+      "submit": "Send message",
+      "success": "Message sent successfully.",
+      "error": "An error occurred while sending. Please try again.",
+      "spamError": "The message was marked as spam.",
+      "sending": "Sending..."
+    },
+    "additionalInfo": {
+      "offices": {
+        "title": "Where we are located",
+        "locations": ["Zemská 818, Teplice"]
+      },
+      "representation": {
+        "title": "Representation",
+        "details": ["+420 775 312 614"]
+      },
+      "billing": {
+        "title": "Billing information",
+        "details": [
+          "Stavby srdcem s.r.o.",
+          "Zelenkova 544/1, 419 01 Duchcov",
+          "Company ID: 21933791"
+        ]
+      }
+    }
+  },
+  "Blog": {
+    "title": "Blog",
+    "readMore": "Read more",
+    "unknownAuthor": "Unknown author",
+    "featured": "Featured"
   }
 }
