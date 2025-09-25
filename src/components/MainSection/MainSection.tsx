@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from '@/i18n/routing'
 
 export default function MainSection() {
   const t = useTranslations('Main')
@@ -12,6 +13,7 @@ export default function MainSection() {
     '/hero-building.jpg',
     '/hero-building2.jpg',
     '/hero-building3.jpg',
+    '/hero-building4.jpg',
   ]
 
   // Aktivní index pro přepínání
@@ -96,6 +98,30 @@ export default function MainSection() {
                 <p className="text-gray-700 dark:text-gray-300">{t(`service${idx}.description`)}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Reference sekce */}
+      <div className="py-20 bg-gray-50 dark:bg-zinc-800 transition-colors duration-300">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Naše reference</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Podívejte se na některé z našich realizovaných projektů
+            </p>
+          </div>
+          
+          <div className="text-center">
+            <Link 
+              href="/references"
+              className="inline-flex items-center px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-lg"
+            >
+              Zobrazit všechny reference
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </div>

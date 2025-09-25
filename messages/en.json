@@ -2,7 +2,6 @@
   "Navigation": {
     "home": "Home",
     "services": "Services",
-    "projects": "Projects",
     "about": "About us",
     "contact": "Contact",
     "career": "Career",
@@ -15,26 +14,22 @@
     "address": "Address",
     "rights": "All rights reserved"
   },
-  "HomePage": {
-    "title": "title",
-    "about": "About us"
+  "Blog": {
+    "title": "Blog",
+    "readMore": "Read more",
+    "unknownAuthor": "Unknown author",
+    "featured": "Featured"
   },
-  "Main": {
-    "title": "MaxProjekty - Your Vision, Our Realization",
-    "subtitle": "We specialize in architectural designs and project planning for all types of buildings",
-    "contactUs": "Contact us",
-    "ourServices": "Our services",
-    "service1": {
-      "title": "Project Planning",
-      "description": "Complete project documentation for all stages of construction"
-    },
-    "service2": {
-      "title": "Architectural Studies",
-      "description": "Designs and visualizations for residential and commercial projects"
-    },
-    "service3": {
-      "title": "Construction Supervision",
-      "description": "Professional oversight during the implementation of your project"
+  "Projects": {
+    "title": "Our projects",
+    "intro": "Browse selected projects we worked on. We specialize in architectural design and project services for all types of buildings – from family houses to large commercial complexes.",
+    "cta": "View project",
+    "all": "All",
+    "categories": {
+      "Residential": "Residential",
+      "Commercial": "Commercial",
+      "Interiors": "Interiors",
+      "Renovation": "Renovation"
     }
   },
   "About": {
@@ -46,26 +41,24 @@
     "subtitle": "Meet our team, values and vision.",
     "history": {
       "title": "Our History",
-      "text": "MaxProjekty was established in 2010 with a vision to provide comprehensive project services at the highest level. Over more than a decade, we have successfully completed hundreds of projects of various sizes."
+      "text": "Maxprojekty was founded in 2010 with the vision to provide comprehensive design services at the highest level. Over more than a decade, we have successfully completed hundreds of projects of various sizes."
     },
     "vision": {
       "title": "Our Vision",
-      "text": "Our goal is to be a leader in innovative and sustainable construction solutions that bring value to clients and society."
+      "text": "We strive for the highest standards of quality in all our projects, follow the latest trends and technologies in architecture and construction, and approach every project with maximum responsibility."
     },
     "values": {
       "title": "Our Values",
-      "value1": {
-        "title": "Quality",
-        "text": "We emphasize precision and detail in every project."
-      },
-      "value2": {
-        "title": "Innovation",
-        "text": "We follow the latest trends and technologies in construction."
-      },
-      "value3": {
-        "title": "Responsibility",
-        "text": "We approach every project with maximum responsibility."
-      }
+      "value1": { "title": "Quality", "text": "We care about the highest quality standards in all our projects." },
+      "value2": { "title": "Innovation", "text": "We follow the latest trends and technologies in architecture and construction." },
+      "value3": { "title": "Responsibility", "text": "We approach every project with maximum responsibility." }
+    },
+    "team": {
+      "title": "Our Team",
+      "member1": { "name": "Ing. Jan Novák", "position": "Lead Project Engineer", "bio": "Expert in project management and technical supervision." },
+      "member2": { "name": "Ing. Marie Svobodová", "position": "Architect", "bio": "Specialist in architectural design and visualization." },
+      "member3": { "name": "Ing. Petr Dvořák", "position": "Civil Engineer", "bio": "Responsible for structural solutions and construction processes." },
+      "member4": { "name": "Ing. Anna Černá", "position": "Project Manager", "bio": "Coordinates projects and communication with clients." }
     },
     "mission": {
       "title": "Our Mission",
@@ -74,7 +67,7 @@
     "timeline": {
       "title": "Milestones of our history",
       "events": [
-        { "year": "2010", "text": "Company MaxProjekty founded." },
+        { "year": "2010", "text": "Company Maxprojekty founded." },
         { "year": "2013", "text": "First major residential project." },
         { "year": "2017", "text": "Team expanded with new specialists." },
         { "year": "2021", "text": "Award for innovation in design." }
@@ -96,34 +89,37 @@
       "title": "Our Technologies and Methods",
       "list": ["BIM modeling", "3D visualization", "Eco-friendly materials", "Modern software tools"]
     },
-    "team": {
-      "title": "Our Team",
-      "member1": {
-        "name": "Ing. Jan Novák",
-        "position": "Lead Project Engineer",
-        "bio": "Expert in project management and technical supervision."
-      },
-      "member2": {
-        "name": "Ing. Marie Svobodová",
-        "position": "Architect",
-        "bio": "Specialist in architectural design and visualization."
-      },
-      "member3": {
-        "name": "Ing. Petr Dvořák",
-        "position": "Civil Engineer",
-        "bio": "Responsible for structural solutions and construction processes."
-      },
-      "member4": {
-        "name": "Ing. Anna Černá",
-        "position": "Project Manager",
-        "bio": "Coordinates projects and communication with clients."
-      }
-    },
     "cta": {
       "title": "Join our team!",
       "text": "We are looking for new colleagues who want to participate in interesting projects.",
       "button": "See open positions"
     }
+  },
+  "ReferencesPage": {
+    "title": "Our References",
+    "subtitle": "Browse our successfully completed projects",
+    "searchPlaceholder": "Search projects...",
+    "allCategories": "All categories",
+    "totalProjects": "total projects",
+    "categories": "categories",
+    "backToReferences": "Back to references",
+    "contactUs": "Contact us",
+    "contactText": "Interested in a similar project?",
+    "projectInfo": "Project information",
+    "location": "Location",
+    "category": "Category", 
+    "completionDate": "Completion date",
+    "projectType": "Project type",
+    "loading": "Loading...",
+    "noResults": "No projects found.",
+    "tryDifferentSearch": "Try different search terms or filters.",
+    "residentialProjects": "Residential buildings",
+    "commercialProjects": "Commercial buildings",
+    "reconstructionProjects": "Reconstructions",
+    "filters": "Filters",
+    "viewDetail": "View detail →",
+    "contactDescription": "Contact us to discuss the possibilities of realizing your project. We will be happy to advise you and prepare a custom quote.",
+    "moreReferences": "More references"
   },
   "Career": {
     "hero": {
@@ -133,6 +129,7 @@
     },
     "benefits": {
       "title": "Why work with us?",
+      "intro": "Discover the benefits of being part of our team",
       "flexibility": {
         "title": "Flexible working hours",
         "description": "Work anytime and anywhere according to your needs."
@@ -147,19 +144,28 @@
       }
     },
     "jobs": {
-      "title": "Current job offers",
-      "job1": {
-        "title": "Architect / Designer",
-        "location": "Prague / Remote",
-        "type": "Full-time",
-        "description": "We are looking for a talented architect with experience in modern building design."
+      "title": "Current positions",
+      "subtitle": "Join our team and help build the future",
+      "empty": {
+        "title": "We don't have open positions right now",
+        "text": "But check back soon! You can also send us an open application."
       },
-      "job2": {
-        "title": "Project Manager",
-        "location": "Brno",
-        "type": "Part-time",
-        "description": "Are you an experienced project manager with an overview of construction processes?"
-      }
+      "viewDetail": "View details"
+    },
+    "stats": {
+      "completed": { "number": "50+", "label": "Projects completed" },
+      "team": { "number": "25+", "label": "Team members" },
+      "years": { "number": "10+", "label": "Years of experience" }
+    },
+    "jobType": {
+      "FULL_TIME": "Full-time",
+      "PART_TIME": "Part-time",
+      "CONTRACT": "Contract",
+      "INTERNSHIP": "Internship"
+    },
+    "cta": {
+      "title": "Didn't find what you're looking for?",
+      "text": "Send us an open application—maybe we'll create a role just for you!"
     }
   },
   "Contact": {
@@ -178,22 +184,51 @@
       },
       "address": {
         "title": "Address",
-        "description": "Zemská 818, Teplice 415 01"
+        "description": "Zemská 818, Teplice 415 01",
+        "street": "Zemská 818",
+        "city": "415 01 Teplice"
       }
     },
     "form": {
       "title": "Write to us",
+      "description": "Write to us and we will get back to you as soon as possible. We will be happy to answer your questions and discuss cooperation opportunities.",
       "name": "Your name",
-      "namePlaceholder": "Enter your name",
+      "namePlaceholder": "Your name",
       "email": "Your email",
-      "emailPlaceholder": "Enter your email",
+      "emailPlaceholder": "your@email.com",
       "message": "Your message",
-      "messagePlaceholder": "Type your message here...",
+      "messagePlaceholder": "Write to us how we can help you...",
       "submit": "Send message",
       "success": "Message sent successfully.",
       "error": "An error occurred while sending. Please try again.",
       "spamError": "The message was marked as spam.",
       "sending": "Sending..."
+    },
+    "map": {
+      "title": "Where to find us"
+    },
+    "contactDetails": {
+      "title": "Contact details"
+    },
+    "workingHours": {
+      "title": "Working hours",
+      "weekdays": "Mon-Fri: 8:00 - 17:00",
+      "weekend": "Sat-Sun: By arrangement"
+    },
+    "transport": {
+      "title": "How to get to us",
+      "parking": "Parking directly at the building",
+      "train": "5 min walk from Teplice station"
+    },
+    "businessInfo": {
+      "title": "Official information",
+      "description": "All necessary information for billing and official correspondence"
+    },
+    "certificates": {
+      "title": "Certifications and licenses",
+      "engineer": "Authorized engineer",
+      "license": "License for building design",
+      "insurance": "Professional liability insurance"
     },
     "additionalInfo": {
       "offices": {
@@ -214,10 +249,37 @@
       }
     }
   },
-  "Blog": {
-    "title": "Blog",
-    "readMore": "Read more",
-    "unknownAuthor": "Unknown author",
-    "featured": "Featured"
+  "Services": {
+    "metaTitle": "Our Services | Maxprojekty",
+    "metaDescription": "Comprehensive architectural and design services for all types of buildings. Architectural design, project services, construction documentation, visualization, renovation, consulting. Maxprojekty Brno.",
+    "heading": "Our Services",
+    "intro": "Maxprojekty offers complete architectural and design services for all types of buildings. We help you from the initial concept to full documentation and realization. Our work combines creativity, technical precision, and years of experience.",
+    "cta": "Contact us for a free consultation",
+    "blocks": [
+      {
+        "title": "Architectural Design",
+        "desc": "We design modern and functional buildings that meet your requirements and fit into the surroundings. Every project is unique."
+      },
+      {
+        "title": "Project Services",
+        "desc": "We provide complete project work from studies through building permit documentation to implementation documentation."
+      },
+      {
+        "title": "Construction Documentation",
+        "desc": "We prepare professional documentation for authorities, investors, and contractors, always in accordance with current legislation."
+      },
+      {
+        "title": "Visualization and 3D Models",
+        "desc": "We create photorealistic visualizations and 3D models so you can imagine your future project before construction begins."
+      },
+      {
+        "title": "Renovation and Modernization",
+        "desc": "We help with renovations, modernizations, and reconstructions of buildings, including historical ones."
+      },
+      {
+        "title": "Consulting and Advisory",
+        "desc": "We provide expert consulting and advice at every stage of the project – from the initial idea to final realization."
+      }
+    ]
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 // src/components/Header/Header.tsx
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/routing'
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 import ThemeToggle from './ThemeToggle'
 import { useState } from 'react'
@@ -27,13 +27,7 @@ export default function Header() {
             {t('services')}
           </Link>
           <Link 
-            href="/projekty" 
-            className="nav-link"
-          >
-            {t('projects')}
-          </Link>
-          <Link 
-            href="/reference" 
+            href="/references" 
             className="nav-link"
           >
             {t('references')}
@@ -86,8 +80,7 @@ export default function Header() {
           >
             <div className="container mx-auto px-4 py-4 flex flex-col gap-3">
               <Link href="/sluzby" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('services')}</Link>
-              <Link href="/projekty" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('projects')}</Link>
-              <Link href="/reference" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('references')}</Link>
+              <Link href="/references" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('references')}</Link>
               <Link href="/o-nas" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('about')}</Link>
               <Link href="/kariera" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('career')}</Link>
               <motion.a

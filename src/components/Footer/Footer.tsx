@@ -1,6 +1,5 @@
 'use client'
 // src/components/Footer.tsx
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 

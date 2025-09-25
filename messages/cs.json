@@ -2,7 +2,6 @@
   "Navigation": {
     "home": "Domů",
     "services": "Služby",
-    "projects": "Projekty",
     "about": "O nás",
     "contact": "Kontakty",
     "career": "Kariéra",
@@ -50,40 +49,24 @@
     },
     "vision": {
       "title": "Naše vize",
-      "text": "Naším cílem je být lídrem v oblasti inovativních a udržitelných stavebních řešení, která přinášejí hodnotu klientům i společnosti."
+      "text": "Dbáme na nejvyšší standardy kvality ve všech našich projektech, sledujeme nejnovější trendy a technologie v architektuře a stavebnictví a ke každému projektu přistupujeme s maximální odpovědností.",
+      "value1": { "title": "Kvalita", "text": "Dbáme na nejvyšší standardy kvality ve všech našich projektech." },
+      "value2": { "title": "Inovace", "text": "Sledujeme nejnovější trendy a technologie v architektuře a stavebnictví." },
+      "value3": { "title": "Zodpovědnost", "text": "Ke každému projektu přistupujeme s maximální odpovědností." }
     },
     "values": {
       "title": "Naše hodnoty",
       "value1": {
         "title": "Kvalita",
-        "text": "Klademe důraz na preciznost a detail v každém projektu."
+        "text": "Dbáme na nejvyšší standardy kvality ve všech našich projektech."
       },
       "value2": {
         "title": "Inovace",
-        "text": "Sledujeme nejnovější trendy a technologie v oblasti stavebnictví."
+        "text": "Sledujeme nejnovější trendy a technologie v architektuře a stavebnictví."
       },
       "value3": {
         "title": "Zodpovědnost",
         "text": "Ke každému projektu přistupujeme s maximální odpovědností."
-      }
-    },
-    "team": {
-      "title": "Náš tým",
-      "member1": {
-        "name": "Ing. Jan Novák",
-        "position": "Hlavní projektant"
-      },
-      "member2": {
-        "name": "Ing. Marie Svobodová",
-        "position": "Architektka"
-      },
-      "member3": {
-        "name": "Ing. Petr Dvořák",
-        "position": "Stavební inženýr"
-      },
-      "member4": {
-        "name": "Ing. Anna Černá",
-        "position": "Projektová manažerka"
       }
     },
     "mission": {
@@ -114,7 +97,61 @@
     "technologies": {
       "title": "Naše technologie a postupy",
       "list": ["BIM modelování", "3D vizualizace", "Ekologické materiály", "Moderní softwarové nástroje"]
+    },
+    "cta": {
+      "title": "Přidejte se k našemu týmu!",
+      "text": "Hledáme nové kolegy, kteří se chtějí podílet na zajímavých projektech.",
+      "button": "Zobrazit volné pozice"
+    },
+    "team": {
+      "title": "Náš tým",
+      "member1": {
+        "name": "Ing. Jan Novák",
+        "position": "Hlavní projektant",
+        "bio": "Expert na projektové řízení a technický dozor."
+      },
+      "member2": {
+        "name": "Ing. Marie Svobodová",
+        "position": "Architektka",
+        "bio": "Specialistka na architektonické návrhy a vizualizace."
+      },
+      "member3": {
+        "name": "Ing. Petr Dvořák",
+        "position": "Stavební inženýr",
+        "bio": "Zodpovědný za konstrukční řešení a stavební procesy."
+      },
+      "member4": {
+        "name": "Ing. Anna Černá",
+        "position": "Projektová manažerka",
+        "bio": "Koordinuje projekty a komunikaci s klienty."
+      }
     }
+  },
+  "ReferencesPage": {
+    "title": "Naše reference",
+    "subtitle": "Prohlédněte si naše úspěšně realizované projekty",
+    "searchPlaceholder": "Hledat projekty...",
+    "allCategories": "Všechny kategorie",
+    "totalProjects": "celkem projektů",
+    "categories": "kategorií",
+    "backToReferences": "Zpět na reference",
+    "contactUs": "Kontaktujte nás",
+    "contactText": "Máte zájem o podobný projekt?",
+    "projectInfo": "Informace o projektu",
+    "location": "Lokace",
+    "category": "Kategorie",
+    "completionDate": "Datum realizace",
+    "projectType": "Typ projektu",
+    "loading": "Načítání...",
+    "noResults": "Žádné projekty nebyly nalezeny.",
+    "tryDifferentSearch": "Zkuste jiné hledané výrazy nebo filtry.",
+    "residentialProjects": "Bytové a rodinné domy",
+    "commercialProjects": "Komerční objekty",
+    "reconstructionProjects": "Rekonstrukce",
+    "filters": "Filtry",
+    "viewDetail": "Zobrazit detail →",
+    "contactDescription": "Kontaktujte nás a projednejte možnosti realizace vašeho projektu. Rádi vám poradíme a připravíme cenovou nabídku na míru.",
+    "moreReferences": "Více referencí"
   },
   "Career": {
     "hero": {
@@ -124,13 +161,14 @@
     },
     "benefits": {
       "title": "Proč pracovat s námi?",
+      "intro": "Objevte výhody, které vám nabízíme jako součást našeho týmu",
       "flexibility": {
         "title": "Flexibilní pracovní doba",
         "description": "Pracuj kdykoliv a odkudkoliv podle tvých potřeb."
       },
       "projects": {
         "title": "Mezinárodní projekty",
-        "description": "Podílej se na zajímavých projektech po celém světě."
+        "description": "Podílej se na zajímavých projektech po celému světe."
       },
       "office": {
         "title": "Moderní kanceláře",
@@ -139,18 +177,27 @@
     },
     "jobs": {
       "title": "Aktuální nabídka pozic",
-      "job1": {
-        "title": "Architekt / Designér",
-        "location": "Praha / Remote",
-        "type": "Plný úvazek",
-        "description": "Hledáme talentovaného architekta se zkušenostmi s návrhy moderních staveb."
+      "subtitle": "Připojte se k našemu týmu a budujte budoucnost s námi",
+      "empty": {
+        "title": "Momentálně nemáme otevřené pozice",
+        "text": "Ale určitě se ohlédněte! Můžete nám poslat iniciativní žádost."
       },
-      "job2": {
-        "title": "Projektový manažer",
-        "location": "Brno",
-        "type": "Částečný úvazek",
-        "description": "Jste zkušený projektový manažer s přehledem o stavebních procesech?"
-      }
+      "viewDetail": "Zobrazit detail"
+    },
+    "stats": {
+      "completed": { "number": "50+", "label": "Dokončených projektů" },
+      "team": { "number": "25+", "label": "Členů týmu" },
+      "years": { "number": "10+", "label": "Let zkušeností" }
+    },
+    "jobType": {
+      "FULL_TIME": "Plný úvazek",
+      "PART_TIME": "Částečný úvazek",
+      "CONTRACT": "Smlouva",
+      "INTERNSHIP": "Stáž"
+    },
+    "cta": {
+      "title": "Nenašli jste to, co hledáte?",
+      "text": "Pošlete nám iniciativní žádost a možná si vytvoříme pozici přímo pro vás!"
     }
   },
   "Contact": {
@@ -169,22 +216,51 @@
       },
       "address": {
         "title": "Adresa",
-        "description": "Zemská 818, Teplice 415 01"
+        "description": "Zemská 818, Teplice 415 01",
+        "street": "Zemská 818",
+        "city": "415 01 Teplice"
       }
     },
     "form": {
       "title": "Napište nám",
+      "description": "Napište nám a my se vám ozveme co nejdříve. Rádi zodpovíme vaše dotazy a projedname možnosti spolupráce.",
       "name": "Vaše jméno",
-      "namePlaceholder": "Zadejte vaše jméno",
+      "namePlaceholder": "Vaše jméno",
       "email": "Váš email",
-      "emailPlaceholder": "Zadejte váš email",
+      "emailPlaceholder": "vas@email.cz",
       "message": "Vaše zpráva",
-      "messagePlaceholder": "Sem napište vaši zprávu...",
+      "messagePlaceholder": "Napište nám, jak vám můžeme pomoci...",
       "submit": "Odeslat zprávu",
       "success": "Zpráva byla úspěšně odeslána.",
       "error": "Nastala chyba při odesílání. Zkuste to prosím znovu.",
       "spamError": "Zpráva byla označena jako spam.",
       "sending": "Odesílání..."
+    },
+    "map": {
+      "title": "Kde nás najdete"
+    },
+    "contactDetails": {
+      "title": "Kontaktní údaje"
+    },
+    "workingHours": {
+      "title": "Pracovní doba",
+      "weekdays": "Po-Pá: 8:00 - 17:00",
+      "weekend": "So-Ne: Na domlouvě"
+    },
+    "transport": {
+      "title": "Jak se k nám dostanete",
+      "parking": "Parkování přímo u budovy",
+      "train": "5 min chůze od nádraží Teplice"
+    },
+    "businessInfo": {
+      "title": "Oficiální údaje",
+      "description": "Veškeré potřebné informace pro fakturaci a oficiální korespondenci"
+    },
+    "certificates": {
+      "title": "Certifikace a licence",
+      "engineer": "Autorizovaný inženýr",
+      "license": "Licence pro projektování staveb",
+      "insurance": "Pojištění profesní odpovědnosti"
     },
     "additionalInfo": {
       "offices": {
@@ -212,5 +288,50 @@
     "readMore": "Číst dál",
     "unknownAuthor": "Neznámý autor",
     "featured": "Doporučeno"
+  },
+  "Projects": {
+    "title": "Naše reference",
+    "intro": "Podívejte se na vybrané projekty, na kterých jsme pracovali. Specializujeme se na architektonické návrhy a projekční činnost pro všechny typy staveb – od rodinných domů po velké komerční komplexy.",
+    "cta": "Zobrazit projekt",
+    "all": "Vše",
+    "categories": {
+      "Rezidenční": "Rezidenční",
+      "Komerční": "Komerční",
+      "Interiéry": "Interiéry",
+      "Rekonstrukce": "Rekonstrukce"
+    }
+  },
+  "Services": {
+    "metaTitle": "Naše služby | Maxprojekty",
+    "metaDescription": "Kompletní architektonické a projekční služby pro všechny typy staveb. Architektonické návrhy, projekční činnost, stavební dokumentace, vizualizace, rekonstrukce, konzultace. Maxprojekty Brno.",
+    "heading": "Naše služby",
+    "intro": "Maxprojekty nabízí kompletní architektonické a projekční služby pro všechny typy staveb. Pomůžeme vám od prvotního návrhu až po kompletní dokumentaci a realizaci. Naše práce spojuje kreativitu, technickou preciznost a dlouholeté zkušenosti.",
+    "cta": "Kontaktujte nás pro nezávaznou konzultaci",
+    "blocks": [
+      {
+        "title": "Architektonické návrhy",
+        "desc": "Navrhujeme moderní a funkční stavby, které splňují vaše požadavky a zapadají do okolního prostředí. Každý projekt je originál."
+      },
+      {
+        "title": "Projekční činnost",
+        "desc": "Zajistíme kompletní projekční práce od studie přes dokumentaci pro stavební povolení až po prováděcí dokumentaci."
+      },
+      {
+        "title": "Stavební dokumentace",
+        "desc": "Připravíme profesionální dokumentaci pro úřady, investory i realizační firmy, vždy v souladu s platnou legislativou."
+      },
+      {
+        "title": "Vizualizace a 3D modely",
+        "desc": "Vytváříme fotorealistické vizualizace a 3D modely, díky kterým si můžete váš budoucí projekt představit ještě před začátkem stavby."
+      },
+      {
+        "title": "Rekonstrukce a modernizace",
+        "desc": "Pomáháme s přestavbami, modernizacemi a rekonstrukcemi objektů, včetně historických budov."
+      },
+      {
+        "title": "Konzultace a poradenství",
+        "desc": "Poskytujeme odborné konzultace a poradíme vám v každé fázi projektu – od prvotního záměru až po finální realizaci."
+      }
+    ]
   }
 }

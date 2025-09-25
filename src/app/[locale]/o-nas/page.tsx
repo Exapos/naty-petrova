@@ -6,7 +6,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import '@/app/[locale]/globals.css'
 
 export default function AboutPage() {
   const t = useTranslations('About');
@@ -20,11 +19,13 @@ export default function AboutPage() {
         <meta property="og:description" content={t('meta.description')} />
       </Head>
       {/* Hero sekce */}
-      <section className="relative h-[50vh] flex items-center justify-center bg-gradient-to-r from-blue-800 to-indigo-900">
-        <Image src="/hero-building2.jpg" alt="Hero" fill className="object-cover opacity-40" />
-        <div className="relative z-10 text-center">
+      <section className="relative min-h-[40vh] flex items-center justify-center bg-gradient-to-r from-blue-800 to-indigo-900">
+        <div className="absolute inset-0">
+          <Image src="/hero-building2.jpg" alt="Hero" fill priority className="object-cover opacity-40" />
+        </div>
+        <div className="relative z-10 w-full px-4 text-center flex flex-col items-center justify-center">
           <motion.h1
-            className="text-5xl font-bold text-white mb-4 drop-shadow-lg"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -32,7 +33,7 @@ export default function AboutPage() {
             {t('title')}
           </motion.h1>
           <motion.p
-            className="text-xl text-white/90 max-w-2xl mx-auto"
+            className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
@@ -43,43 +44,47 @@ export default function AboutPage() {
       </section>
 
       {/* Historie a vize */}
-      <section className="max-w-5xl mx-auto py-16 px-4 grid md:grid-cols-2 gap-12 items-center">
+      <section className="max-w-5xl mx-auto py-12 px-4 flex flex-col md:flex-row gap-10 md:gap-12 items-center">
         <motion.div
+          className="w-full md:w-1/2"
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">{t('history.title')}</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-900 dark:text-white">{t('history.title')}</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">{t('history.text')}</p>
-          <h3 className="text-2xl font-semibold mt-8 mb-2 text-blue-700 dark:text-blue-400">{t('vision.title')}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold mt-8 mb-2 text-blue-700 dark:text-blue-400">{t('vision.title')}</h3>
           <p className="text-gray-700 dark:text-gray-300">{t('vision.text')}</p>
         </motion.div>
         <motion.div
+          className="w-full md:w-1/2"
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, delay: 0.1 }}
         >
-          <Image src="/images/team.jpg" alt="Tým Maxprojekty" width={600} height={400} className="rounded-xl shadow-lg object-cover" />
+          <div className="aspect-w-3 aspect-h-2 w-full max-w-md mx-auto">
+            <Image src="/images/team.jpg" alt="Tým Maxprojekty" fill className="rounded-xl shadow-lg object-cover" />
+          </div>
         </motion.div>
       </section>
 
       {/* Hodnoty */}
-      <section className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">{t('values.title')}</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+      <section className="max-w-6xl mx-auto py-12 px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">{t('values.title')}</h2>
+        <div className="flex flex-col md:flex-row gap-8">
           {[1,2,3].map((idx) => (
             <motion.div
               key={idx}
-              className="p-8 bg-white dark:bg-zinc-800 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-700 text-center"
+              className="flex-1 p-6 bg-white dark:bg-zinc-800 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-700 text-center"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.7, delay: idx * 0.15 }}
             >
-              <h3 className="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">{t(`values.value${idx}.title`)}</h3>
-              <p className="text-gray-700 dark:text-gray-300">{t(`values.value${idx}.text`)}</p>
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 text-blue-700 dark:text-blue-400">{t(`values.value${idx}.title`)}</h3>
+              <p className="text-gray-700 dark:text-gray-300 text-base sm:text-lg">{t(`values.value${idx}.text`)}</p>
             </motion.div>
           ))}
         </div>
@@ -111,10 +116,10 @@ export default function AboutPage() {
       <section className="max-w-5xl mx-auto py-16 px-4">
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">{t('timeline.title')}</h2>
         <VerticalTimeline lineColor="#60a5fa">
-          {t.raw('timeline.events').map((event, idx) => (
+          {t.raw('timeline.events').map((event) => (
             <VerticalTimelineElement
               key={event.year}
-              date={<span className="text-blue-700 dark:text-blue-200 bg-white dark:bg-zinc-900 rounded-full border-2 border-blue-400 dark:border-blue-400 shadow font-extrabold text-xl px-6 py-2 inline-block">{event.year}</span>}
+              date={event.year}
               iconStyle={{ background: '#60a5fa', color: '#fff', boxShadow: '0 0 0 4px #fff, 0 0 0 8px #60a5fa' }}
               contentStyle={{ background: 'var(--tw-bg-opacity,1) #fff', color: 'var(--tw-text-opacity,1) #222', borderRadius: '0.75rem', boxShadow: '0 2px 16px 0 rgba(30,41,59,0.10)', border: '1px solid #e0e7ef' }}
               contentArrowStyle={{ borderRight: '7px solid #fff' }}
@@ -173,11 +178,13 @@ export default function AboutPage() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
               {/* Pokud existuje obrázek certifikátu, zobraz jej */}
-              <img
+              <Image
                 src={`/certificates/cert${idx + 1}.png`}
                 alt={cert}
+                width={48}
+                height={48}
                 className="h-12 mb-2 object-contain"
-                onError={e => (e.currentTarget.style.display = 'none')}
+                onError={(e) => (e.currentTarget.style.display = 'none')}
               />
               {cert}
             </motion.li>
@@ -205,9 +212,9 @@ export default function AboutPage() {
       </section>
 
       {/* Tým s bio */}
-      <section className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">{t('team.title')}</h2>
-        <div className="grid md:grid-cols-4 gap-8">
+      <section className="max-w-6xl mx-auto py-12 px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">{t('team.title')}</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {[1,2,3,4].map((idx) => (
             <motion.div
               key={idx}
@@ -217,7 +224,7 @@ export default function AboutPage() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.7, delay: idx * 0.1 }}
             >
-              <div className="relative h-[260px] mb-4">
+              <div className="relative w-full aspect-[3/4] mb-4 mx-auto max-w-xs">
                 <Image
                   src={`/images/team-member-${idx}.jpg`}
                   alt={t(`team.member${idx}.name`)}

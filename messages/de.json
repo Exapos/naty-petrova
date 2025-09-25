@@ -2,8 +2,12 @@
   "Navigation": {
     "home": "Startseite",
     "services": "Dienstleistungen",
-    "projects": "Projekte",
     "about": "Über uns",
+      "tryDifferentSearch": "Versuchen Sie andere Suchbegriffe oder Filter.",
+    "residentialProjects": "Wohn- und Einfamilienhäuser",
+    "commercialProjects": "Gewerbeobjekte",
+    "reconstructionProjects": "Rekonstruktionen",
+    "filters": "Filter",
     "contact": "Kontakt",
     "career": "Karriere",
     "references": "Referenzen"
@@ -15,57 +19,51 @@
     "address": "Adresse",
     "rights": "Alle Rechte vorbehalten"
   },
-  "HomePage": {
-    "title": "title",
-    "about": "Über uns"
+  "Blog": {
+    "title": "Blog",
+    "readMore": "Weiterlesen",
+    "unknownAuthor": "Unbekannter Autor",
+    "featured": "Empfohlen"
   },
-  "Main": {
-    "title": "MaxProjekty - Ihre Vision, unsere Umsetzung",
-    "subtitle": "Wir spezialisieren uns auf architektonische Entwürfe und Projektarbeiten für alle Arten von Bauten",
-    "contactUs": "Kontaktieren Sie uns",
-    "ourServices": "Unsere Dienstleistungen",
-    "service1": {
-      "title": "Projektarbeit",
-      "description": "Komplette Projektdokumentation für alle Bauphasen"
-    },
-    "service2": {
-      "title": "Architekturstudien",
-      "description": "Entwürfe und Visualisierungen für Wohn- und Gewerbeobjekte"
-    },
-    "service3": {
-      "title": "Bauaufsicht",
-      "description": "Fachgerechte Überwachung bei der Umsetzung Ihres Projekts"
+  "Projects": {
+    "title": "Unsere Referenzen",
+    "intro": "Sehen Sie ausgewählte Projekte, an denen wir gearbeitet haben. Wir sind auf architektonische Entwürfe und Projektplanung für alle Arten von Gebäuden spezialisiert – von Einfamilienhäusern bis zu großen Gewerbekomplexen.",
+    "cta": "Projekt anzeigen",
+    "all": "Alle",
+    "categories": {
+      "Residential": "Wohnbau",
+      "Commercial": "Gewerblich",
+      "Interiors": "Interieurs",
+      "Renovation": "Sanierung"
     }
   },
   "About": {
     "title": "Über uns",
     "meta": {
-      "title": "Über uns | MaxProjekty",
-      "description": "Lernen Sie das MaxProjekty-Team, unsere Geschichte, Vision und Werte kennen. Planungsbüro mit Fokus auf Qualität, Innovation und Verantwortung."
+      "title": "Über uns | Maxprojekty",
+      "description": "Lernen Sie das Maxprojekty-Team, unsere Geschichte, Vision und Werte kennen. Planungsbüro mit Fokus auf Qualität, Innovation und Verantwortung."
     },
     "subtitle": "Lernen Sie unser Team, unsere Werte und unsere Vision kennen.",
     "history": {
       "title": "Unsere Geschichte",
-      "text": "MaxProjekty wurde 2010 mit dem Ziel gegründet, umfassende Projektdienstleistungen auf höchstem Niveau anzubieten. In über einem Jahrzehnt haben wir erfolgreich Hunderte von Projekten unterschiedlicher Größe realisiert."
+      "text": "Maxprojekty wurde 2010 mit dem Ziel gegründet, umfassende Projektdienstleistungen auf höchstem Niveau anzubieten. In über einem Jahrzehnt haben wir erfolgreich Hunderte von Projekten unterschiedlicher Größe realisiert."
     },
     "vision": {
       "title": "Unsere Vision",
-      "text": "Unser Ziel ist es, führend in innovativen und nachhaltigen Bau-Lösungen zu sein, die unseren Kunden und der Gesellschaft einen Mehrwert bringen."
+      "text": "Wir streben nach höchsten Qualitätsstandards in all unseren Projekten, verfolgen die neuesten Trends und Technologien in Architektur und Bauwesen und gehen jedes Projekt mit größter Verantwortung an."
     },
     "values": {
       "title": "Unsere Werte",
-      "value1": {
-        "title": "Qualität",
-        "text": "Wir legen Wert auf Präzision und Detail in jedem Projekt."
-      },
-      "value2": {
-        "title": "Innovation",
-        "text": "Wir verfolgen die neuesten Trends und Technologien im Bauwesen."
-      },
-      "value3": {
-        "title": "Verantwortung",
-        "text": "Wir gehen jedes Projekt mit größter Verantwortung an."
-      }
+      "value1": { "title": "Qualität", "text": "Wir legen Wert auf höchste Qualitätsstandards in all unseren Projekten." },
+      "value2": { "title": "Innovation", "text": "Wir verfolgen die neuesten Trends und Technologien in Architektur und Bauwesen." },
+      "value3": { "title": "Verantwortung", "text": "Wir gehen jedes Projekt mit größter Verantwortung an." }
+    },
+    "team": {
+      "title": "Unser Team",
+      "member1": { "name": "Ing. Jan Novák", "position": "Leitender Projektant", "bio": "Experte für Projektmanagement und technische Aufsicht." },
+      "member2": { "name": "Ing. Marie Svobodová", "position": "Architektin", "bio": "Spezialistin für Architekturentwurf und Visualisierung." },
+      "member3": { "name": "Ing. Petr Dvořák", "position": "Bauingenieur", "bio": "Verantwortlich für Tragwerkslösungen und Bauprozesse." },
+      "member4": { "name": "Ing. Anna Černá", "position": "Projektmanagerin", "bio": "Koordiniert Projekte und die Kommunikation mit Kunden." }
     },
     "mission": {
       "title": "Unsere Mission",
@@ -74,7 +72,7 @@
     "timeline": {
       "title": "Meilensteine unserer Geschichte",
       "events": [
-        { "year": "2010", "text": "Gründung der Firma MaxProjekty." },
+        { "year": "2010", "text": "Gründung der Firma Maxprojekty." },
         { "year": "2013", "text": "Erstes großes Wohnprojekt." },
         { "year": "2017", "text": "Erweiterung des Teams um neue Spezialisten." },
         { "year": "2021", "text": "Auszeichnung für Innovation im Bauwesen." }
@@ -84,7 +82,7 @@
       "title": "Unsere Kunden und Referenzen",
       "logos": ["logo1.png", "logo2.png", "logo3.png"],
       "quotes": [
-        { "author": "Jan Kovář, Investor", "text": "Die Zusammenarbeit mit MaxProjekty war professionell und reibungslos." },
+        { "author": "Jan Kovář, Investor", "text": "Die Zusammenarbeit mit Maxprojekty war professionell und reibungslos." },
         { "author": "Petra Malá, Entwicklerin", "text": "Ich schätze den innovativen Ansatz und die Kommunikation des Teams." }
       ]
     },
@@ -96,34 +94,37 @@
       "title": "Unsere Technologien und Methoden",
       "list": ["BIM-Modellierung", "3D-Visualisierung", "Ökologische Materialien", "Moderne Software-Tools"]
     },
-    "team": {
-      "title": "Unser Team",
-      "member1": {
-        "name": "Ing. Jan Novák",
-        "position": "Leitender Projektant",
-        "bio": "Experte für Projektmanagement und technische Aufsicht."
-      },
-      "member2": {
-        "name": "Ing. Marie Svobodová",
-        "position": "Architektin",
-        "bio": "Spezialistin für Architekturentwurf und Visualisierung."
-      },
-      "member3": {
-        "name": "Ing. Petr Dvořák",
-        "position": "Bauingenieur",
-        "bio": "Verantwortlich für Tragwerkslösungen und Bauprozesse."
-      },
-      "member4": {
-        "name": "Ing. Anna Černá",
-        "position": "Projektmanagerin",
-        "bio": "Koordiniert Projekte und die Kommunikation mit Kunden."
-      }
-    },
     "cta": {
       "title": "Werden Sie Teil unseres Teams!",
       "text": "Wir suchen neue Kolleginnen und Kollegen, die an spannenden Projekten mitwirken möchten.",
       "button": "Offene Stellen ansehen"
     }
+  },
+  "ReferencesPage": {
+    "title": "Unsere Referenzen",
+    "subtitle": "Schauen Sie sich unsere erfolgreich abgeschlossenen Projekte an",
+    "searchPlaceholder": "Projekte suchen...",
+    "allCategories": "Alle Kategorien",
+    "totalProjects": "Projekte insgesamt",
+    "categories": "Kategorien",
+    "backToReferences": "Zurück zu Referenzen",
+    "contactUs": "Kontaktieren Sie uns",
+    "contactText": "Interessiert an einem ähnlichen Projekt?",
+    "projectInfo": "Projektinformationen",
+    "location": "Standort",
+    "category": "Kategorie",
+    "completionDate": "Fertigstellungsdatum",
+    "projectType": "Projekttyp",
+    "loading": "Wird geladen...",
+    "noResults": "Keine Projekte gefunden.",
+    "tryDifferentSearch": "Versuchen Sie andere Suchbegriffe oder Filter.",
+    "residentialProjects": "Wohn- und Einfamilienhäuser",
+    "commercialProjects": "Gewerbeobjekte",
+    "reconstructionProjects": "Rekonstruktionen",
+    "filters": "Filter",
+    "viewDetail": "Details anzeigen →",
+    "contactDescription": "Kontaktieren Sie uns und besprechen Sie die Möglichkeiten der Realisierung Ihres Projekts. Gerne beraten wir Sie und erstellen ein maßgeschneidertes Angebot.",
+    "moreReferences": "Weitere Referenzen"
   },
   "Career": {
     "hero": {
@@ -133,6 +134,7 @@
     },
     "benefits": {
       "title": "Warum mit uns arbeiten?",
+      "intro": "Entdecken Sie die Vorteile, Teil unseres Teams zu sein",
       "flexibility": {
         "title": "Flexible Arbeitszeiten",
         "description": "Arbeiten Sie jederzeit und überall nach Ihren Bedürfnissen."
@@ -147,19 +149,28 @@
       }
     },
     "jobs": {
-      "title": "Aktuelle Stellenangebote",
-      "job1": {
-        "title": "Architekt / Designer",
-        "location": "Prag / Remote",
-        "type": "Vollzeit",
-        "description": "Wir suchen einen talentierten Architekten mit Erfahrung im modernen Gebäudedesign."
+      "title": "Aktuelle Positionen",
+      "subtitle": "Werden Sie Teil unseres Teams und helfen Sie, die Zukunft zu gestalten",
+      "empty": {
+        "title": "Wir haben derzeit keine offenen Stellen",
+        "text": "Aber schauen Sie bald wieder vorbei! Sie können uns auch eine Initiativbewerbung senden."
       },
-      "job2": {
-        "title": "Projektmanager",
-        "location": "Brünn",
-        "type": "Teilzeit",
-        "description": "Sind Sie ein erfahrener Projektmanager mit Überblick über Bauprozesse?"
-      }
+      "viewDetail": "Details anzeigen"
+    },
+    "stats": {
+      "completed": { "number": "50+", "label": "Abgeschlossene Projekte" },
+      "team": { "number": "25+", "label": "Teammitglieder" },
+      "years": { "number": "10+", "label": "Jahre Erfahrung" }
+    },
+    "jobType": {
+      "FULL_TIME": "Vollzeit",
+      "PART_TIME": "Teilzeit",
+      "CONTRACT": "Vertrag",
+      "INTERNSHIP": "Praktikum"
+    },
+    "cta": {
+      "title": "Haben Sie nicht gefunden, wonach Sie suchen?",
+      "text": "Senden Sie uns eine Initiativbewerbung—vielleicht schaffen wir eine Stelle nur für Sie!"
     }
   },
   "Contact": {
@@ -178,22 +189,51 @@
       },
       "address": {
         "title": "Adresse",
-        "description": "Zemská 818, Teplice 415 01"
+        "description": "Zemská 818, Teplice 415 01",
+        "street": "Zemská 818",
+        "city": "415 01 Teplice"
       }
     },
     "form": {
       "title": "Schreiben Sie uns",
+      "description": "Schreiben Sie uns und wir melden uns so schnell wie möglich bei Ihnen. Gerne beantworten wir Ihre Fragen und besprechen Kooperationsmöglichkeiten.",
       "name": "Ihr Name",
-      "namePlaceholder": "Geben Sie Ihren Namen ein",
+      "namePlaceholder": "Ihr Name",
       "email": "Ihre E-Mail",
-      "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
+      "emailPlaceholder": "ihre@email.de",
       "message": "Ihre Nachricht",
-      "messagePlaceholder": "Schreiben Sie hier Ihre Nachricht...",
+      "messagePlaceholder": "Schreiben Sie uns, wie wir Ihnen helfen können...",
       "submit": "Nachricht senden",
       "success": "Nachricht wurde erfolgreich gesendet.",
       "error": "Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
       "spamError": "Die Nachricht wurde als Spam erkannt.",
       "sending": "Wird gesendet..."
+    },
+    "map": {
+      "title": "Wo Sie uns finden"
+    },
+    "contactDetails": {
+      "title": "Kontaktdaten"
+    },
+    "workingHours": {
+      "title": "Arbeitszeiten",
+      "weekdays": "Mo-Fr: 8:00 - 17:00",
+      "weekend": "Sa-So: Nach Vereinbarung"
+    },
+    "transport": {
+      "title": "Wie Sie zu uns kommen",
+      "parking": "Parkplatz direkt am Gebäude",
+      "train": "5 Min zu Fuß vom Bahnhof Teplice"
+    },
+    "businessInfo": {
+      "title": "Offizielle Angaben",
+      "description": "Alle notwendigen Informationen für Rechnungsstellung und offizielle Korrespondenz"
+    },
+    "certificates": {
+      "title": "Zertifikate und Lizenzen",
+      "engineer": "Autorisierter Ingenieur",
+      "license": "Lizenz für Gebäudeplanung",
+      "insurance": "Berufshaftpflichtversicherung"
     },
     "additionalInfo": {
       "offices": {
@@ -214,10 +254,37 @@
       }
     }
   },
-  "Blog": {
-    "title": "Blog",
-    "readMore": "Weiterlesen",
-    "unknownAuthor": "Unbekannter Autor",
-    "featured": "Empfohlen"
+  "Services": {
+    "metaTitle": "Unsere Dienstleistungen | Maxprojekty",
+    "metaDescription": "Umfassende architektonische und planerische Dienstleistungen für alle Gebäudetypen. Architekturentwürfe, Projektplanung, Baudokumentation, Visualisierung, Sanierung, Beratung. Maxprojekty Brno.",
+    "heading": "Unsere Dienstleistungen",
+    "intro": "Maxprojekty bietet umfassende architektonische und planerische Dienstleistungen für alle Arten von Bauvorhaben. Wir begleiten Sie vom ersten Entwurf bis zur vollständigen Dokumentation und Realisierung. Unsere Arbeit verbindet Kreativität, technische Präzision und langjährige Erfahrung.",
+    "cta": "Kontaktieren Sie uns für eine unverbindliche Beratung",
+    "blocks": [
+      {
+        "title": "Architekturentwürfe",
+        "desc": "Wir entwerfen moderne und funktionale Gebäude, die Ihren Anforderungen entsprechen und sich in die Umgebung einfügen. Jedes Projekt ist ein Unikat."
+      },
+      {
+        "title": "Projektplanung",
+        "desc": "Wir übernehmen alle Planungsleistungen von der Studie über die Baugenehmigungsplanung bis zur Ausführungsplanung."
+      },
+      {
+        "title": "Baudokumentation",
+        "desc": "Wir erstellen professionelle Dokumentationen für Behörden, Investoren und Baufirmen – stets gemäß aktueller Gesetzgebung."
+      },
+      {
+        "title": "Visualisierung und 3D-Modelle",
+        "desc": "Wir erstellen fotorealistische Visualisierungen und 3D-Modelle, damit Sie Ihr zukünftiges Projekt schon vor Baubeginn erleben können."
+      },
+      {
+        "title": "Sanierung und Modernisierung",
+        "desc": "Wir unterstützen Sie bei Umbauten, Modernisierungen und Sanierungen – auch von historischen Gebäuden."
+      },
+      {
+        "title": "Beratung und Consulting",
+        "desc": "Wir bieten fachkundige Beratung in jeder Projektphase – von der ersten Idee bis zur finalen Umsetzung."
+      }
+    ]
   }
 }
