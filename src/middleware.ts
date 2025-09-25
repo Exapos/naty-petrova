@@ -4,5 +4,7 @@ import {routing} from './i18n/routing';
 export default createMiddleware(routing);
  
 export const config = {
-  matcher: ['/((?!api|_next|.*\\..*).*)'], // Ignoruj systémové cesty
+  matcher: [
+    '/((?!api|_next|.*\\..*|admin).*)', // Ignoruj systémové cesty a /admin
+  ],
 };
