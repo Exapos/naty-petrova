@@ -4,6 +4,7 @@ import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import AnalyticsWrapper from '@/components/AnalyticsWrapper/AnalyticsWrapper';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '@/app/[locale]/globals.css'
@@ -38,6 +39,7 @@ export default async function LocaleLayout({
         <title>Maxprojekty</title>
       </head>
       <body className="flex min-h-screen flex-col bg-background text-foreground dark:bg-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+  <AnalyticsWrapper />
         <script dangerouslySetInnerHTML={{__html: `console.log('🔥 Layout loaded!');`}} />
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>

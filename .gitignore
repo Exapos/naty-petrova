@@ -19,6 +19,7 @@
 
 # production
 /build
+/public/uploads/references
 
 # IDE
 .vscode/
