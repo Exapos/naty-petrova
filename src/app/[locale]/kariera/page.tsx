@@ -54,7 +54,7 @@ export default function CareerPage() {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-7xl mx-auto text-center">
           <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent"
+            className="text-4xl md:text-6xl font-bold mb-8 text-white leading-tight"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -62,7 +62,7 @@ export default function CareerPage() {
             {t('hero.title')}
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl mb-10 text-blue-100 max-w-3xl mx-auto"
+            className="text-lg md:text-xl mb-10 text-blue-100 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
@@ -290,10 +290,10 @@ export default function CareerPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 leading-tight">
               {t('cta.title')}
             </h2>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-lg mb-8 text-blue-100 leading-relaxed">
               {t('cta.text')}
             </p>
             <Link

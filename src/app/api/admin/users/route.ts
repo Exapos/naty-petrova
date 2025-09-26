@@ -23,12 +23,19 @@ export async function GET() {
       return NextResponse.json({ error: 'Access denied - Admin required' }, { status: 403 });
     }
 
-    // Získat všechny uživatele pomocí raw SQL
-    const users = await prisma.$queryRaw`
-      SELECT id, email, name, role, "createdAt"
-      FROM "User"
-      ORDER BY "createdAt" DESC
-    `;
+    // Získat všechny uživatele pomocí Prisma ORM
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
     return NextResponse.json({ users });
 
@@ -92,14 +99,25 @@ export async function POST(request: NextRequest) {
     // Hash hesla
     const hashedPassword = await argon2.hash(password);
 
-    // Vytvořit uživatele pomocí raw SQL
-    await prisma.$executeRaw`
-      INSERT INTO "User" (id, email, password, name, role, "createdAt")
-      VALUES (gen_random_uuid(), ${email}, ${hashedPassword}, ${name || null}, ${role}::"Role", NOW())
-    `;
+    // Vytvořit uživatele pomocí Prisma ORM
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name: name || null,
+        role: role as 'ADMIN' | 'EDITOR'
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true
+      }
+    });
 
     return NextResponse.json(
-      { message: 'User created successfully' },
+      { message: 'User created successfully', user: newUser },
       { status: 201 }
     );
 

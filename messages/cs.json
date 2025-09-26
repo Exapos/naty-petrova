@@ -3,7 +3,7 @@
     "home": "Domů",
     "services": "Služby",
     "about": "O nás",
-    "contact": "Kontakty",
+    "contact": "Kontakt",
     "career": "Kariéra",
     "references": "Reference"
   },
@@ -19,21 +19,97 @@
     "about": "O nás"
   },
   "Main": {
-    "title": "Maxprojekty - Vaše vize, naše realizace",
-    "subtitle": "Specializujeme se na architektonické návrhy a projekční činnost pro všechny typy staveb",
-    "contactUs": "Kontaktujte nás",
-    "ourServices": "Naše služby",
-    "service1": {
-      "title": "Projekční činnost",
-      "description": "Kompletní projektová dokumentace pro všechny fáze stavebního řízení"
+    "hero": {
+      "badge": "Profesionální projekční služby",
+      "title": "Vaše vize, naše odbornost",
+      "subtitle": "Specializujeme se na architektonické návrhy a komplexní projekční služby. Od prvotního nápadu až po finální realizaci - s námi dosáhnete svých stavebních cílů.",
+      "primaryCta": "Nezávazná konzultace",
+      "secondaryCta": "Naše služby",
+      "trustIndicators": [
+        "Více než 10 let zkušeností",
+        "100+ úspěšných projektů",
+        "Profesionální tým",
+        "Spokojení klienti"
+      ]
     },
-    "service2": {
-      "title": "Architektonické studie",
-      "description": "Návrhy a vizualizace pro rezidenční i komerční projekty"
+    "stats": [
+      { "number": "250+", "label": "Realizovaných projektů" },
+      { "number": "12", "label": "Let na trhu" },
+      { "number": "98%", "label": "Spokojených klientů" },
+      { "number": "24/7", "label": "Technická podpora" }
+    ],
+    "services": {
+      "title": "Komplexní projektové služby",
+      "subtitle": "Od architektonických návrhů po kompletní projektovou dokumentaci. Každý projekt řešíme individuálně s důrazem na kvalitu a funkčnost.",
+      "learnMore": "Zjistit více",
+      "viewAll": "Všechny služby",
+      "items": [
+        {
+          "title": "Architektonické návrhy",
+          "description": "Kreativní návrhy moderních a funkčních budov, které splňují vaše požadavky a harmonicky zapadají do okolního prostředí."
+        },
+        {
+          "title": "Projekční činnost",
+          "description": "Kompletní projektové práce od studie přes dokumentaci pro stavební povolení až po prováděcí dokumentaci."
+        },
+        {
+          "title": "Stavební dokumentace",
+          "description": "Profesionální příprava dokumentace pro úřady, investory i realizační firmy v souladu s platnou legislativou."
+        },
+        {
+          "title": "3D vizualizace",
+          "description": "Fotorealistické vizualizace a 3D modely pro lepší představu o vašem budoucím projektu ještě před začátkem stavby."
+        },
+        {
+          "title": "Rekonstrukce",
+          "description": "Odborné řešení přestaveb, modernizací a rekonstrukcí objektů včetně památkově chráněných budov."
+        },
+        {
+          "title": "Konzultace",
+          "description": "Odborné poradenství a konzultace v každé fázi projektu od prvotního záměru až po finální realizaci."
+        }
+      ]
     },
-    "service3": {
-      "title": "Stavební dozor",
-      "description": "Odborný dohled nad realizací vašeho projektu"
+    "whyChooseUs": {
+      "title": "Proč si vybrat Maxprojekty?",
+      "subtitle": "Jsme tu pro vás již více než 12 let. Naše zkušenosti, profesionalita a individuální přístup jsou zárukou úspěchu vašeho projektu.",
+      "reasons": [
+        {
+          "title": "Odbornost a zkušenosti",
+          "description": "Více než desetiletí zkušeností v oboru architektonického a stavebního projektování."
+        },
+        {
+          "title": "Individuální přístup",
+          "description": "Každý projekt je pro nás jedinečný. Věnujeme mu maximální pozornost a péči."
+        },
+        {
+          "title": "Moderní technologie",
+          "description": "Využíváme nejnovější technologie a software pro vytváření precizních projektů."
+        },
+        {
+          "title": "Komplexní služby",
+          "description": "Pod jednou střechou nabízíme vše od návrhu po kompletní projektovou dokumentaci."
+        },
+        {
+          "title": "Dodržování termínů",
+          "description": "Respektujeme vaše časové požadavky a dodržujeme dohodnuté termíny realizace."
+        },
+        {
+          "title": "Transparentní komunikace",
+          "description": "Udržujeme vás v obraze po celou dobu projektu a jsme vždy k dispozici pro vaše dotazy."
+        }
+      ]
+    },
+    "references": {
+      "title": "Naše úspěšné projekty",
+      "subtitle": "Podívejte se na výběr z našich realizovaných projektů. Každý z nich reprezentuje naši odbornost a kreativní přístup k řešení stavebních úkolů.",
+      "viewAll": "Prohlédnout všechny reference"
+    },
+    "finalCta": {
+      "title": "Připraveni začít váš projekt?",
+      "subtitle": "Neváhejte nás kontaktovat pro nezávaznou konzultaci. Společně najdeme nejlepší řešení pro vaše stavební potřeby a realuzujeme vaše představy.",
+      "primaryButton": "Zavolejte nám",
+      "secondaryButton": "Napište e-mail"
     }
   },
   "About": {
@@ -151,7 +227,8 @@
     "filters": "Filtry",
     "viewDetail": "Zobrazit detail →",
     "contactDescription": "Kontaktujte nás a projednejte možnosti realizace vašeho projektu. Rádi vám poradíme a připravíme cenovou nabídku na míru.",
-    "moreReferences": "Více referencí"
+    "moreReferences": "Více referencí",
+    "noProjectsYet": "Zatím jsme nevytvořili žádné reference. Brzy zde najdete naše realizované projekty."
   },
   "Career": {
     "hero": {
@@ -307,6 +384,52 @@
     "heading": "Naše služby",
     "intro": "Maxprojekty nabízí kompletní architektonické a projekční služby pro všechny typy staveb. Pomůžeme vám od prvotního návrhu až po kompletní dokumentaci a realizaci. Naše práce spojuje kreativitu, technickou preciznost a dlouholeté zkušenosti.",
     "cta": "Kontaktujte nás pro nezávaznou konzultaci",
+    "hero": {
+      "badge": "Profesionální projekční služby",
+      "title": "Naše služby",
+      "subtitle": "Maxprojekty nabízí kompletní architektonické a projekční služby pro všechny typy staveb. Pomůžeme vám od prvotního návrhu až po kompletní dokumentaci a realizaci. Naše práce spojuje kreativitu, technickou preciznost a dlouholeté zkušenosti.",
+      "primaryCta": "Nezávazná konzultace",
+      "secondaryCta": "Naše reference",
+      "trustIndicators": [
+        "Ověřené zkušenosti",
+        "Komplexní řešení",
+        "Dodržování termínů",
+        "Profesionální přístup"
+      ]
+    },
+    "servicesSection": {
+      "title": "Naše služby",
+      "subtitle": "Kompletní projektování od návrhu po realizaci. Profesionální přístup s důrazem na kvalitu a spolehlivost.",
+      "moreInfo": "Více informací"
+    },
+    "whyChooseUs": {
+      "title": "Proč si vybrat Maxprojekty?",
+      "subtitle": "Více než 10 let zkušeností v oboru projektování a stavebnictví",
+      "stats": [
+        {
+          "number": "100+ projektů",
+          "description": "Úspěšně realizovaných staveb"
+        },
+        {
+          "number": "Včasné dodání",
+          "description": "Dodržujeme termíny"
+        },
+        {
+          "number": "Osobní přístup",
+          "description": "Komunikace na první místě"
+        },
+        {
+          "number": "Férové ceny",
+          "description": "Transparentní ceník"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Připraveni začít váš projekt?",
+      "subtitle": "Kontaktujte nás ještě dnes pro nezávaznou konzultaci. Společně najdeme nejlepší řešení pro váš projekt.",
+      "callButton": "Zavolejte nám",
+      "emailButton": "Napište nám"
+    },
     "blocks": [
       {
         "title": "Architektonické návrhy",

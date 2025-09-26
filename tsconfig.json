@@ -24,5 +24,12 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    // Exclude legacy editors that are currently broken or unused
+    "src/components/BlogEditor/**",
+    "src/components/Editor/**",
+    // Optionally exclude experimental debug editors if needed later
+    // "src/components/ContentEditorExperimental/**"
+  ]
 }

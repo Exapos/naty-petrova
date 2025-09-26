@@ -287,7 +287,7 @@ export default function ReferencesPage() {
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {searchQuery || selectedCategory !== 'all' 
                 ? t('tryDifferentSearch')
-                : t('noResults')
+                : t('noProjectsYet')
               }
             </p>
           </div>

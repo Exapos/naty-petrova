@@ -18,12 +18,24 @@ export async function GET() {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
-    // Získat všechny reference pomocí raw SQL
-    const references = await prisma.$queryRaw`
-      SELECT id, title, slug, location, description, category, image, published, "createdAt", "updatedAt"
-      FROM "Reference"
-      ORDER BY "createdAt" DESC
-    `;
+    // Získat všechny reference pomocí Prisma ORM
+    const references = await prisma.reference.findMany({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        location: true,
+        description: true,
+        category: true,
+        image: true,
+        published: true,
+        createdAt: true,
+        updatedAt: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
     return NextResponse.json(references);
 
@@ -72,14 +84,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Vytvořit referenci pomocí raw SQL
-    await prisma.$executeRaw`
-      INSERT INTO "Reference" (id, title, slug, location, description, category, image, published, "createdAt", "updatedAt")
-      VALUES (gen_random_uuid(), ${title}, ${slug}, ${location}, ${description}, ${category}, ${image || ''}, ${published}, NOW(), NOW())
-    `;
+    // Vytvořit referenci pomocí Prisma ORM
+    const newReference = await prisma.reference.create({
+      data: {
+        title,
+        slug,
+        location,
+        description,
+        category,
+        image: image || '',
+        published
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        location: true,
+        description: true,
+        category: true,
+        image: true,
+        published: true,
+        createdAt: true,
+        updatedAt: true
+      }
+    });
 
     return NextResponse.json(
-      { message: 'Reference created successfully' },
+      { message: 'Reference created successfully', reference: newReference },
       { status: 201 }
     );
 

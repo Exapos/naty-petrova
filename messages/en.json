@@ -14,6 +14,100 @@
     "address": "Address",
     "rights": "All rights reserved"
   },
+  "Main": {
+    "hero": {
+      "badge": "Professional Design Services",
+      "title": "Your Vision, Our Expertise",
+      "subtitle": "We specialize in architectural design and comprehensive project services. From initial concept to final realization - achieve your construction goals with us.",
+      "primaryCta": "Free Consultation",
+      "secondaryCta": "Our Services",
+      "trustIndicators": [
+        "Over 10 years of experience",
+        "100+ successful projects",
+        "Professional team",
+        "Satisfied clients"
+      ]
+    },
+    "stats": [
+      { "number": "250+", "label": "Completed Projects" },
+      { "number": "12", "label": "Years in Business" },
+      { "number": "98%", "label": "Client Satisfaction" },
+      { "number": "24/7", "label": "Technical Support" }
+    ],
+    "services": {
+      "title": "Comprehensive Project Services",
+      "subtitle": "From architectural designs to complete project documentation. We approach each project individually with emphasis on quality and functionality.",
+      "learnMore": "Learn More",
+      "viewAll": "All Services",
+      "items": [
+        {
+          "title": "Architectural Design",
+          "description": "Creative designs of modern and functional buildings that meet your requirements and harmoniously fit into the surrounding environment."
+        },
+        {
+          "title": "Project Planning",
+          "description": "Complete project work from studies through building permit documentation to implementation documentation."
+        },
+        {
+          "title": "Construction Documentation",
+          "description": "Professional preparation of documentation for authorities, investors and contractors in accordance with current legislation."
+        },
+        {
+          "title": "3D Visualization",
+          "description": "Photorealistic visualizations and 3D models for better understanding of your future project before construction begins."
+        },
+        {
+          "title": "Renovations",
+          "description": "Expert solutions for renovations, modernizations and reconstructions of buildings including heritage-protected structures."
+        },
+        {
+          "title": "Consulting",
+          "description": "Professional advice and consultation at every stage of the project from initial concept to final realization."
+        }
+      ]
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Maxprojekty?",
+      "subtitle": "We've been here for you for over 12 years. Our experience, professionalism and individual approach guarantee the success of your project.",
+      "reasons": [
+        {
+          "title": "Expertise & Experience",
+          "description": "More than a decade of experience in architectural and construction project design."
+        },
+        {
+          "title": "Individual Approach",
+          "description": "Each project is unique to us. We give it maximum attention and care."
+        },
+        {
+          "title": "Modern Technology",
+          "description": "We use the latest technology and software to create precise projects."
+        },
+        {
+          "title": "Comprehensive Services",
+          "description": "Under one roof, we offer everything from design to complete project documentation."
+        },
+        {
+          "title": "Meeting Deadlines",
+          "description": "We respect your time requirements and meet agreed implementation deadlines."
+        },
+        {
+          "title": "Transparent Communication",
+          "description": "We keep you informed throughout the project and are always available for your questions."
+        }
+      ]
+    },
+    "references": {
+      "title": "Our Successful Projects",
+      "subtitle": "Take a look at a selection of our completed projects. Each represents our expertise and creative approach to solving construction challenges.",
+      "viewAll": "View All References"
+    },
+    "finalCta": {
+      "title": "Ready to Start Your Project?",
+      "subtitle": "Don't hesitate to contact us for a free consultation. Together we'll find the best solution for your construction needs and realize your vision.",
+      "primaryButton": "Call Us",
+      "secondaryButton": "Send Email"
+    }
+  },
   "Blog": {
     "title": "Blog",
     "readMore": "Read more",
@@ -119,7 +213,8 @@
     "filters": "Filters",
     "viewDetail": "View detail →",
     "contactDescription": "Contact us to discuss the possibilities of realizing your project. We will be happy to advise you and prepare a custom quote.",
-    "moreReferences": "More references"
+    "moreReferences": "More references",
+    "noProjectsYet": "We haven't created any references yet. You will soon find our completed projects here."
   },
   "Career": {
     "hero": {
@@ -255,6 +350,52 @@
     "heading": "Our Services",
     "intro": "Maxprojekty offers complete architectural and design services for all types of buildings. We help you from the initial concept to full documentation and realization. Our work combines creativity, technical precision, and years of experience.",
     "cta": "Contact us for a free consultation",
+    "hero": {
+      "badge": "Professional Design Services",
+      "title": "Our Services",
+      "subtitle": "Maxprojekty offers complete architectural and design services for all types of buildings. We help you from the initial concept to full documentation and realization. Our work combines creativity, technical precision, and years of experience.",
+      "primaryCta": "Free Consultation",
+      "secondaryCta": "Our Portfolio",
+      "trustIndicators": [
+        "Proven Experience",
+        "Comprehensive Solutions",
+        "Meeting Deadlines",
+        "Professional Approach"
+      ]
+    },
+    "servicesSection": {
+      "title": "Our Services",
+      "subtitle": "Complete design from concept to realization. Professional approach with emphasis on quality and reliability.",
+      "moreInfo": "Learn More"
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Maxprojekty?",
+      "subtitle": "More than 10 years of experience in design and construction",
+      "stats": [
+        {
+          "number": "100+ Projects",
+          "description": "Successfully completed buildings"
+        },
+        {
+          "number": "On-Time Delivery",
+          "description": "We meet deadlines"
+        },
+        {
+          "number": "Personal Approach",
+          "description": "Communication first"
+        },
+        {
+          "number": "Fair Pricing",
+          "description": "Transparent pricing"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Ready to Start Your Project?",
+      "subtitle": "Contact us today for a free consultation. Together we'll find the best solution for your project.",
+      "callButton": "Call Us",
+      "emailButton": "Email Us"
+    },
     "blocks": [
       {
         "title": "Architectural Design",

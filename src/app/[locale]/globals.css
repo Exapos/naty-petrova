@@ -60,3 +60,591 @@
     padding: 2rem 0;
   }
 }
+
+/* Admin panel specific styles - Force light mode */
+body.admin-context {
+  background-color: white !important;
+  color: black !important;
+}
+
+/* Force white backgrounds for form containers */
+body.admin-context .bg-white,
+body.admin-context div[class*="bg-white"],
+body.admin-context form,
+body.admin-context .shadow {
+  background-color: white !important;
+}
+
+body.admin-context .bg-gray-50 {
+  background-color: #f9fafb !important;
+}
+
+body.admin-context .bg-gray-100 {
+  background-color: #f3f4f6 !important;
+}
+
+body.admin-context .bg-blue-600 {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+body.admin-context .text-gray-600 {
+  color: #4b5563 !important;
+}
+
+body.admin-context .text-gray-700 {
+  color: #374151 !important;
+}
+
+body.admin-context .text-gray-900 {
+  color: #111827 !important;
+}
+
+body.admin-context input,
+body.admin-context textarea,
+body.admin-context select,
+body.admin-context input[type="text"],
+body.admin-context input[type="email"],
+body.admin-context input[type="password"],
+body.admin-context input[type="url"],
+body.admin-context input[type="number"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #d1d5db !important;
+  padding: 0.5rem !important;
+}
+
+body.admin-context input:focus,
+body.admin-context textarea:focus,
+body.admin-context select:focus {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+body.admin-context .border-gray-300 {
+  border-color: #d1d5db !important;
+}
+
+/* Admin panel navigation */
+body.admin-context nav {
+  background-color: white !important;
+}
+
+body.admin-context .sidebar {
+  background-color: white !important;
+}
+
+/* Specific Tailwind overrides for admin */
+body.admin-context .bg-white {
+  background-color: #ffffff !important;
+}
+
+body.admin-context .bg-gray-50 {
+  background-color: #f9fafb !important;
+}
+
+body.admin-context .shadow,
+body.admin-context .shadow-lg,
+body.admin-context .shadow-xl,
+body.admin-context .shadow-2xl {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Form specific styles */
+body.admin-context .rounded-lg,
+body.admin-context .rounded-md,
+body.admin-context .rounded {
+  background-color: inherit !important;
+}
+
+body.admin-context label {
+  color: #374151 !important;
+}
+
+body.admin-context button {
+  color: inherit !important;
+}
+
+body.admin-context .text-white {
+  color: white !important;
+}
+
+body.admin-context .hover\:bg-gray-50:hover {
+  background-color: #f9fafb !important;
+}
+
+/* Line clamp utilities */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* TipTap ProseMirror Styling */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror li {
+  margin: 0.5rem 0;
+  padding-left: 0.25rem;
+}
+
+.ProseMirror li > p {
+  margin: 0;
+}
+
+.ProseMirror ol li {
+  list-style-type: decimal;
+}
+
+.ProseMirror ul li {
+  list-style-type: disc;
+}
+
+.ProseMirror ol ol {
+  list-style-type: lower-alpha;
+}
+
+.ProseMirror ul ul {
+  list-style-type: circle;
+}
+
+/* Ensure lists in preview also have proper styling */
+.prose ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+.prose ul {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+.prose li {
+  margin: 0.5rem 0 !important;
+  padding-left: 0.25rem !important;
+  display: list-item !important;
+}
+
+.prose ol li {
+  list-style-type: decimal !important;
+}
+
+.prose ul li {
+  list-style-type: disc !important;
+}
+
+/* Force list styling even in dangerouslySetInnerHTML */
+.prose [data-type="orderedList"],
+.prose ol[data-type="orderedList"] {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+.prose [data-type="bulletList"],
+.prose ul[data-type="bulletList"] {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+.prose [data-type="listItem"], 
+.prose li[data-type="listItem"] {
+  display: list-item !important;
+  margin: 0.5rem 0 !important;
+  padding-left: 0.25rem !important;
+}
+
+/* TipTap specific classes */
+.prose .tiptap-ordered-list {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+.prose .tiptap-bullet-list {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 1rem 0 !important;
+}
+
+.prose .tiptap-list-item {
+  display: list-item !important;
+  margin: 0.5rem 0 !important;
+  padding-left: 0.25rem !important;
+}
+
+/* Advanced text formatting support */
+.prose u {
+  text-decoration: underline !important;
+}
+
+.prose mark {
+  background-color: yellow !important;
+  padding: 0.1em 0.2em !important;
+}
+
+/* Float support for images - using data attributes for better TipTap integration */
+.prose img[data-float="left"],
+.prose img.float-left {
+  float: left !important;
+  margin-right: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  max-width: 20rem !important;
+}
+
+.prose img[data-float="right"],
+.prose img.float-right {
+  float: right !important;
+  margin-left: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  max-width: 20rem !important;
+}
+
+.prose img[data-align="center"],
+.prose img.mx-auto {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Responsive image sizing */
+.prose img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Text alignment support */
+.prose [style*="text-align: center"] {
+  text-align: center !important;
+}
+
+.prose [style*="text-align: right"] {
+  text-align: right !important;
+}
+
+.prose [style*="text-align: justify"] {
+  text-align: justify !important;
+}
+
+/* Spacing and layout */
+.prose hr {
+  margin: 2rem 0 !important;
+  border: none !important;
+  border-top: 1px solid #e5e7eb !important;
+}
+
+.prose [style*="margin-left"] {
+  margin-left: 2rem !important;
+}
+
+/* Clear floats after images */
+.prose::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Selected image highlight */
+.ProseMirror img:hover {
+  cursor: pointer;
+  box-shadow: 0 0 0 2px #3B82F6 !important;
+  border-radius: 8px;
+}
+
+.ProseMirror img.selected {
+  box-shadow: 0 0 0 3px #3B82F6 !important;
+  border-radius: 8px;
+}
+
+/* Free Position Image Node View Styles */
+.floating-image {
+  position: absolute;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: move;
+  user-select: none;
+  z-index: 10;
+}
+
+.floating-image:hover {
+  border-color: #3B82F6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.floating-image.dragging {
+  border-color: #10B981;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+  z-index: 20;
+}
+
+.floating-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  pointer-events: none;
+  display: block;
+}
+
+.resize-handle {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 16px;
+  height: 16px;
+  background: #3B82F6;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: nw-resize;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 15;
+}
+
+.floating-image:hover .resize-handle {
+  opacity: 1;
+}
+
+.resize-handle:hover {
+  background: #1D4ED8;
+  transform: scale(1.2);
+}
+
+/* CSS Shapes for text wrapping */
+.wrap-shape {
+  float: left;
+  shape-outside: inset(0);
+  shape-margin: 16px;
+  margin: 16px;
+}
+
+.wrap-shape.wrap-right {
+  float: right;
+}
+
+/* Visual feedback during drag */
+.floating-image.dragging::after {
+  content: "🚀 Volné pozicování";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #10B981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Advanced Editor Styles */
+.advanced-image-wrapper {
+  position: absolute;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: move;
+}
+
+.advanced-image-wrapper.selected {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 1px #3B82F6;
+}
+
+.advanced-image-wrapper.dragging {
+  border-color: #10B981;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+  z-index: 1000;
+}
+
+.callout-wrapper.selected {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.gallery-wrapper.selected {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Table styles */
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 16px 0;
+  overflow: hidden;
+}
+
+.ProseMirror td, .ProseMirror th {
+  min-width: 1em;
+  border: 2px solid #e5e7eb;
+  padding: 8px 12px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ProseMirror th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f9fafb;
+}
+
+.ProseMirror .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(59, 130, 246, 0.1);
+  pointer-events: none;
+}
+
+/* Editor focus styles */
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror-focused {
+  outline: none;
+}
+
+/* Placeholder styles */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
+}
+
+/* Link styles */
+.ProseMirror a {
+  color: #3b82f6;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  color: #1d4ed8;
+}
+
+/* Code styles */
+.ProseMirror code {
+  background: #f3f4f6;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.ProseMirror pre {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Blockquote styles */
+.ProseMirror blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 16px;
+  margin: 16px 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* List styles */
+.ProseMirror ul, .ProseMirror ol {
+  padding-left: 24px;
+}
+
+.ProseMirror li {
+  margin: 4px 0;
+}
+
+/* Heading styles */
+.ProseMirror h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 32px 0 16px 0;
+}
+
+.ProseMirror h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 24px 0 12px 0;
+}
+
+.ProseMirror h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 20px 0 10px 0;
+}
+
+/* Selection styles */
+.ProseMirror ::selection {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+/* Drag and drop styles */
+.ProseMirror .drag-handle {
+  position: absolute;
+  left: -24px;
+  top: 0;
+  width: 16px;
+  height: 24px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ProseMirror .drag-handle:hover,
+.ProseMirror *:hover > .drag-handle {
+  opacity: 1;
+}
+
+.ProseMirror .drag-handle:active {
+  cursor: grabbing;
+}

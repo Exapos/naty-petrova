@@ -15,6 +15,9 @@ body {
   outline: none;
   padding: 1rem;
   min-height: 300px;
+  position: relative;
+  overflow: visible;
+  line-height: 1.6;
 }
 
 .ProseMirror ul {
@@ -82,6 +85,34 @@ body {
 
 .dark .ProseMirror a:hover {
   color: #93c5fd;
+}
+
+/* Interactive Image positioning */
+.ProseMirror .interactive-image {
+  user-select: none;
+  transition: opacity 0.2s ease;
+}
+
+.ProseMirror .interactive-image:hover {
+  z-index: 20 !important;
+}
+
+.ProseMirror .interactive-image.ProseMirror-selectednode {
+  outline: none;
+}
+
+.ProseMirror .interactive-image.dragging {
+  user-select: none;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.8;
+  cursor: move;
+}
+
+/* Text flow improvements */
+.ProseMirror p {
+  text-align: justify;
+  hyphens: auto;
 }
 
 /* Admin layout styles */

@@ -3,11 +3,6 @@
     "home": "Startseite",
     "services": "Dienstleistungen",
     "about": "Über uns",
-      "tryDifferentSearch": "Versuchen Sie andere Suchbegriffe oder Filter.",
-    "residentialProjects": "Wohn- und Einfamilienhäuser",
-    "commercialProjects": "Gewerbeobjekte",
-    "reconstructionProjects": "Rekonstruktionen",
-    "filters": "Filter",
     "contact": "Kontakt",
     "career": "Karriere",
     "references": "Referenzen"
@@ -18,6 +13,100 @@
     "followUs": "Folgen Sie uns",
     "address": "Adresse",
     "rights": "Alle Rechte vorbehalten"
+  },
+  "Main": {
+    "hero": {
+      "badge": "Professionelle Planungsdienstleistungen",
+      "title": "Ihre Vision, unser Fachwissen",
+      "subtitle": "Wir spezialisieren uns auf Architekturentwürfe und umfassende Projektdienstleistungen. Vom ersten Konzept bis zur finalen Realisierung - erreichen Sie Ihre Bauziele mit uns.",
+      "primaryCta": "Kostenlose Beratung",
+      "secondaryCta": "Unsere Leistungen",
+      "trustIndicators": [
+        "Über 10 Jahre Erfahrung",
+        "100+ erfolgreiche Projekte",
+        "Professionelles Team",
+        "Zufriedene Kunden"
+      ]
+    },
+    "stats": [
+      { "number": "250+", "label": "Realisierte Projekte" },
+      { "number": "12", "label": "Jahre am Markt" },
+      { "number": "98%", "label": "Kundenzufriedenheit" },
+      { "number": "24/7", "label": "Technischer Support" }
+    ],
+    "services": {
+      "title": "Umfassende Projektdienstleistungen",
+      "subtitle": "Von Architekturentwürfen bis zur kompletten Projektdokumentation. Wir gehen jeden Auftrag individuell an mit Schwerpunkt auf Qualität und Funktionalität.",
+      "learnMore": "Mehr erfahren",
+      "viewAll": "Alle Leistungen",
+      "items": [
+        {
+          "title": "Architekturentwürfe",
+          "description": "Kreative Entwürfe moderner und funktionaler Gebäude, die Ihre Anforderungen erfüllen und harmonisch in die Umgebung passen."
+        },
+        {
+          "title": "Projektplanung",
+          "description": "Komplette Projektarbeiten von Studien über Baugenehmigungsplanung bis zur Ausführungsplanung."
+        },
+        {
+          "title": "Baudokumentation",
+          "description": "Professionelle Vorbereitung der Dokumentation für Behörden, Investoren und Baufirmen gemäß geltender Gesetzgebung."
+        },
+        {
+          "title": "3D-Visualisierung",
+          "description": "Fotorealistische Visualisierungen und 3D-Modelle für besseres Verständnis Ihres zukünftigen Projekts vor Baubeginn."
+        },
+        {
+          "title": "Sanierungen",
+          "description": "Fachkundige Lösungen für Umbauten, Modernisierungen und Sanierungen von Gebäuden einschließlich denkmalgeschützter Objekte."
+        },
+        {
+          "title": "Beratung",
+          "description": "Fachkundige Beratung und Consulting in jeder Projektphase vom ersten Konzept bis zur finalen Realisierung."
+        }
+      ]
+    },
+    "whyChooseUs": {
+      "title": "Warum Maxprojekty wählen?",
+      "subtitle": "Wir sind seit über 12 Jahren für Sie da. Unsere Erfahrung, Professionalität und individueller Ansatz garantieren den Erfolg Ihres Projekts.",
+      "reasons": [
+        {
+          "title": "Fachwissen & Erfahrung",
+          "description": "Mehr als ein Jahrzehnt Erfahrung in der Architektur- und Bauplanung."
+        },
+        {
+          "title": "Individueller Ansatz",
+          "description": "Jedes Projekt ist für uns einzigartig. Wir widmen ihm maximale Aufmerksamkeit und Sorgfalt."
+        },
+        {
+          "title": "Moderne Technologie",
+          "description": "Wir nutzen modernste Technologie und Software für präzise Projekte."
+        },
+        {
+          "title": "Umfassende Leistungen",
+          "description": "Unter einem Dach bieten wir alles vom Entwurf bis zur kompletten Projektdokumentation."
+        },
+        {
+          "title": "Termintreue",
+          "description": "Wir respektieren Ihre zeitlichen Anforderungen und erfüllen vereinbarte Umsetzungstermine."
+        },
+        {
+          "title": "Transparente Kommunikation",
+          "description": "Wir halten Sie während des gesamten Projekts auf dem Laufenden und stehen für Ihre Fragen zur Verfügung."
+        }
+      ]
+    },
+    "references": {
+      "title": "Unsere erfolgreichen Projekte",
+      "subtitle": "Sehen Sie eine Auswahl unserer realisierten Projekte. Jedes repräsentiert unser Fachwissen und unseren kreativen Ansatz bei der Lösung von Bauaufgaben.",
+      "viewAll": "Alle Referenzen anzeigen"
+    },
+    "finalCta": {
+      "title": "Bereit, Ihr Projekt zu starten?",
+      "subtitle": "Zögern Sie nicht, uns für eine kostenlose Beratung zu kontaktieren. Gemeinsam finden wir die beste Lösung für Ihre Bauanforderungen und setzen Ihre Vision um.",
+      "primaryButton": "Rufen Sie uns an",
+      "secondaryButton": "E-Mail senden"
+    }
   },
   "Blog": {
     "title": "Blog",
@@ -124,7 +213,8 @@
     "filters": "Filter",
     "viewDetail": "Details anzeigen →",
     "contactDescription": "Kontaktieren Sie uns und besprechen Sie die Möglichkeiten der Realisierung Ihres Projekts. Gerne beraten wir Sie und erstellen ein maßgeschneidertes Angebot.",
-    "moreReferences": "Weitere Referenzen"
+    "moreReferences": "Weitere Referenzen",
+    "noProjectsYet": "Wir haben noch keine Referenzen erstellt. Hier finden Sie bald unsere realisierten Projekte."
   },
   "Career": {
     "hero": {
@@ -260,6 +350,52 @@
     "heading": "Unsere Dienstleistungen",
     "intro": "Maxprojekty bietet umfassende architektonische und planerische Dienstleistungen für alle Arten von Bauvorhaben. Wir begleiten Sie vom ersten Entwurf bis zur vollständigen Dokumentation und Realisierung. Unsere Arbeit verbindet Kreativität, technische Präzision und langjährige Erfahrung.",
     "cta": "Kontaktieren Sie uns für eine unverbindliche Beratung",
+    "hero": {
+      "badge": "Professionelle Planungsdienstleistungen",
+      "title": "Unsere Dienstleistungen",
+      "subtitle": "Maxprojekty bietet umfassende architektonische und planerische Dienstleistungen für alle Arten von Bauvorhaben. Wir begleiten Sie vom ersten Entwurf bis zur vollständigen Dokumentation und Realisierung. Unsere Arbeit verbindet Kreativität, technische Präzision und langjährige Erfahrung.",
+      "primaryCta": "Unverbindliche Beratung",
+      "secondaryCta": "Unsere Referenzen",
+      "trustIndicators": [
+        "Bewährte Erfahrung",
+        "Ganzheitliche Lösungen",
+        "Termintreue",
+        "Professioneller Ansatz"
+      ]
+    },
+    "servicesSection": {
+      "title": "Unsere Dienstleistungen",
+      "subtitle": "Komplette Planung vom Entwurf bis zur Realisierung. Professioneller Ansatz mit Fokus auf Qualität und Zuverlässigkeit.",
+      "moreInfo": "Mehr erfahren"
+    },
+    "whyChooseUs": {
+      "title": "Warum Maxprojekty wählen?",
+      "subtitle": "Mehr als 10 Jahre Erfahrung in Planung und Bauwesen",
+      "stats": [
+        {
+          "number": "100+ Projekte",
+          "description": "Erfolgreich realisierte Bauten"
+        },
+        {
+          "number": "Pünktliche Lieferung",
+          "description": "Wir halten Termine ein"
+        },
+        {
+          "number": "Persönlicher Ansatz",
+          "description": "Kommunikation steht an erster Stelle"
+        },
+        {
+          "number": "Faire Preise",
+          "description": "Transparente Preisgestaltung"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Bereit, Ihr Projekt zu starten?",
+      "subtitle": "Kontaktieren Sie uns noch heute für eine unverbindliche Beratung. Gemeinsam finden wir die beste Lösung für Ihr Projekt.",
+      "callButton": "Rufen Sie uns an",
+      "emailButton": "Schreiben Sie uns"
+    },
     "blocks": [
       {
         "title": "Architekturentwürfe",

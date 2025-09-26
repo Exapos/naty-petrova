@@ -38,6 +38,7 @@ export default async function LocaleLayout({
         <title>Maxprojekty</title>
       </head>
       <body className="flex min-h-screen flex-col bg-background text-foreground dark:bg-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+        <script dangerouslySetInnerHTML={{__html: `console.log('🔥 Layout loaded!');`}} />
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <Header />

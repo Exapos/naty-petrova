@@ -30,6 +30,9 @@ export default function SettingsPage() {
     googleTagManager: '',
     hotjar: '',
     mailchimp: '',
+    gaServiceAccountEmail: '',
+    gaServiceAccountPrivateKey: '',
+    gaPropertyId: '',
   });
 
   const [sessions, setSessions] = useState<any[]>([]);
@@ -58,8 +61,25 @@ export default function SettingsPage() {
         name: session.user?.name || '',
         email: session.user?.email || '',
       }));
+      
+      // Načtení integrací pro admin uživatele
+      if (session.user.role === 'ADMIN') {
+        loadIntegrations();
+      }
     }
   }, [session]);
+
+  const loadIntegrations = async () => {
+    try {
+      const response = await fetch('/api/settings/integrations');
+      if (response.ok) {
+        const data = await response.json();
+        setIntegrations(data.integrations);
+      }
+    } catch (error) {
+      console.error('Error loading integrations:', error);
+    }
+  };
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -500,20 +520,89 @@ export default function SettingsPage() {
             
             {/* Formulář pro integrace */}
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Google Analytics ID
-                </label>
-                <input
-                  type="text"
-                  value={integrations.googleAnalytics}
-                  onChange={(e) => handleIntegrationsChange('googleAnalytics', e.target.value)}
-                  placeholder="G-XXXXXXXXXX"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Zadejte své Google Analytics Measurement ID
-                </p>
+              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <h4 className="text-md font-medium text-gray-900 mb-4">Google Analytics 4</h4>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Measurement ID
+                    </label>
+                    <input
+                      type="text"
+                      value={integrations.googleAnalytics}
+                      onChange={(e) => handleIntegrationsChange('googleAnalytics', e.target.value)}
+                      placeholder="G-XXXXXXXXXX"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Measurement ID z Google Analytics (pro tracking)
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Property ID
+                    </label>
+                    <input
+                      type="text"
+                      value={integrations.gaPropertyId}
+                      onChange={(e) => handleIntegrationsChange('gaPropertyId', e.target.value)}
+                      placeholder="123456789"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Číselné Property ID z Google Analytics (pro API) - najdeš v Admin → Property Settings
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Service Account Email
+                    </label>
+                    <input
+                      type="email"
+                      value={integrations.gaServiceAccountEmail}
+                      onChange={(e) => handleIntegrationsChange('gaServiceAccountEmail', e.target.value)}
+                      placeholder="ga-service-account@project.iam.gserviceaccount.com"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      E-mail adresa Service Account z Google Cloud Console
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Private Key
+                    </label>
+                    <textarea
+                      value={integrations.gaServiceAccountPrivateKey}
+                      onChange={(e) => handleIntegrationsChange('gaServiceAccountPrivateKey', e.target.value)}
+                      placeholder="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+                      rows={4}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-xs"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Privátní klíč ze souboru JSON (včetně -----BEGIN PRIVATE KEY----- a -----END PRIVATE KEY-----)
+                    </p>
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <p className="text-sm text-blue-700">
+                          <strong>Pro GA4 Reporting API:</strong> Postupujte podle návodu v GA4_SETUP.md pro vytvoření Service Account a nastavení oprávnění.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -601,16 +690,30 @@ export default function SettingsPage() {
                       <span className="text-white font-bold text-sm">G</span>
                     </div>
                     <div>
-                      <h5 className="text-sm font-medium text-gray-900">Google Analytics</h5>
-                      <p className="text-xs text-gray-500">Sledování návštěvnosti</p>
+                      <h5 className="text-sm font-medium text-gray-900">Google Analytics 4</h5>
+                      <p className="text-xs text-gray-500">
+                        {integrations.googleAnalytics && integrations.gaPropertyId && integrations.gaServiceAccountEmail && integrations.gaServiceAccountPrivateKey
+                          ? 'Kompletní nastavení s API přístupem'
+                          : integrations.googleAnalytics
+                          ? 'Pouze základní tracking'
+                          : 'Sledování návštěvnosti'
+                        }
+                      </p>
                     </div>
                   </div>
                   <div className={`px-2 py-1 text-xs rounded-full ${
-                    integrations.googleAnalytics 
+                    integrations.googleAnalytics && integrations.gaPropertyId && integrations.gaServiceAccountEmail && integrations.gaServiceAccountPrivateKey
                       ? 'bg-green-100 text-green-800' 
+                      : integrations.googleAnalytics
+                      ? 'bg-yellow-100 text-yellow-800'
                       : 'bg-gray-100 text-gray-600'
                   }`}>
-                    {integrations.googleAnalytics ? 'Připojeno' : 'Nepřipojeno'}
+                    {integrations.googleAnalytics && integrations.gaPropertyId && integrations.gaServiceAccountEmail && integrations.gaServiceAccountPrivateKey
+                      ? 'Plně aktivní'
+                      : integrations.googleAnalytics
+                      ? 'Částečně aktivní'
+                      : 'Neaktivní'
+                    }
                   </div>
                 </div>
 

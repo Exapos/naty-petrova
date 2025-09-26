@@ -1,0 +1,1 @@
+export { SEOSetup } from './SEOSetup';

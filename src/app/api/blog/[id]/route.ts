@@ -14,17 +14,24 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  try {
+    const { id } = await params;
+    console.log('PUT /api/blog/[id] - ID:', id);
+    
+    const session = await getServerSession(authOptions);
+    console.log('Session:', session ? { user: session.user, role: session.user?.role } : 'No session');
+    
+    if (!session || !session.user || session.user.role !== 'ADMIN') {
+      console.log('Authorization failed');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
   
   const { 
     title, 
     slug, 
     content, 
     excerpt, 
+    featuredImage,
     metaTitle, 
     metaDescription, 
     keywords, 
@@ -45,6 +52,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       slug, 
       content: safeContent,
       ...(excerpt !== undefined && { excerpt }),
+      ...(featuredImage !== undefined && { featuredImage }),
       ...(metaTitle !== undefined && { metaTitle }),
       ...(metaDescription !== undefined && { metaDescription }),
       ...(keywords !== undefined && { keywords }),
@@ -62,6 +70,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     },
   });
   return NextResponse.json(post);
+  } catch (error) {
+    console.error('PUT /api/blog/[id] error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

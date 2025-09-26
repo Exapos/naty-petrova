@@ -4,13 +4,19 @@ export interface BlogPost {
   slug: string;
   content: string;
   excerpt?: string;
+  featuredImage?: string;
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string;
+  categories?: string; // JSON string or comma-separated
+  tags?: string; // Legacy support for keywords
   published: boolean;
   editorMode?: 'markdown' | 'wysiwyg';
+  readingTime?: number; // Auto-calculated reading time in minutes
+  viewsCount?: number; // Track article views
   createdAt: Date;
   updatedAt: Date;
+  authorId: string;
   author?: {
     id: string;
     name: string;
@@ -23,11 +29,11 @@ export interface BlogPostFormData {
   slug: string;
   content: string;
   excerpt: string;
+  featuredImage: string;
   metaTitle: string;
   metaDescription: string;
   keywords: string;
   published: boolean;
-  editorMode: 'markdown' | 'wysiwyg';
 }
 
 export type EditorMode = 'markdown' | 'wysiwyg';

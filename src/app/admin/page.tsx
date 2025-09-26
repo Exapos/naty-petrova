@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
@@ -9,6 +9,15 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (status === 'loading') return; // Still loading
+    if (session?.user) {
+      router.push('/admin/dashboard');
+    }
+  }, [session, status, router]);
 
   async function handleSubmit(e) {
     e.preventDefault();

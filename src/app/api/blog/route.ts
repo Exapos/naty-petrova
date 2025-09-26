@@ -16,16 +16,23 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user || session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  try {
+    console.log('POST /api/blog');
+    
+    const session = await getServerSession(authOptions);
+    console.log('Session:', session ? { user: session.user, role: session.user?.role } : 'No session');
+    
+    if (!session || !session.user || session.user.role !== 'ADMIN') {
+      console.log('Authorization failed');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
   
   const { 
     title, 
     slug, 
     content, 
     excerpt, 
+    featuredImage,
     metaTitle, 
     metaDescription, 
     keywords, 
@@ -51,6 +58,7 @@ export async function POST(request: NextRequest) {
       slug: finalSlug,
       content: safeContent,
       ...(excerpt && { excerpt }),
+      ...(featuredImage && { featuredImage }),
       ...(metaTitle && { metaTitle }),
       ...(metaDescription && { metaDescription }),
       ...(keywords && { keywords }),
@@ -70,4 +78,8 @@ export async function POST(request: NextRequest) {
   });
   
   return NextResponse.json(post, { status: 201 });
+  } catch (error) {
+    console.error('POST /api/blog error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

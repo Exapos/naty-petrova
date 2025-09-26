@@ -65,7 +65,14 @@ export default function AboutPage() {
           transition={{ duration: 0.7, delay: 0.1 }}
         >
           <div className="aspect-w-3 aspect-h-2 w-full max-w-md mx-auto">
-            <Image src="/images/team.jpg" alt="Tým Maxprojekty" fill className="rounded-xl shadow-lg object-cover" />
+            <div className="w-full h-64 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 rounded-xl shadow-lg flex items-center justify-center">
+              <div className="text-center text-blue-600 dark:text-blue-300">
+                <svg className="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                </svg>
+                <p className="text-sm font-medium">Tým Maxprojekty</p>
+              </div>
+            </div>
           </div>
         </motion.div>
       </section>
@@ -77,7 +84,7 @@ export default function AboutPage() {
           {[1,2,3].map((idx) => (
             <motion.div
               key={idx}
-              className="flex-1 p-6 bg-white dark:bg-zinc-800 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-700 text-center"
+              className="flex-1 p-6 bg-white dark:bg-zinc-800 rounded-lg shadow-md border border-gray-200 dark:border-zinc-700 text-center"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -135,16 +142,18 @@ export default function AboutPage() {
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">{t('references.title')}</h2>
         <div className="flex flex-wrap justify-center gap-8 mb-8">
           {t.raw('references.logos').map((logo, idx) => (
-            <motion.img
+            <motion.div
               key={logo}
-              src={`/logos/${logo}`}
-              alt={`Logo klienta ${idx + 1}`}
-              className="h-16 object-contain grayscale hover:grayscale-0 transition-all duration-300 bg-white rounded shadow p-2"
+              className="h-16 w-24 bg-white dark:bg-zinc-100 rounded shadow p-2 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-            />
+            >
+              <div className="text-gray-400 dark:text-gray-600 font-bold text-xs text-center">
+                LOGO {idx + 1}
+              </div>
+            </motion.div>
           ))}
         </div>
         <div className="grid md:grid-cols-2 gap-8">
@@ -225,12 +234,14 @@ export default function AboutPage() {
               transition={{ duration: 0.7, delay: idx * 0.1 }}
             >
               <div className="relative w-full aspect-[3/4] mb-4 mx-auto max-w-xs">
-                <Image
-                  src={`/images/team-member-${idx}.jpg`}
-                  alt={t(`team.member${idx}.name`)}
-                  fill
-                  className="object-cover rounded-lg group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-blue-200 dark:group-hover:ring-blue-400 transition-all duration-300"
-                />
+                <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-700 dark:to-zinc-800 rounded-lg flex items-center justify-center group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-blue-200 dark:group-hover:ring-blue-400 transition-all duration-300">
+                  <div className="text-gray-400 dark:text-gray-500 text-center">
+                    <svg className="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"/>
+                    </svg>
+                    <p className="text-xs font-medium">{t(`team.member${idx}.name`)}</p>
+                  </div>
+                </div>
               </div>
               <h3 className="font-semibold text-gray-900 dark:text-white">{t(`team.member${idx}.name`)}</h3>
               <p className="text-gray-600 dark:text-gray-300">{t(`team.member${idx}.position`)}</p>

@@ -16,6 +16,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import { canAccessBlogs, canAccessReferences, canAccessAnalytics, canAccessUsers, canAccessSettings, canAccessJobs } from '@/lib/permissions';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -24,7 +26,6 @@ interface AdminLayoutProps {
 const allNavigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon, permission: 'all' },
   { name: 'Blog', href: '/admin/blog', icon: DocumentTextIcon, permission: 'blogs' },
-  { name: 'Blog Editor', href: '/admin/blog/editor', icon: DocumentTextIcon, permission: 'blogs' },
   { name: 'Reference', href: '/admin/reference', icon: PhotoIcon, permission: 'references' },
   { name: 'Kariéra', href: '/admin/jobs', icon: BriefcaseIcon, permission: 'jobs' },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon, permission: 'analytics' },
@@ -37,6 +38,33 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Vypnutí dark mode pro admin panel
+  useEffect(() => {
+    document.documentElement.classList.remove('dark');
+    document.body.classList.add('admin-context', 'bg-white', 'text-black');
+    
+    // Opravit všechny input fieldy každých 100ms (aby pokryl i dynamicky vytvořené elementy)
+    const fixInputs = () => {
+      const inputs = document.querySelectorAll('input, textarea, select');
+      inputs.forEach((input: any) => {
+        if (input.style) {
+          input.style.backgroundColor = 'white';
+          input.style.color = 'black';
+          input.style.border = '1px solid #d1d5db';
+        }
+      });
+    };
+    
+    // Spusť ihned a pak každých 100ms
+    fixInputs();
+    const interval = setInterval(fixInputs, 100);
+    
+    return () => {
+      document.body.classList.remove('admin-context', 'bg-white', 'text-black');
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     if (status !== 'loading' && !session) {
@@ -198,6 +226,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           {children}
         </main>
       </div>
+
+      {/* Toast notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

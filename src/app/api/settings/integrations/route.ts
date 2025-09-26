@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/authOptions';
+import { prisma } from '@/lib/prisma';
 
 export async function PUT(request: NextRequest) {
   try {
@@ -16,9 +17,21 @@ export async function PUT(request: NextRequest) {
 
     const integrations = await request.json();
 
-    // Pro teď jen vracíme úspěch - později by se uložilo do databáze
-    // nebo konfiguračního souboru
-    console.log('Integrations saved for user:', session.user.email, integrations);
+    // Uložení každé integrace do databáze
+    for (const [key, value] of Object.entries(integrations)) {
+      await prisma.settings.upsert({
+        where: { key },
+        update: { value: value as string },
+        create: { key, value: value as string }
+      });
+    }
+
+    // Logování s maskovacím sensitive údajů
+    const logIntegrations = { ...integrations };
+    if (logIntegrations.gaServiceAccountPrivateKey) {
+      logIntegrations.gaServiceAccountPrivateKey = '***MASKED***';
+    }
+    console.log('Integrations saved for user:', session.user.email, logIntegrations);
 
     return NextResponse.json({
       message: 'Integrations updated successfully',
@@ -41,14 +54,32 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Pro teď vracíme prázdné integrace - později by se načetlo z databáze
+    // Načtení integrací z databáze
+    const settingsData = await prisma.settings.findMany({
+      where: {
+        key: {
+          in: ['googleAnalytics', 'facebookPixel', 'googleTagManager', 'hotjar', 'mailchimp', 'gaServiceAccountEmail', 'gaServiceAccountPrivateKey', 'gaPropertyId']
+        }
+      }
+    });
+
+    // Převedení na objekt
     const integrations = {
       googleAnalytics: '',
       facebookPixel: '',
       googleTagManager: '',
       hotjar: '',
       mailchimp: '',
+      gaServiceAccountEmail: '',
+      gaServiceAccountPrivateKey: '',
+      gaPropertyId: '',
     };
+
+    settingsData.forEach(setting => {
+      if (setting.key in integrations) {
+        (integrations as any)[setting.key] = setting.value || '';
+      }
+    });
 
     return NextResponse.json({
       integrations

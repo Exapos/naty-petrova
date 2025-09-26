@@ -44,14 +44,23 @@ export default function Header() {
           >
             {t('career')}
           </Link>
-          <motion.a
-            href="/kontakt"
-            className="ml-2 px-6 py-2 rounded-full font-semibold bg-blue-600 text-white shadow-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900"
+          <Link 
+            href="/blog" 
+            className="nav-link"
+          >
+            Blog
+          </Link>
+          <motion.div
             whileHover={{ scale: 1.07 }}
             whileTap={{ scale: 0.97 }}
           >
-            {t('contact')}
-          </motion.a>
+            <Link
+              href="/kontakt"
+              className="ml-2 px-6 py-2 rounded-full font-semibold bg-blue-600 text-white shadow-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900 inline-block"
+            >
+              {t('contact')}
+            </Link>
+          </motion.div>
           <LanguageSwitcher />
           <ThemeToggle />
         </nav>
@@ -83,15 +92,19 @@ export default function Header() {
               <Link href="/references" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('references')}</Link>
               <Link href="/o-nas" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('about')}</Link>
               <Link href="/kariera" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('career')}</Link>
-              <motion.a
-                href="/kontakt"
-                className="mt-2 px-6 py-2 rounded-full font-semibold bg-blue-600 text-white shadow-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200 text-center"
+              <Link href="/blog" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>Blog</Link>
+              <motion.div
                 whileHover={{ scale: 1.07 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => setIsMenuOpen(false)}
               >
-                {t('contact')}
-              </motion.a>
+                <Link
+                  href="/kontakt"
+                  className="mt-2 px-6 py-2 rounded-full font-semibold bg-blue-600 text-white shadow-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200 text-center inline-block"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t('contact')}
+                </Link>
+              </motion.div>
               <div className="py-2 flex items-center gap-2">
                 <LanguageSwitcher />
                 <ThemeToggle />
