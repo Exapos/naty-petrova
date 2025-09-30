@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 interface PublicSettings {
   googleAnalytics?: string;
   googleTagManager?: string;
+  facebookPixel?: string;
 }
 
 export function usePublicSettings() {

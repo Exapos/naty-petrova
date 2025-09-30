@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Head from 'next/head';
 import { useTranslations } from 'next-intl';
 import { SafeText, SafeDescription } from '@/components/SafeText/SafeText';
 import {
@@ -150,6 +151,12 @@ export default function ReferencesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 transition-colors duration-300">
+      <Head>
+        <title>{t('metaTitle')}</title>
+        <meta name="description" content={t('metaDescription')} />
+        <meta property="og:title" content={t('metaTitle')} />
+        <meta property="og:description" content={t('metaDescription')} />
+      </Head>
       {/* Header */}
       <div className="bg-white dark:bg-zinc-800 shadow-sm transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-20">

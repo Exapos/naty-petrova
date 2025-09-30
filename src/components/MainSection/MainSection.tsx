@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from '@/i18n/routing'
+import { generateArchitectStructuredData, generateLocalBusinessStructuredData } from '@/lib/structured-data'
 import AnalyticsWrapper from '@/components/AnalyticsWrapper/AnalyticsWrapper'
 import { 
   ArrowRightIcon,
@@ -16,11 +17,26 @@ import {
   CubeIcon,
   WrenchScrewdriverIcon,
   ClipboardDocumentListIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  AcademicCapIcon,
+  UserGroupIcon,
+  CpuChipIcon,
+  CogIcon,
+  ClockIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline'
 
 export default function MainSection() {
   const t = useTranslations('Main')
+
+  const whyChooseIcons = [
+    AcademicCapIcon,    // Odbornost a zkušenosti
+    UserGroupIcon,      // Individuální přístup
+    CpuChipIcon,        // Moderní technologie
+    CogIcon,           // Komplexní služby
+    ClockIcon,         // Dodržování termínů
+    EyeIcon            // Transparentní komunikace
+  ]
 
   // Obrázky pro carousel
   const heroImages = [
@@ -43,6 +59,20 @@ export default function MainSection() {
   return (
     <main className="min-h-screen">
       <AnalyticsWrapper />
+
+      {/* Strukturovaná data pro SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateArchitectStructuredData())
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateLocalBusinessStructuredData())
+        }}
+      />
       
       {/* Hero sekce - Impresivní úvodní část */}
       <section className="relative h-screen overflow-hidden">
@@ -105,6 +135,22 @@ export default function MainSection() {
               <Link
                 href="/kontakt"
                 className="group relative inline-flex items-center justify-center px-10 py-5 bg-white text-blue-900 font-bold text-lg rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 hover:scale-105"
+                onClick={() => {
+                  // GA4 CTA Click Tracking
+                  if (typeof window !== 'undefined' && window.gtag) {
+                    window.gtag('event', 'cta_click', {
+                      event_category: 'engagement',
+                      event_label: 'hero_primary_cta'
+                    });
+                  }
+                  // Facebook Pixel Lead Event
+                  if (typeof window !== 'undefined' && window.fbq) {
+                    window.fbq('track', 'Lead', {
+                      content_name: 'Hero CTA',
+                      content_category: 'Lead Generation'
+                    });
+                  }
+                }}
               >
                 <PhoneIcon className="w-6 h-6 mr-3" />
                 {t('hero.primaryCta')}
@@ -114,6 +160,15 @@ export default function MainSection() {
               <Link
                 href="/sluzby"
                 className="inline-flex items-center justify-center px-10 py-5 border-2 border-white text-white font-semibold text-lg rounded-xl hover:bg-white hover:text-blue-900 transition-all duration-300"
+                onClick={() => {
+                  // GA4 Secondary CTA Click Tracking
+                  if (typeof window !== 'undefined' && window.gtag) {
+                    window.gtag('event', 'cta_click', {
+                      event_category: 'engagement',
+                      event_label: 'hero_secondary_cta'
+                    });
+                  }
+                }}
               >
                 {t('hero.secondaryCta')}
               </Link>
@@ -212,25 +267,38 @@ export default function MainSection() {
               return (
                 <motion.div
                   key={index}
-                  className="group bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                    <IconComponent className="w-8 h-8 text-blue-600 dark:text-blue-400 group-hover:text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                    {service.description}
-                  </p>
-                  <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold group-hover:text-blue-700 transition-colors">
-                    <span>{t('services.learnMore')}</span>
-                    <ArrowRightIcon className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                  <Link
+                    href="/sluzby"
+                    className="group block bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                    onClick={() => {
+                      // GA4 Service Click Tracking
+                      if (typeof window !== 'undefined' && window.gtag) {
+                        window.gtag('event', 'service_click', {
+                          event_category: 'engagement',
+                          event_label: service.title
+                        });
+                      }
+                    }}
+                  >
+                    <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <IconComponent className="w-8 h-8 text-blue-600 dark:text-blue-400 group-hover:text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                      {service.description}
+                    </p>
+                    <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold group-hover:text-blue-700 transition-colors">
+                      <span>{t('services.learnMore')}</span>
+                      <ArrowRightIcon className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
                 </motion.div>
               );
             })}
@@ -279,22 +347,25 @@ export default function MainSection() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {t.raw('whyChooseUs.reasons').map((reason: any, index: number) => (
-              <motion.div
-                key={index}
-                className="text-center p-6"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <StarIcon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">{reason.title}</h3>
-                <p className="text-blue-100 leading-relaxed">{reason.description}</p>
-              </motion.div>
-            ))}
+            {t.raw('whyChooseUs.reasons').map((reason: any, index: number) => {
+              const IconComponent = whyChooseIcons[index] || StarIcon;
+              return (
+                <motion.div
+                  key={index}
+                  className="text-center p-6"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <IconComponent className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4">{reason.title}</h3>
+                  <p className="text-blue-100 leading-relaxed">{reason.description}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

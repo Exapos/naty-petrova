@@ -190,6 +190,10 @@
     }
   },
   "ReferencesPage": {
+    "meta": {
+      "title": "Referenzen | Maxprojekty",
+      "description": "Schauen Sie sich unsere erfolgreichen Projekte an. Referenzen aus Architektur, Planung und Bauwesen. Einfamilienhäuser, Gewerbegebäude, Renovierungen in Teplice und Umgebung."
+    },
     "title": "Unsere Referenzen",
     "subtitle": "Schauen Sie sich unsere erfolgreich abgeschlossenen Projekte an",
     "searchPlaceholder": "Projekte suchen...",
@@ -217,6 +221,10 @@
     "noProjectsYet": "Wir haben noch keine Referenzen erstellt. Hier finden Sie bald unsere realisierten Projekte."
   },
   "Career": {
+    "meta": {
+      "title": "Karriere | Maxprojekty",
+      "description": "Treten Sie dem Maxprojekty-Team bei. Wir suchen Architekten, Designer und andere Fachkräfte. Flexible Arbeitsbedingungen, internationale Projekte, moderne Technologie."
+    },
     "hero": {
       "title": "Werden Sie Teil unseres Teams",
       "subtitle": "Wir suchen talentierte Fachkräfte für unser Team. Werden Sie Teil inspirierender Projekte.",
@@ -264,6 +272,10 @@
     }
   },
   "Contact": {
+    "meta": {
+      "title": "Kontakt | Maxprojekty",
+      "description": "Kontaktieren Sie Maxprojekty für Architekturleistungen. E-Mail, Telefon, Adresse. Kostenlose Beratung für Ihr Bauprojekt in Teplice und Umgebung."
+    },
     "hero": {
       "title": "Kontaktieren Sie uns",
       "subtitle": "Wir sind für Sie da! Zögern Sie nicht, uns zu kontaktieren."
@@ -286,18 +298,44 @@
     },
     "form": {
       "title": "Schreiben Sie uns",
-      "description": "Schreiben Sie uns und wir melden uns so schnell wie möglich bei Ihnen. Gerne beantworten wir Ihre Fragen und besprechen Kooperationsmöglichkeiten.",
-      "name": "Ihr Name",
+      "description": "Füllen Sie das Formular aus und wir melden uns so schnell wie möglich bei Ihnen",
+      "name": "Vollständiger Name",
       "namePlaceholder": "Ihr Name",
-      "email": "Ihre E-Mail",
+      "email": "E-Mail-Adresse",
       "emailPlaceholder": "ihre@email.de",
+      "phone": "Telefon (optional)",
+      "phonePlaceholder": "+420 123 456 789",
+      "projectType": "Projekttyp",
+      "projectTypeOptions": {
+        "residential": "Einfamilienhaus",
+        "apartment": "Mehrfamilienhaus",
+        "commercial": "Gewerbegebäude"
+      },
+      "budget": "Geschätztes Budget",
+      "budgetOptions": {
+        "under-1m": "Unter 1 Mio. CZK",
+        "1-3m": "1 - 3 Mio. CZK",
+        "3-5m": "3 - 5 Mio. CZK",
+        "5-10m": "5 - 10 Mio. CZK",
+        "over-10m": "Über 10 Mio. CZK"
+      },
+      "timeline": "Zeitrahmen",
+      "timelineOptions": {
+        "asap": "So bald wie möglich",
+        "1-3months": "1 - 3 Monate",
+        "3-6months": "3 - 6 Monate",
+        "6-12months": "6 - 12 Monate",
+        "flexible": "Flexibel"
+      },
+      "location": "Projektstandort",
+      "locationPlaceholder": "z.B. Prag, Brünn, Teplice...",
       "message": "Ihre Nachricht",
-      "messagePlaceholder": "Schreiben Sie uns, wie wir Ihnen helfen können...",
+      "messagePlaceholder": "Beschreiben Sie Ihr Projekt oder Ihre Anfrage...",
       "submit": "Nachricht senden",
-      "success": "Nachricht wurde erfolgreich gesendet.",
+      "sending": "Wird gesendet...",
+      "success": "Nachricht wurde erfolgreich gesendet!",
       "error": "Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-      "spamError": "Die Nachricht wurde als Spam erkannt.",
-      "sending": "Wird gesendet..."
+      "spamError": "Spam erkannt. Nachricht wurde nicht gesendet."
     },
     "map": {
       "title": "Wo Sie uns finden"
@@ -422,5 +460,56 @@
         "desc": "Wir bieten fachkundige Beratung in jeder Projektphase – von der ersten Idee bis zur finalen Umsetzung."
       }
     ]
+  },
+  "Calculator": {
+    "title": "Projektleistungen Rechner",
+    "subtitle": "Erfahren Sie den geschätzten Preis für unsere Architekturleistungen",
+    "configuration": "Projektkonfiguration",
+    "projectType": "Projekttyp",
+    "projectTypes": {
+      "residential": "Einfamilienhaus",
+      "apartment": "Mehrfamilienhaus",
+      "commercial": "Gewerbegebäude"
+    },
+    "complexity": "Projektkomplexität",
+    "complexityLevels": {
+      "simple": {
+        "name": "Einfach",
+        "description": "Standardlösung ohne spezielle Anforderungen"
+      },
+      "standard": {
+        "name": "Standard",
+        "description": "Übliches Niveau mit mehreren spezifischen Anforderungen"
+      },
+      "complex": {
+        "name": "Komplex",
+        "description": "Komplexes Projekt mit vielen spezifischen Anforderungen"
+      }
+    },
+    "area": "Gebäudefläche (m²)",
+    "services": {
+      "interior": "Inklusive Innenausstattung (+30%)",
+      "permit": "Inklusive Baugenehmigung (+20%)"
+    },
+    "results": {
+      "title": "Geschätzter Preis",
+      "vatNote": "Ohne MwSt."
+    },
+    "breakdown": {
+      "basePrice": "Grundpreis",
+      "complexity": "Komplexität",
+      "area": "Fläche",
+      "interior": "Innenausstattung",
+      "permit": "Baugenehmigung"
+    },
+    "cta": {
+      "note": "Diese Berechnung ist geschätzt. Kontaktieren Sie uns für ein genaues Angebot.",
+      "button": "Präzises Angebot erhalten"
+    },
+    "disclaimer": {
+      "title": "Warnung:",
+      "message": "Der Preis ist geschätzt und kann je nach spezifischen Projektanforderungen, Standort und anderen Faktoren variieren. Eine persönliche Beratung ist für ein verbindliches Preisangebot erforderlich."
+    },
+    "fromPrice": "Ab"
   }
 }

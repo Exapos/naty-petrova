@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog | Naty Petrova',
+  title: 'Maxprojekty | Blog',
   description: 'Články a novinky ze světa architektury a designu',
 };
 

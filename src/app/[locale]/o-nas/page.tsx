@@ -21,7 +21,7 @@ export default function AboutPage() {
       {/* Hero sekce */}
       <section className="relative min-h-[40vh] flex items-center justify-center bg-gradient-to-r from-blue-800 to-indigo-900">
         <div className="absolute inset-0">
-          <Image src="/hero-building2.jpg" alt="Hero" fill priority className="object-cover opacity-40" />
+          <Image src="/hero-building2.jpg" alt="Architektonické projekty Maxprojekty - moderní architektura v Teplicích" fill priority className="object-cover opacity-40" />
         </div>
         <div className="relative z-10 w-full px-4 text-center flex flex-col items-center justify-center">
           <motion.h1
@@ -246,6 +246,118 @@ export default function AboutPage() {
               <h3 className="font-semibold text-gray-900 dark:text-white">{t(`team.member${idx}.name`)}</h3>
               <p className="text-gray-600 dark:text-gray-300">{t(`team.member${idx}.position`)}</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">{t(`team.member${idx}.bio`)}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ sekce */}
+      <section className="max-w-4xl mx-auto py-16 px-4">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+        >
+          <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+            Často kladené otázky
+          </h2>
+          <p className="text-lg text-gray-700 dark:text-gray-300">
+            Odpovídáme na nejčastější otázky našich klientů
+          </p>
+        </motion.div>
+
+        {/* Strukturovaná data pro FAQ */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Jak dlouho trvá realizace architektonického projektu?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Doba realizace závisí na složitosti projektu. Jednoduché projekty trvají 2-4 týdny, komplexní projekty s dokumentací pro stavební povolení 2-6 měsíců. Každý projekt řešíme individuálně s ohledem na vaše požadavky."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Poskytujete i stavební dozor?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ano, nabízíme kompletní stavební dozor včetně technického dozoru stavebníka. Zajišťujeme, že stavba probíhá dle projektu, norem a v dohodnutých termínech."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Děláte i rekonstrukce a modernizace?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ano, specializujeme se na rekonstrukce a modernizace objektů včetně památkově chráněných budov. Máme zkušenosti s různými typy staveb a respektujeme historickou hodnotu."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Jak probíhá cenová kalkulace projektu?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Cenová kalkulace je vždy individuální a závisí na typu projektu, jeho složitosti a rozsahu. Poskytujeme nezávaznou cenovou nabídku po úvodní konzultaci a analýze vašich požadavků."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Poskytujete 3D vizualizace projektů?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ano, nabízíme profesionální 3D vizualizace a fotorealistické rendery. Pomáhají vám lépe si představit finální podobu projektu ještě před zahájením stavby."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+        <div className="space-y-6">
+          {[
+            {
+              question: "Jak dlouho trvá realizace architektonického projektu?",
+              answer: "Doba realizace závisí na složitosti projektu. Jednoduché projekty trvají 2-4 týdny, komplexní projekty s dokumentací pro stavební povolení 2-6 měsíců. Každý projekt řešíme individuálně s ohledem na vaše požadavky."
+            },
+            {
+              question: "Poskytujete i stavební dozor?",
+              answer: "Ano, nabízíme kompletní stavební dozor včetně technického dozoru stavebníka. Zajišťujeme, že stavba probíhá dle projektu, norem a v dohodnutých termínech."
+            },
+            {
+              question: "Děláte i rekonstrukce a modernizace?",
+              answer: "Ano, specializujeme se na rekonstrukce a modernizace objektů včetně památkově chráněných budov. Máme zkušenosti s různými typy staveb a respektujeme historickou hodnotu."
+            },
+            {
+              question: "Jak probíhá cenová kalkulace projektu?",
+              answer: "Cenová kalkulace je vždy individuální a závisí na typu projektu, jeho složitosti a rozsahu. Poskytujeme nezávaznou cenovou nabídku po úvodní konzultaci a analýze vašich požadavků."
+            },
+            {
+              question: "Poskytujete 3D vizualizace projektů?",
+              answer: "Ano, nabízíme profesionální 3D vizualizace a fotorealistické rendery. Pomáhají vám lépe si představit finální podobu projektu ještě před zahájením stavby."
+            }
+          ].map((faq, index) => (
+            <motion.div
+              key={index}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+                {faq.question}
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {faq.answer}
+              </p>
             </motion.div>
           ))}
         </div>

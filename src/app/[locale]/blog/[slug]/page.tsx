@@ -132,8 +132,8 @@ export default function BlogPostPage() {
         </div>
         
         {/* Breadcrumb */}
-        <div className="absolute top-8 left-0 right-0 z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="absolute left-0 right-0 z-20 top-16 flex justify-start pointer-events-none">
+          <div className="max-w-7xl w-full mx-auto px-2 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -141,7 +141,7 @@ export default function BlogPostPage() {
             >
               <Link
                 href="/blog"
-                className="inline-flex items-center text-white/90 hover:text-white font-medium transition-colors group bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg"
+                className="inline-flex items-center text-white/90 hover:text-white font-medium transition-colors group bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg pointer-events-auto"
               >
                 <ChevronLeftIcon className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                 Zpět na blog

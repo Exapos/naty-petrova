@@ -2,6 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 import { 
   MapPin, 
   Clock, 
@@ -49,6 +50,12 @@ export default function CareerPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 transition-colors duration-300">
+      <Head>
+        <title>{t('metaTitle')}</title>
+        <meta name="description" content={t('metaDescription')} />
+        <meta property="og:title" content={t('metaTitle')} />
+        <meta property="og:description" content={t('metaDescription')} />
+      </Head>
       {/* Hero sekce */}
       <header className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-24 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>

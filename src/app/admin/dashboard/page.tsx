@@ -9,6 +9,7 @@ import {
   CalendarDaysIcon 
 } from '@heroicons/react/24/outline';
 import { prisma } from '@/lib/prisma';
+import { GoogleAnalyticsService } from '@/lib/analytics';
 
 export default async function AdminDashboard() {
   let blogPostsCount = 0;
@@ -16,6 +17,7 @@ export default async function AdminDashboard() {
   let recentPosts: any[] = [];
   let lastMonthPostsCount = 0;
   let previousMonthPostsCount = 0;
+  let analyticsData: any = null;
 
   try {
     // Získání dynamických dat z databáze
@@ -57,6 +59,37 @@ export default async function AdminDashboard() {
         }
       }
     });
+
+    // Načtení analytics dat
+    try {
+      const gaPropertyId = await prisma.settings.findUnique({
+        where: { key: 'gaPropertyId' }
+      });
+
+      const gaEmail = await prisma.settings.findUnique({
+        where: { key: 'gaServiceAccountEmail' }
+      });
+
+      const gaPrivateKey = await prisma.settings.findUnique({
+        where: { key: 'gaServiceAccountPrivateKey' }
+      });
+
+      const propertyId = gaPropertyId?.value || '';
+      const serviceAccountEmail = gaEmail?.value || '';
+      const privateKey = gaPrivateKey?.value || '';
+
+      if (propertyId && serviceAccountEmail && privateKey) {
+        const analyticsService = new GoogleAnalyticsService({
+          propertyId,
+          serviceAccountEmail,
+          privateKey,
+        });
+        analyticsData = await analyticsService.getAnalyticsData(30);
+      }
+    } catch (analyticsError) {
+      console.error('Error loading analytics data:', analyticsError);
+      // Analytics data zůstanou null - použijí se "---"
+    }
   } catch (error) {
     console.error('Error loading dashboard data:', error);
     // Pokud se nepodaří načíst data, použijí se defaultní hodnoty (0)
@@ -73,11 +106,16 @@ export default async function AdminDashboard() {
   
   const postsChange = calculateChange(lastMonthPostsCount, previousMonthPostsCount);
   const postsChangeType = lastMonthPostsCount >= previousMonthPostsCount ? 'positive' : 'negative';
+  
+  // Příprava analytics dat
+  const visitorsValue = analyticsData ? analyticsData.totalUsers.toLocaleString() : '---';
+  const pageViewsValue = analyticsData ? analyticsData.totalPageViews.toLocaleString() : '---';
+  
   const stats = [
     { name: 'Celkem článků', value: blogPostsCount.toString(), icon: DocumentTextIcon, change: postsChange, changeType: postsChangeType },
     { name: 'Celkem referencí', value: referencesCount.toString(), icon: PhotoIcon, change: '---', changeType: 'neutral' },
-    { name: 'Návštěvníci (měsíc)', value: '---', icon: UserGroupIcon, change: '---', changeType: 'neutral' },
-    { name: 'Zobrazení stránek', value: '---', icon: EyeIcon, change: '---', changeType: 'neutral' },
+    { name: 'Návštěvníci (měsíc)', value: visitorsValue, icon: UserGroupIcon, change: '---', changeType: 'neutral' },
+    { name: 'Zobrazení stránek', value: pageViewsValue, icon: EyeIcon, change: '---', changeType: 'neutral' },
   ];
 
   // Formatování datumu pro zobrazení

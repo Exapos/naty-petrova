@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Admin | Naty Petrova',
+  title: 'Admin | Maxprojekty',
   description: 'Admin panel pro správu obsahu',
 }
 

@@ -14,12 +14,21 @@ import {
   Navigation,
   Car,
   Train,
-  Shield
+  Shield,
+  Calendar,
+  DollarSign
 } from 'lucide-react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'react-toastify';
+
+// Global type declarations
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
 
 const FormSchema = z.object({
   name: z.string()
@@ -28,9 +37,26 @@ const FormSchema = z.object({
   email: z.string()
     .email({ message: 'Neplatný emailový formát' })
     .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: 'Neplatná emailová adresa' }),
+  phone: z.string()
+    .optional()
+    .refine((val) => !val || /^(\+420\s?)?[0-9\s\-\(\)]{9,}$/.test(val), {
+      message: 'Neplatné telefonní číslo'
+    }),
+  projectType: z.enum(['residential', 'apartment', 'commercial'], {
+    required_error: 'Vyberte typ projektu'
+  }),
+  budget: z.enum(['under-1m', '1-3m', '3-5m', '5-10m', 'over-10m'], {
+    required_error: 'Vyberte rozpočet'
+  }),
+  timeline: z.enum(['asap', '1-3months', '3-6months', '6-12months', 'flexible'], {
+    required_error: 'Vyberte časový rámec'
+  }),
+  location: z.string()
+    .min(2, { message: 'Zadejte lokalitu' })
+    .max(100, { message: 'Maximální délka lokality je 100 znaků' }),
   message: z.string()
     .min(10, { message: 'Zpráva musí mít alespoň 10 znaků' })
-    .max(500, { message: 'Maximální délka zprávy je 500 znaků' }),
+    .max(1000, { message: 'Maximální délka zprávy je 1000 znaků' }),
   website: z.string().max(0) // Honeypot
 });
 
@@ -43,7 +69,7 @@ export default function ContactPage() {
     register, 
     handleSubmit, 
     formState: { errors, isSubmitting }, 
-    reset 
+    reset
   } = useForm<FormData>({
     resolver: zodResolver(FormSchema)
   });
@@ -59,6 +85,22 @@ export default function ContactPage() {
       });
 
       if (!response.ok) throw new Error('SEND_FAILED');
+      
+      // GA4 Conversion Tracking - Custom event for conversion setup
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'contact_form_submit', {
+          event_category: 'conversion',
+          event_label: 'contact_form'
+        });
+      }
+
+      // Facebook Pixel Lead Event
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead', {
+          content_name: 'Contact Form',
+          content_category: 'Contact'
+        });
+      }
       
       toast.success(t('form.success'));
       reset();
@@ -189,6 +231,120 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      {t('form.phone')}
+                    </label>
+                    <input
+                      {...register('phone')}
+                      type="tel"
+                      className={`w-full px-4 py-3 rounded-lg border transition-colors duration-200 ${
+                        errors.phone 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-gray-300 dark:border-zinc-600 focus:border-blue-500'
+                      } bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                      placeholder={t('form.phonePlaceholder')}
+                    />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <Building2 className="w-4 h-4 inline mr-2" />
+                      {t('form.projectType')} *
+                    </label>
+                    <select
+                      {...register('projectType')}
+                      className={`w-full px-4 py-3 rounded-lg border transition-colors duration-200 ${
+                        errors.projectType 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-gray-300 dark:border-zinc-600 focus:border-blue-500'
+                      } bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    >
+                      <option value="">{t('form.projectType')}</option>
+                      <option value="residential">{t('form.projectTypeOptions.residential')}</option>
+                      <option value="apartment">{t('form.projectTypeOptions.apartment')}</option>
+                      <option value="commercial">{t('form.projectTypeOptions.commercial')}</option>
+                    </select>
+                    {errors.projectType && (
+                      <p className="text-red-500 text-sm mt-1">{errors.projectType.message}</p>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <DollarSign className="w-4 h-4 inline mr-2" />
+                        {t('form.budget')} *
+                      </label>
+                      <select
+                        {...register('budget')}
+                        className={`w-full px-4 py-3 rounded-lg border transition-colors duration-200 ${
+                          errors.budget 
+                            ? 'border-red-500 focus:border-red-500' 
+                            : 'border-gray-300 dark:border-zinc-600 focus:border-blue-500'
+                        } bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                      >
+                        <option value="">{t('form.budget')}</option>
+                        <option value="under-1m">{t('form.budgetOptions.under-1m')}</option>
+                        <option value="1-3m">{t('form.budgetOptions.1-3m')}</option>
+                        <option value="3-5m">{t('form.budgetOptions.3-5m')}</option>
+                        <option value="5-10m">{t('form.budgetOptions.5-10m')}</option>
+                        <option value="over-10m">{t('form.budgetOptions.over-10m')}</option>
+                      </select>
+                      {errors.budget && (
+                        <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <Calendar className="w-4 h-4 inline mr-2" />
+                        {t('form.timeline')} *
+                      </label>
+                      <select
+                        {...register('timeline')}
+                        className={`w-full px-4 py-3 rounded-lg border transition-colors duration-200 ${
+                          errors.timeline 
+                            ? 'border-red-500 focus:border-red-500' 
+                            : 'border-gray-300 dark:border-zinc-600 focus:border-blue-500'
+                        } bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                      >
+                        <option value="">{t('form.timeline')}</option>
+                        <option value="asap">{t('form.timelineOptions.asap')}</option>
+                        <option value="1-3months">{t('form.timelineOptions.1-3months')}</option>
+                        <option value="3-6months">{t('form.timelineOptions.3-6months')}</option>
+                        <option value="6-12months">{t('form.timelineOptions.6-12months')}</option>
+                        <option value="flexible">{t('form.timelineOptions.flexible')}</option>
+                      </select>
+                      {errors.timeline && (
+                        <p className="text-red-500 text-sm mt-1">{errors.timeline.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <MapPin className="w-4 h-4 inline mr-2" />
+                      {t('form.location')} *
+                    </label>
+                    <input
+                      {...register('location')}
+                      className={`w-full px-4 py-3 rounded-lg border transition-colors duration-200 ${
+                        errors.location 
+                          ? 'border-red-500 focus:border-red-500' 
+                          : 'border-gray-300 dark:border-zinc-600 focus:border-blue-500'
+                      } bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                      placeholder={t('form.locationPlaceholder')}
+                    />
+                    {errors.location && (
+                      <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       <MessageSquare className="w-4 h-4 inline mr-2" />
                       {t('form.message')}
                     </label>
@@ -307,7 +463,26 @@ export default function ContactPage() {
                         {t('contact.phone.title')}
                       </h4>
                       <p className="text-gray-600 dark:text-gray-300">
-                        <a href={`tel:${t('contact.phone.description')}`} className="hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                        <a 
+                          href={`tel:${t('contact.phone.description')}`} 
+                          className="hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                          onClick={() => {
+                            // GA4 Phone Click Tracking - Custom event for conversion setup
+                            if (typeof window !== 'undefined' && window.gtag) {
+                              window.gtag('event', 'phone_click_conversion', {
+                                event_category: 'conversion',
+                                event_label: 'phone_number'
+                              });
+                            }
+                            // Facebook Pixel Contact Event
+                            if (typeof window !== 'undefined' && window.fbq) {
+                              window.fbq('track', 'Contact', {
+                                content_name: 'Phone Click',
+                                content_category: 'Contact'
+                              });
+                            }
+                          }}
+                        >
                           {t('contact.phone.description')}
                         </a>
                       </p>
@@ -323,7 +498,26 @@ export default function ContactPage() {
                         {t('contact.email.title')}
                       </h4>
                       <p className="text-gray-600 dark:text-gray-300">
-                        <a href={`mailto:${t('contact.email.description')}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                        <a 
+                          href={`mailto:${t('contact.email.description')}`} 
+                          className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                          onClick={() => {
+                            // GA4 Email Click Tracking - Custom event for conversion setup
+                            if (typeof window !== 'undefined' && window.gtag) {
+                              window.gtag('event', 'email_click_conversion', {
+                                event_category: 'conversion',
+                                event_label: 'email_address'
+                              });
+                            }
+                            // Facebook Pixel Contact Event
+                            if (typeof window !== 'undefined' && window.fbq) {
+                              window.fbq('track', 'Contact', {
+                                content_name: 'Email Click',
+                                content_category: 'Contact'
+                              });
+                            }
+                          }}
+                        >
                           {t('contact.email.description')}
                         </a>
                       </p>

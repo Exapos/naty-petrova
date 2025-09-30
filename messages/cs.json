@@ -22,7 +22,7 @@
     "hero": {
       "badge": "Profesionální projekční služby",
       "title": "Vaše vize, naše odbornost",
-      "subtitle": "Specializujeme se na architektonické návrhy a komplexní projekční služby. Od prvotního nápadu až po finální realizaci - s námi dosáhnete svých stavebních cílů.",
+      "subtitle": "Specializujeme se na architektonické návrhy a komplexní projekční služby v Teplicích a okolí. Od prvotního nápadu až po finální realizaci - s námi dosáhnete svých stavebních cílů.",
       "primaryCta": "Nezávazná konzultace",
       "secondaryCta": "Naše služby",
       "trustIndicators": [
@@ -40,7 +40,7 @@
     ],
     "services": {
       "title": "Komplexní projektové služby",
-      "subtitle": "Od architektonických návrhů po kompletní projektovou dokumentaci. Každý projekt řešíme individuálně s důrazem na kvalitu a funkčnost.",
+      "subtitle": "Od architektonických návrhů po kompletní projektovou dokumentaci v Teplicích a Ústeckém kraji. Každý projekt řešíme individuálně s důrazem na kvalitu a funkčnost. Architekt Teplice, stavební projektant.",
       "learnMore": "Zjistit více",
       "viewAll": "Všechny služby",
       "items": [
@@ -204,6 +204,10 @@
     }
   },
   "ReferencesPage": {
+    "meta": {
+      "title": "Reference | Maxprojekty",
+      "description": "Prohlédněte si naše úspěšné projekty. Reference z architektury, projekce a stavebnictví. Rodinné domy, komerční objekty, rekonstrukce v Teplicích a okolí."
+    },
     "title": "Naše reference",
     "subtitle": "Prohlédněte si naše úspěšně realizované projekty",
     "searchPlaceholder": "Hledat projekty...",
@@ -231,6 +235,10 @@
     "noProjectsYet": "Zatím jsme nevytvořili žádné reference. Brzy zde najdete naše realizované projekty."
   },
   "Career": {
+    "meta": {
+      "title": "Kariéra | Maxprojekty",
+      "description": "Připojte se k týmu Maxprojekty. Hledáme architekty, projektanty a další profesionály. Flexibilní pracovní podmínky, mezinárodní projekty, moderní technologie."
+    },
     "hero": {
       "title": "Připojte se k našemu týmu",
       "subtitle": "Hledáme talentované profesionály do našeho týmu. Buďte součástí inspirativních projektů.",
@@ -278,6 +286,10 @@
     }
   },
   "Contact": {
+    "meta": {
+      "title": "Kontakt | Maxprojekty",
+      "description": "Kontaktujte Maxprojekty pro architektonické služby. Email, telefon, adresa. Nezávazná konzultace pro váš stavební projekt v Teplicích a okolí."
+    },
     "hero": {
       "title": "Kontaktujte nás",
       "subtitle": "Jsme tu pro vás! Neváhejte se na nás obrátit."
@@ -300,18 +312,44 @@
     },
     "form": {
       "title": "Napište nám",
-      "description": "Napište nám a my se vám ozveme co nejdříve. Rádi zodpovíme vaše dotazy a projedname možnosti spolupráce.",
-      "name": "Vaše jméno",
+      "description": "Vyplňte formulář a my se vám ozveme co nejdříve",
+      "name": "Jméno a příjmení",
       "namePlaceholder": "Vaše jméno",
-      "email": "Váš email",
+      "email": "Emailová adresa",
       "emailPlaceholder": "vas@email.cz",
+      "phone": "Telefon (volitelné)",
+      "phonePlaceholder": "+420 123 456 789",
+      "projectType": "Typ projektu",
+      "projectTypeOptions": {
+        "residential": "Rodinný dům",
+        "apartment": "Bytový dům",
+        "commercial": "Komerční budova"
+      },
+      "budget": "Odhadovaný rozpočet",
+      "budgetOptions": {
+        "under-1m": "Do 1 mil. Kč",
+        "1-3m": "1 - 3 mil. Kč",
+        "3-5m": "3 - 5 mil. Kč",
+        "5-10m": "5 - 10 mil. Kč",
+        "over-10m": "Nad 10 mil. Kč"
+      },
+      "timeline": "Časový rámec",
+      "timelineOptions": {
+        "asap": "Co nejdříve",
+        "1-3months": "1 - 3 měsíce",
+        "3-6months": "3 - 6 měsíců",
+        "6-12months": "6 - 12 měsíců",
+        "flexible": "Flexibilní"
+      },
+      "location": "Lokalita projektu",
+      "locationPlaceholder": "např. Praha, Brno, Teplice...",
       "message": "Vaše zpráva",
-      "messagePlaceholder": "Napište nám, jak vám můžeme pomoci...",
+      "messagePlaceholder": "Popište váš projekt nebo dotaz...",
       "submit": "Odeslat zprávu",
-      "success": "Zpráva byla úspěšně odeslána.",
-      "error": "Nastala chyba při odesílání. Zkuste to prosím znovu.",
-      "spamError": "Zpráva byla označena jako spam.",
-      "sending": "Odesílání..."
+      "sending": "Odesílám...",
+      "success": "Zpráva byla úspěšně odeslána!",
+      "error": "Došlo k chybě při odesílání. Zkuste to prosím znovu.",
+      "spamError": "Spam detekován. Zpráva nebyla odeslána."
     },
     "map": {
       "title": "Kde nás najdete"
@@ -456,5 +494,56 @@
         "desc": "Poskytujeme odborné konzultace a poradíme vám v každé fázi projektu – od prvotního záměru až po finální realizaci."
       }
     ]
+  },
+  "Calculator": {
+    "title": "Kalkulačka projektových služeb",
+    "subtitle": "Zjistěte orientační cenu za naše architektonické služby",
+    "configuration": "Konfigurace projektu",
+    "projectType": "Typ projektu",
+    "projectTypes": {
+      "residential": "Rodinný dům",
+      "apartment": "Bytový dům",
+      "commercial": "Komerční budova"
+    },
+    "complexity": "Složitost projektu",
+    "complexityLevels": {
+      "simple": {
+        "name": "Jednoduchý",
+        "description": "Standardní řešení bez speciálních požadavků"
+      },
+      "standard": {
+        "name": "Standardní",
+        "description": "Běžná úroveň s několika specifickými požadavky"
+      },
+      "complex": {
+        "name": "Komplexní",
+        "description": "Složitý projekt s mnoha specifickými požadavky"
+      }
+    },
+    "area": "Plocha stavby (m²)",
+    "services": {
+      "interior": "Včetně interiérového návrhu (+30%)",
+      "permit": "Včetně vyřízení stavebního povolení (+20%)"
+    },
+    "results": {
+      "title": "Orientační cena",
+      "vatNote": "Bez DPH"
+    },
+    "breakdown": {
+      "basePrice": "Základní cena",
+      "complexity": "Složitost",
+      "area": "Plocha",
+      "interior": "Interiér",
+      "permit": "Stavební povolení"
+    },
+    "cta": {
+      "note": "Tato kalkulace je orientační. Pro přesnou cenovou nabídku nás kontaktujte.",
+      "button": "Získat přesnou nabídku"
+    },
+    "disclaimer": {
+      "title": "Upozornění:",
+      "message": "Cena je orientační a může se lišit v závislosti na konkrétních požadavcích projektu, lokalitě a dalších faktorech. Pro závaznou cenovou nabídku je nutné osobní konzultace."
+    },
+    "fromPrice": "Od"
   }
 }

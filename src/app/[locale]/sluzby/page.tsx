@@ -2,6 +2,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
+import Head from 'next/head';
 import Link from 'next/link';
 import { 
   HomeIcon, 
@@ -52,7 +53,13 @@ export default function ServicesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 transition-colors">
+      <Head>
+        <title>{t('metaTitle')}</title>
+        <meta name="description" content={t('metaDescription')} />
+        <meta property="og:title" content={t('metaTitle')} />
+        <meta property="og:description" content={t('metaDescription')} />
+      </Head>
       {/* Hero sekce s profesionálním designem */}
       <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white pt-24 pb-20">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -271,6 +278,6 @@ export default function ServicesPage() {
 
       {/* Strukturovaná data pro SEO */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }} />
-    </main>
+    </div>
   );
 }

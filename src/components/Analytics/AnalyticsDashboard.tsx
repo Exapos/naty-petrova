@@ -3,6 +3,13 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { AnalyticsOverview } from './AnalyticsOverview';
 import { TopPages } from './TopPages';
 import { TrafficSources } from './TrafficSources';
+import { WebVitalsAnalytics } from './WebVitalsAnalytics';
+import { RealTimeMetrics } from './RealTimeMetrics';
+import { Conversions } from './Conversions';
+import { GeographicData } from './GeographicData';
+import { DeviceBrowserBreakdown } from './DeviceBrowserBreakdown';
+import { PerformanceMetrics } from './PerformanceMetrics';
+import { DailyChart } from './DailyChart';
 
 const TIME_PERIODS = [
   { value: 7, label: 'Posledních 7 dní' },
@@ -131,14 +138,35 @@ export function AnalyticsDashboard() {
         </div>
       </div>
 
+      {/* Real-time a konverze */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <RealTimeMetrics realTimeUsers={data.realTimeUsers} />
+        <Conversions conversions={data.conversions} className="lg:col-span-2" />
+      </div>
+
       {/* Přehled metrik */}
       <AnalyticsOverview data={data} />
+
+      {/* Denní trendy */}
+      <DailyChart dailyData={data.dailyData} />
+
+      {/* Web Vitals sekce */}
+      <WebVitalsAnalytics days={selectedPeriod} />
 
       {/* Detailní statistiky */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TopPages data={data.topPages} />
         <TrafficSources data={data.trafficSources} />
       </div>
+
+      {/* Geografická data a zařízení/prohlížeče */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <GeographicData countries={data.countries} />
+        <DeviceBrowserBreakdown devices={data.devices} browsers={data.browsers} />
+      </div>
+
+      {/* Performance metriky */}
+      <PerformanceMetrics performance={data.performance} />
 
       {/* Informace o datech */}
       {!isRealData && (
