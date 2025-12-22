@@ -26,6 +26,7 @@ export function GalleryBlock({ block }: GalleryBlockProps) {
     <div className="w-full h-full grid grid-cols-2 gap-2 p-2">
       {images.slice(0, 4).map((image: any, index: number) => (
         <div key={index} className="relative aspect-square">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image.src || image}
             alt={image.alt || `Obrázek ${index + 1}`}

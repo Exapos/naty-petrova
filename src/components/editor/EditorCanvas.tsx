@@ -338,6 +338,7 @@ export function EditorCanvas() {
             </label>
             {featuredImage ? (
               <div className="relative group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={featuredImage}
                   alt="Featured"

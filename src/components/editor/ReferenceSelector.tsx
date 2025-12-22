@@ -170,13 +170,14 @@ export function ReferenceSelector({ isOpen, onClose, onReferenceSelect, selected
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      {reference.image && (
-                        <img
-                          src={reference.image}
-                          alt={reference.title}
-                          className="w-16 h-16 object-cover rounded-md flex-shrink-0"
-                        />
-                      )}
+                        {reference.image && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={reference.image}
+                            alt={reference.title}
+                            className="w-16 h-16 object-cover rounded-md flex-shrink-0"
+                          />
+                        )}
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-gray-900 truncate">
                           {reference.title}

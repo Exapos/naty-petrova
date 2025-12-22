@@ -30,6 +30,7 @@ export function ReferenceBlock({ block }: ReferenceBlockProps) {
               <p className="text-sm text-gray-600 mt-1">{project.description || 'Popis projektu...'}</p>
               {project.image && (
                 <div className="mt-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={project.image}
                     alt={project.title}

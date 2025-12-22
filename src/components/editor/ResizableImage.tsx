@@ -30,6 +30,7 @@ export function ResizableImage({
   isSelected = false,
   onClick
 }: ResizableImageProps) {
+  const [isResizing, setIsResizing] = useState(false);
   const [resizeData, setResizeData] = useState({ width, height });
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,6 +38,7 @@ export function ResizableImage({
   const handleMouseDown = useCallback((e: React.MouseEvent, corner: string) => {
     e.preventDefault();
     e.stopPropagation();
+    setIsResizing(true);
 
     const startX = e.clientX;
     const startY = e.clientY;
@@ -104,9 +106,10 @@ export function ResizableImage({
   return (
     <div
       ref={containerRef}
-      className={`relative inline-block ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      className={`relative inline-block ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isResizing ? 'resizing' : ''}`}
       onClick={onClick}
     >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imageRef}
           src={src}

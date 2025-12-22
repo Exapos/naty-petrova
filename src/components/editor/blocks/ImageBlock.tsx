@@ -203,6 +203,7 @@ export function ImageBlock({ block, isEditing, onUpdate }: ImageBlockProps) {
   return (
     <div className="w-full h-full relative group" style={styles}>
       <div className="relative w-full h-full flex items-center justify-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={block.content.src}
           alt={block.content.alt || ''}

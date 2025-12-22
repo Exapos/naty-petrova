@@ -134,6 +134,7 @@ export function MediaManager({ isOpen, onClose, onSelect }: MediaManagerProps) {
                           className={`relative group rounded-xl border ${isActive ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
                           onClick={() => setSelected(asset)}
                         >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={asset.url}
                             alt={asset.alt || asset.filename}
