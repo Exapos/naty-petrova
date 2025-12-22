@@ -18,6 +18,15 @@ export function DailyChart({ dailyData, className = '' }: DailyChartProps) {
 
   const formatDate = (dateString: string) => {
     try {
+      // Formát z GA4 je YYYYMMDD, převedeme na YYYY-MM-DD
+      if (dateString.length === 8) {
+        const year = dateString.substring(0, 4);
+        const month = dateString.substring(4, 6);
+        const day = dateString.substring(6, 8);
+        const date = new Date(`${year}-${month}-${day}T00:00:00`);
+        return date.toLocaleDateString('cs-CZ', { month: 'short', day: 'numeric' });
+      }
+      // Pokud je již ve formátu YYYY-MM-DD
       const date = new Date(dateString + 'T00:00:00');
       return date.toLocaleDateString('cs-CZ', { month: 'short', day: 'numeric' });
     } catch {

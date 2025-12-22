@@ -38,8 +38,7 @@ export default function BlogPage() {
     } else {
       const filtered = posts.filter(post => 
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (post.excerpt && post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (post.content && post.content.toLowerCase().includes(searchQuery.toLowerCase()))
+        (post.excerpt && post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       setFilteredPosts(filtered);
     }

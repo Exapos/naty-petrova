@@ -26,30 +26,30 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   
-  const { 
-    title, 
-    slug, 
-    content, 
-    excerpt, 
+  const {
+    title,
+    slug,
+    content,
+    excerpt,
     featuredImage,
-    metaTitle, 
-    metaDescription, 
-    keywords, 
+    metaTitle,
+    metaDescription,
+    keywords,
     published,
-    editorMode 
+    editorMode
   } = await req.json();
-  
+
   if (!title || !content) {
     return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
   }
-  
+
   const safeContent = sanitizeInput(content);
-  
+
   const post = await prisma.blogPost.update({
     where: { id },
-    data: { 
-      title, 
-      slug, 
+    data: {
+      title,
+      slug,
       content: safeContent,
       ...(excerpt !== undefined && { excerpt }),
       ...(featuredImage !== undefined && { featuredImage }),

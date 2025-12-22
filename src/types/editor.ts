@@ -1,17 +1,14 @@
-// Types for the blog editor
-export interface Block {
-  id: string;
-  type: BlockType;
-  content: any;
-  styles: BlockStyles;
-  columnSpan?: number; // How many columns this block spans (default: 1)
-  responsive: {
-    desktop: BlockStyles & { columnSpan?: number };
-    tablet: BlockStyles & { columnSpan?: number };
-    mobile: BlockStyles & { columnSpan?: number };
-  };
-}
+// Simplified types for the blog editor
 
+// Layout types for blocks
+export type LayoutType =
+  | 'single'           // Jeden sloupec (default)
+  | 'two-column-equal' // 50/50
+  | 'two-column-left'  // 70/30 (text vlevo, obrázek vpravo)
+  | 'two-column-right' // 30/70 (obrázek vlevo, text vpravo)
+  | 'three-column';    // 33/33/33
+
+// Block types
 export type BlockType =
   | 'heading'
   | 'text'
@@ -24,8 +21,33 @@ export type BlockType =
   | 'button'
   | 'divider'
   | 'icon'
-  | 'table';
+  | 'table'
+  | 'layout';  // Nový typ pro layout bloky
 
+// Sub-block pro layout bloky (image + text kombinace)
+export interface SubBlock {
+  id: string;
+  type: BlockType;
+  content: any;
+  styles: BlockStyles;
+}
+
+// Hlavní blok
+export interface Block {
+  id: string;
+  type: BlockType;
+  layout?: LayoutType; // Pro layout bloky
+  content: any;
+  subBlocks?: SubBlock[]; // Pro layout bloky (např. [image, text])
+  styles: BlockStyles;
+  responsive?: {
+    desktop?: BlockStyles;
+    tablet?: BlockStyles;
+    mobile?: BlockStyles;
+  };
+}
+
+// Styly pro bloky
 export interface BlockStyles {
   backgroundColor?: string;
   textColor?: string;
@@ -40,57 +62,71 @@ export interface BlockStyles {
   height?: string;
   borderColor?: string;
   borderWidth?: string;
+  // Image specific styles
+  objectFit?: string;
+  filter?: string;
+  rotate?: string;
+  opacity?: number;
+  // Layout specific styles
+  gap?: string;
+  // Animation styles
+  animation?: string;
+  animationDuration?: string;
+  animationDelay?: string;
+  hoverEffect?: string;
+  // Layout styles
+  display?: string;
+  flexDirection?: string;
+  flexWrap?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  // Table styles
+  tableStyle?: string;
+  // Icon styles
+  color?: string;
+  // Responsive styles
+  responsive?: {
+    mobile?: Partial<BlockStyles>;
+    tablet?: Partial<BlockStyles>;
+    desktop?: Partial<BlockStyles>;
+  };
 }
 
-export interface Column {
+export interface MediaAsset {
   id: string;
-  width: number; // percentage (0-100)
+  filename: string;
+  url: string;
+  width?: number;
+  height?: number;
+  size?: number;
+  type: 'image' | 'video' | 'file';
+  alt?: string;
+  caption?: string;
+  createdAt: string;
+}
+
+export type EditorWorkflowStatus = 'draft' | 'review' | 'published';
+
+export interface EditorVersion {
+  id: string;
+  title: string;
+  status: EditorWorkflowStatus;
+  savedAt: string;
+  author?: string;
   blocks: Block[];
-  styles: {
-    backgroundColor?: string;
-    padding?: string;
-    margin?: string;
-    alignment?: 'left' | 'center' | 'right';
-  };
-  responsive: {
-    desktop: { width: number };
-    tablet: { width: number };
-    mobile: { width: number };
-  };
+  note?: string;
 }
 
-export interface Row {
-  id: string;
-  columns: Column[];
-  styles: {
-    backgroundColor?: string;
-    padding?: string;
-    margin?: string;
-    minHeight?: string;
-  };
-}
-
-export interface Section {
-  id: string;
-  rows: Row[];
-  styles: {
-    backgroundColor?: string;
-    padding?: string;
-    margin?: string;
-    borderRadius?: string;
-  };
-}
-
+// Zjednodušený editor state - jen pole bloků!
 export interface EditorState {
-  sections: Section[];
+  blocks: Block[]; // ✨ To je všechno!
   selectedBlock: string | null;
-  selectedColumn: string | null;
-  selectedRow: string | null;
-  selectedSection: string | null;
   isPreviewMode: boolean;
-  history: Section[][];
+  responsiveMode: 'desktop' | 'tablet' | 'mobile';
+  history: Block[][];
   historyIndex: number;
-  gridSize: 8 | 16 | 32;
   showGrid: boolean;
   globalStyles: {
     primaryColor: string;
@@ -104,8 +140,19 @@ export interface EditorState {
   };
   stylePresets: StylePreset[];
   customColors: string[];
+  mediaAssets: MediaAsset[];
+  title: string;
+  slug: string;
+  featuredImage?: string | null;
+  isSaving: boolean;
+  lastSavedAt: string | null;
+  status: EditorWorkflowStatus;
+  versions: EditorVersion[];
+  lastError?: string | null;
+  postId?: string | null;
 }
 
+// Style presets
 export interface StylePreset {
   id: string;
   name: string;
@@ -121,12 +168,22 @@ export interface StylePreset {
   borderRadius: string;
 }
 
+// Drag item data
 export interface DragItem {
-  type: 'block' | 'new-block' | 'column-resize';
+  type: 'block' | 'new-block';
   blockType?: BlockType;
+  layoutType?: LayoutType; // Pro předpřipravené layouty
   block?: Block;
-  columnId?: string;
-  sectionId?: string;
-  rowId?: string;
-  id?: string;
+  index?: number;
+}
+
+// Layout template pro Block Picker
+export interface LayoutTemplate {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  blockType: BlockType;
+  layoutType?: LayoutType;
+  previewImage?: string;
 }

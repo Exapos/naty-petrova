@@ -18,7 +18,11 @@ export function TableBlock({ block }: TableBlockProps) {
     hasHeader = true,
     borderStyle = 'border',
     cellPadding = '8px',
-  } = block.content;
+  } = block.content || {};
+
+  const normalizedRows: string[][] = Array.isArray(rows)
+    ? rows.map((row: any) => (Array.isArray(row) ? row.map((cell: any) => String(cell ?? '')) : [String(row ?? '')]))
+    : [];
 
   return (
     <div className="w-full overflow-x-auto">
@@ -27,7 +31,7 @@ export function TableBlock({ block }: TableBlockProps) {
         style={{ borderCollapse: 'collapse' }}
       >
         <tbody>
-          {rows.map((row: string[], rowIndex: number) => (
+          {normalizedRows.map((row: string[], rowIndex: number) => (
             <tr key={rowIndex} className={borderStyle === 'border' ? 'border-b border-gray-300' : ''}>
               {row.map((cell: string, cellIndex: number) => {
                 const isHeader = hasHeader && rowIndex === 0;

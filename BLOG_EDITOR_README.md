@@ -131,6 +131,33 @@ interface EditorState {
 - [ ] A/B testing
 - [ ] Version control
 
+### Version workflow & review
+- [ ] Workflow states: draft → review → published
+- [ ] Reviewer assignment & approval queue
+- [ ] Version timeline with diff view / restore
+- [ ] Commenting & change requests per block
+- [ ] Publication audit log (who/when)
+
+### Templates & theming
+- [ ] Export/import templates as JSON bundles
+- [ ] Block presets library with thumbnails
+- [ ] Theme overrides (colors, typography, spacing) per article
+- [ ] Shared sections (hero, CTA) with reuse tracking
+
+### SEO & accessibility checks
+- [ ] Alt-text reminders on images
+- [ ] Heading hierarchy validation (H1/H2 order)
+- [ ] Color contrast warnings for text/background
+- [ ] Metadata checklist (title length, meta description, keywords)
+- [ ] Internal/external link health monitor
+
+### Testing strategy
+- [ ] Drag/drop integration tests (block reorder, layout sub-blocks)
+- [ ] Keyboard navigation suite (selection, shortcuts)
+- [ ] Autosave & publish API contract tests
+- [ ] Visual regression snapshots for key blocks
+- [ ] Performance budgets (load blocks, render layout)
+
 ## Instalace a spuštění
 
 ```bash

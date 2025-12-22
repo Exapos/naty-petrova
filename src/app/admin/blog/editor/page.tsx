@@ -1,31 +1,45 @@
 'use client';
 
 import React, { useEffect, useCallback, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
 import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   EyeIcon,
   CloudArrowUpIcon,
   ShareIcon,
-  PlusIcon,
   Cog6ToothIcon,
-  Squares2X2Icon,
-  PaintBrushIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   DeviceTabletIcon,
 } from '@heroicons/react/24/outline';
 import { EditorCanvas } from '@/components/editor/EditorCanvas';
-import { DragMenu } from '@/components/editor/DragMenu';
+import { OutlinePanel } from '@/components/editor/OutlinePanel';
+import { InspectorPanel } from '@/components/editor/InspectorPanel';
 import { useEditorStore } from '@/stores/editorStore';
 
 export default function BlogEditorPage() {
-  const { undo, redo, saveDraft, publishArticle, exportToJSON, addSection, addRow, addColumn, addBlock, moveBlock, sections, selectedColumn, selectedRow, selectedSection, isPreviewMode, setPreviewMode } = useEditorStore();
-  const [showAddMenu, setShowAddMenu] = useState(false);
+  const searchParams = useSearchParams();
+  const postId = searchParams.get('id');
+  const [loadingPost, setLoadingPost] = useState(!!postId);
+  const {
+    undo,
+    redo,
+    saveDraft,
+    publishArticle,
+    exportToJSON,
+    reorderBlocks,
+    isPreviewMode,
+    setPreviewMode,
+    responsiveMode,
+    setResponsiveMode,
+    isSaving,
+    lastSavedAt,
+    lastError,
+  } = useEditorStore();
   const [showSettings, setShowSettings] = useState(false);
-  const [responsiveMode, setResponsiveMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -52,6 +66,13 @@ export default function BlogEditorPage() {
           event.preventDefault();
           redo();
           break;
+        case 'd':
+          event.preventDefault();
+          const { selectedBlock, duplicateBlock } = useEditorStore.getState();
+          if (selectedBlock) {
+            duplicateBlock(selectedBlock);
+          }
+          break;
       }
     }
 
@@ -62,12 +83,111 @@ export default function BlogEditorPage() {
         deleteBlock(selectedBlock);
       }
     }
+
+    // Arrow key navigation
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const { blocks, selectedBlock, selectBlock } = useEditorStore.getState();
+      if (selectedBlock) {
+        const currentIndex = blocks.findIndex(block => block.id === selectedBlock);
+        if (currentIndex !== -1) {
+          const nextIndex = event.key === 'ArrowUp' 
+            ? Math.max(0, currentIndex - 1)
+            : Math.min(blocks.length - 1, currentIndex + 1);
+          if (nextIndex !== currentIndex) {
+            selectBlock(blocks[nextIndex].id);
+          }
+        }
+      }
+    }
+
+    // Escape to clear selection
+    if (event.key === 'Escape') {
+      const { selectBlock } = useEditorStore.getState();
+      selectBlock(null);
+    }
   }, [undo, redo]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
+
+  // Načtení existujícího blogu
+  useEffect(() => {
+    if (postId) {
+      const loadPost = async () => {
+        try {
+          const response = await fetch(`/api/blog/${postId}`);
+          if (!response.ok) {
+            throw new Error('Nepodařilo se načíst článek');
+          }
+          const post = await response.json();
+          
+          // Načíst data do store
+          const { setTitle, setSlug, setFeaturedImage, setState } = useEditorStore.getState();
+          setTitle(post.title || '');
+          setSlug(post.slug || '');
+          setFeaturedImage(post.featuredImage || null);
+          
+          // Načíst bloky pokud existují
+          if (post.content) {
+            try {
+              const contentData = JSON.parse(post.content);
+              if (contentData.blocks) {
+                setState({
+                  blocks: contentData.blocks,
+                  globalStyles: contentData.globalStyles || useEditorStore.getState().globalStyles,
+                  postId: post.id,
+                });
+              }
+            } catch (e) {
+              console.error('Chyba při parsování obsahu:', e);
+            }
+          }
+        } catch (error) {
+          console.error('Chyba při načítání článku:', error);
+          alert('Nepodařilo se načíst článek');
+        } finally {
+          setLoadingPost(false);
+        }
+      };
+      
+      loadPost();
+    }
+  }, [postId]);
+
+  // Auto-save functionality
+  useEffect(() => {
+    const autoSaveInterval = setInterval(() => {
+      const { blocks } = useEditorStore.getState();
+      if (blocks.length > 0) {
+        // Save to localStorage as backup
+        localStorage.setItem('editor-auto-save', JSON.stringify({
+          blocks,
+          timestamp: Date.now(),
+        }));
+      }
+    }, 30000); // Auto-save every 30 seconds
+
+    return () => clearInterval(autoSaveInterval);
+  }, []);
+
+  // Load auto-save on mount
+  useEffect(() => {
+    const autoSaveData = localStorage.getItem('editor-auto-save');
+    if (autoSaveData) {
+      try {
+        const { blocks, timestamp } = JSON.parse(autoSaveData);
+        // Only load if auto-save is less than 1 hour old
+        if (Date.now() - timestamp < 3600000) {
+          useEditorStore.setState({ blocks });
+        }
+      } catch (error) {
+        console.error('Failed to load auto-save:', error);
+      }
+    }
+  }, []);
 
   const handleDragStart = () => {
     // Handle drag start if needed
@@ -82,89 +202,27 @@ export default function BlogEditorPage() {
 
     if (!over) return;
 
-    // Handle dropping new blocks
-    if (active.data.current?.type === 'new-block') {
-      const blockType = active.data.current.blockType;
+    // Handle reordering blocks
+    if (active.data.current?.type === 'block' && over.data.current?.type === 'block') {
+      const activeIndex = active.data.current.index;
+      const overIndex = over.data.current.index;
 
-      // Get target from drop zone data
-      let targetSectionId: string | null = null;
-      let targetRowId: string | null = null;
-      let targetColumnId: string | null = null;
-
-      if (over.data.current?.type === 'column') {
-        // Dropped directly on a column
-        targetSectionId = over.data.current.sectionId;
-        targetRowId = over.data.current.rowId;
-        targetColumnId = over.data.current.columnId;
-      } else if (over.id === 'canvas') {
-        // Dropped on canvas - use selected or first available
-        if (selectedColumn && selectedRow && selectedSection) {
-          targetSectionId = selectedSection;
-          targetRowId = selectedRow;
-          targetColumnId = selectedColumn;
-        } else if (sections.length > 0) {
-          // Use last section's last row's last column
-          const lastSection = sections[sections.length - 1];
-          if (lastSection.rows.length > 0) {
-            const lastRow = lastSection.rows[lastSection.rows.length - 1];
-            if (lastRow.columns.length > 0) {
-              targetSectionId = lastSection.id;
-              targetRowId = lastRow.id;
-              targetColumnId = lastRow.columns[lastRow.columns.length - 1].id;
-            }
-          }
-        }
-      }
-
-      // If no valid target found, create new structure
-      if (!targetSectionId || !targetRowId || !targetColumnId) {
-        if (sections.length === 0) {
-          // Create first section (this will automatically create row and column)
-          addSection();
-          // Don't add block yet - user can try dropping again
-          return;
-        } else {
-          // Use the first available column from existing sections
-          const firstSection = sections[0];
-          if (firstSection.rows.length > 0) {
-            const firstRow = firstSection.rows[0];
-            if (firstRow.columns.length > 0) {
-              targetSectionId = firstSection.id;
-              targetRowId = firstRow.id;
-              targetColumnId = firstRow.columns[0].id;
-            }
-          }
-        }
-      }
-
-      if (targetSectionId && targetRowId && targetColumnId) {
-        // Add new block to the target column
-        addBlock(targetSectionId, targetRowId, targetColumnId, {
-          type: blockType,
-          content: getDefaultContent(blockType),
-          styles: getDefaultStyles(),
-          responsive: {
-            desktop: getDefaultStyles(),
-            tablet: getDefaultStyles(),
-            mobile: getDefaultStyles(),
-          },
-        });
-      }
-    }
-
-    // Handle moving existing blocks between columns
-    if (active.data.current?.type === 'block') {
-      if (over.data.current?.type === 'column') {
-        const sourceBlockId = active.data.current.block.id;
-        const targetSectionId = over.data.current.sectionId;
-        const targetRowId = over.data.current.rowId;
-        const targetColumnId = over.data.current.columnId;
-
-        // Move block to new column
-        moveBlock(sourceBlockId, targetSectionId, targetRowId, targetColumnId);
+      if (activeIndex !== overIndex) {
+        reorderBlocks(activeIndex, overIndex);
       }
     }
   };
+
+  if (loadingPost) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Načítám článek...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -305,10 +363,11 @@ export default function BlogEditorPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={saveDraft}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium text-sm"
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium text-sm disabled:opacity-60"
+                disabled={isSaving}
               >
                 <CloudArrowUpIcon className="w-4 h-4 inline mr-2" />
-                Uložit
+                {isSaving ? 'Ukládám...' : 'Uložit'}
               </motion.button>
 
               {/* Publish */}
@@ -316,122 +375,54 @@ export default function BlogEditorPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={publishArticle}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all font-medium text-sm shadow-lg hover:shadow-xl"
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all font-medium text-sm shadow-lg hover:shadow-xl disabled:opacity-60"
+                disabled={isSaving}
               >
                 <ShareIcon className="w-4 h-4 inline mr-2" />
-                Publikovat
+                {isSaving ? 'Publikuji...' : 'Publikovat'}
               </motion.button>
             </div>
           </div>
         </div>
       </div>
 
+      {lastSavedAt && (
+        <div className="text-xs text-center py-1">
+          <span className="text-gray-500">
+            Naposledy uloženo: {new Date(lastSavedAt).toLocaleTimeString('cs-CZ')}
+          </span>
+          {lastError && (
+            <span className="ml-2 text-red-500">{lastError}</span>
+          )}
+        </div>
+      )}
+
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <DndContext
-          sensors={sensors}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
-        >
-          <div className="flex gap-8">
-            {/* Canvas */}
-            <div className="flex-1">
-              <EditorCanvas />
-            </div>
+      <div className="flex-1 flex overflow-hidden">
 
-            {/* Right Sidebar */}
-            <AnimatePresence>
-              {!isPreviewMode && (
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="w-80 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden"
-                >
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                      <Squares2X2Icon className="w-5 h-5 mr-2 text-blue-500" />
-                      Bloky
-                    </h3>
-                    <DragMenu />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </DndContext>
-      </div>
+        {/* Left Outline */}
+        <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start h-[calc(100vh-6rem)]">
+          <OutlinePanel />
+        </aside>
 
-      {/* Floating Add Button */}
-      <AnimatePresence>
-        {!isPreviewMode && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed bottom-8 right-8 z-40"
+        {/* Canvas */}
+        <div className="flex-1 min-w-0 overflow-y-auto">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
           >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowAddMenu(!showAddMenu)}
-              className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-2xl hover:shadow-3xl flex items-center justify-center"
-            >
-              <PlusIcon className="w-6 h-6" />
-            </motion.button>
+            <EditorCanvas />
+          </DndContext>
+        </div>
 
-            {/* Add Menu */}
-            <AnimatePresence>
-              {showAddMenu && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute bottom-16 right-0 bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 min-w-48"
-                >
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => {
-                        addSection();
-                        setShowAddMenu(false);
-                      }}
-                      className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <PlusIcon className="w-4 h-4 text-green-600" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-900">Sekce</div>
-                        <div className="text-sm text-gray-500">Přidat novou sekci</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        const { sections, addRow } = useEditorStore.getState();
-                        if (sections.length > 0) {
-                          addRow(sections[0].id);
-                          setShowAddMenu(false);
-                        }
-                      }}
-                      className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <PaintBrushIcon className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-900">Řádek</div>
-                        <div className="text-sm text-gray-500">Přidat řádek do sekce</div>
-                      </div>
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Right Inspector */}
+        <aside className="hidden lg:block w-80 flex-shrink-0 sticky top-24 self-start h-[calc(100vh-6rem)]">
+          <InspectorPanel />
+        </aside>
+      </div>
 
       {/* Settings Panel */}
       <AnimatePresence>
@@ -495,55 +486,4 @@ export default function BlogEditorPage() {
       </AnimatePresence>
     </div>
   );
-}
-
-// Helper functions
-function getDefaultContent(type: string) {
-  switch (type) {
-    case 'heading':
-      return { text: 'Nový nadpis', level: 1 };
-    case 'text':
-      return { text: 'Zde zadejte text...' };
-    case 'image':
-      return { src: '', alt: '', caption: '' };
-    case 'gallery':
-      return { images: [] };
-    case 'video':
-      return { src: '', type: 'youtube' };
-    case 'button':
-      return { text: 'Tlačítko', url: '', style: 'primary' };
-    case 'contact':
-      return { title: 'Kontaktujte nás', showForm: true };
-    case 'reference':
-      return { title: 'Naše reference', projects: [] };
-    case 'map':
-      return { latitude: 50.0755, longitude: 14.4378, zoom: 12 };
-    case 'divider':
-      return { style: 'solid', thickness: '1px', color: '#e5e7eb', width: '100%' };
-    case 'icon':
-      return { icon: 'star', size: '48px', color: '#1f2937' };
-    case 'table':
-      return {
-        rows: [
-          ['Nadpis 1', 'Nadpis 2', 'Nadpis 3'],
-          ['Řádek 1', 'Data 1', 'Data 2'],
-          ['Řádek 2', 'Data 3', 'Data 4'],
-        ],
-        hasHeader: true,
-        borderStyle: 'border',
-        cellPadding: '8px',
-      };
-    default:
-      return {};
-  }
-}
-
-function getDefaultStyles() {
-  return {
-    backgroundColor: 'transparent',
-    textColor: '#1f2937',
-    padding: '1rem',
-    margin: '0',
-    borderRadius: '0.5rem',
-  };
 }

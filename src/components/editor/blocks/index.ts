@@ -10,3 +10,4 @@ export { MapBlock } from './MapBlock';
 export { DividerBlock } from './DividerBlock';
 export { IconBlock } from './IconBlock';
 export { TableBlock } from './TableBlock';
+export { LayoutBlock } from './LayoutBlock';

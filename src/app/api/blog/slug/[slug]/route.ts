@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { BlogBlock } from '@/types/blog';
 
 const prisma = new PrismaClient();
 
@@ -58,13 +59,32 @@ export async function GET(
       .filter(p => p.slug !== slug)
       .slice(0, 3);
 
-    return NextResponse.json({
+    const navigation = {
+      previous: previousPost,
+      next: nextPost
+    };
+
+    const cleanPost = {
       ...post,
-      navigation: {
-        previous: previousPost,
-        next: nextPost
-      },
-      relatedPosts
+      content: post.content || '',
+      blocks: undefined as BlogBlock[] | undefined,
+      globalStyles: undefined as any,
+    };
+
+    if (post.editorMode === 'block' && post.content) {
+      try {
+        const parsed = JSON.parse(post.content);
+        cleanPost.blocks = parsed.blocks || [];
+        cleanPost.globalStyles = parsed.globalStyles || {};
+      } catch (error) {
+        console.error('Failed to parse block content', error);
+      }
+    }
+
+    return NextResponse.json({
+      ...cleanPost,
+      navigation,
+      relatedPosts,
     });
 
   } catch (error) {

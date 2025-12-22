@@ -7,12 +7,21 @@ import { useEditorStore } from '@/stores/editorStore';
 interface HeadingBlockProps {
   block: Block;
   isEditing: boolean;
+  onUpdate?: (block: Block) => void;
 }
 
-export function HeadingBlock({ block, isEditing }: HeadingBlockProps) {
-  const { updateBlock } = useEditorStore();
+export function HeadingBlock({ block, isEditing, onUpdate }: HeadingBlockProps) {
+  const { updateBlock: storeUpdateBlock } = useEditorStore();
   const [isEditingText, setIsEditingText] = useState(false);
   const [tempText, setTempText] = useState(block.content.text || 'Nový nadpis');
+
+  const updateBlock = (id: string, updates: Partial<Block>) => {
+    if (onUpdate) {
+      onUpdate({ ...block, ...updates });
+    } else {
+      storeUpdateBlock(id, updates);
+    }
+  };
 
   const handleTextChange = (newText: string) => {
     updateBlock(block.id, {
@@ -57,7 +66,7 @@ export function HeadingBlock({ block, isEditing }: HeadingBlockProps) {
 
   if (isEditing && isEditingText) {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-full p-4 bg-white border border-gray-200 rounded-lg shadow-lg">
         <textarea
           value={tempText}
           onChange={(e) => setTempText(e.target.value)}

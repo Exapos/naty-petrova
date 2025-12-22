@@ -16,7 +16,7 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { useParams } from 'next/navigation';
-
+import { RenderBlogBlocks } from '@/components/editor/RenderBlogBlocks';
 
 
 export default function BlogPostPage() {
@@ -255,24 +255,26 @@ export default function BlogPostPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               <div
-                className="prose prose-xl max-w-none
-                  prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight
-                  prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-lg
-                  prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:font-medium
-                  prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-bold
-                  prose-ul:text-gray-700 dark:prose-ul:text-gray-300 prose-ul:text-lg prose-ul:mb-6
-                  prose-ol:text-gray-700 dark:prose-ol:text-gray-300 prose-ol:text-lg prose-ol:mb-6
-                  prose-li:mb-2 prose-li:leading-relaxed
-                  prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:p-6 prose-blockquote:rounded-r-lg prose-blockquote:my-8
-                  prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:text-gray-900 dark:prose-code:text-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:font-medium
-                  prose-pre:bg-gray-900 dark:prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-pre:rounded-lg prose-pre:shadow-lg prose-pre:my-8
-                  prose-h1:text-4xl prose-h1:mb-6 prose-h1:mt-12
-                  prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-700
-                  prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-blue-900 dark:prose-h3:text-blue-200
-                  prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8 prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700
-                  prose-figure:my-8"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+                className="prose prose-lg md:prose-xl max-w-none
+                  prose-headings:text-slate-900 dark:prose-headings:text-slate-100 prose-headings:font-bold prose-headings:tracking-tight
+                  prose-p:text-slate-800 dark:prose-p:text-slate-200 prose-p:leading-8 prose-p:mb-6 prose-p:text-lg
+                  prose-a:text-blue-600 dark:prose-a:text-blue-300 prose-a:font-semibold hover:prose-a:text-blue-700 dark:hover:prose-a:text-blue-200
+                  prose-strong:text-slate-900 dark:prose-strong:text-slate-100 prose-strong:font-semibold
+                  prose-ul:text-slate-800 dark:text-slate-200 prose-ul:text-lg prose-ul:space-y-2 prose-ul:mb-6
+                  prose-ol:text-slate-800 dark:text-slate-200 prose-ol:text-lg prose-ol:space-y-2 prose-ol:mb-6
+                  prose-li:leading-relaxed
+                  prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:p-6 prose-blockquote:rounded-r-xl prose-blockquote:my-10 prose-blockquote:text-slate-700 dark:prose-blockquote:text-slate-200
+                  prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:text-slate-900 dark:prose-code:text-slate-100 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:font-medium
+                  prose-pre:bg-slate-900 dark:prose-pre:bg-slate-950 prose-pre:text-slate-100 prose-pre:rounded-xl prose-pre:shadow-lg prose-pre:my-8
+                  prose-img:rounded-2xl prose-img:shadow-2xl prose-img:my-10 prose-img:border prose-img:border-slate-200 dark:prose-img:border-slate-700
+                  prose-figure:my-10"
+              >
+                {post.editorMode === 'block' && post.blocks ? (
+                  <RenderBlogBlocks blocks={post.blocks} globalStyles={post.globalStyles} />
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                )}
+              </div>
             </motion.div>
 
             {/* Clean Navigation between articles */}

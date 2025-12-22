@@ -5,6 +5,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { Block } from '@/types/editor';
 import { useEditorStore } from '@/stores/editorStore';
 import { motion } from 'framer-motion';
+import { AnimatedBlock } from './AnimatedBlock';
 import {
   HeadingBlock,
   TextBlock,
@@ -18,17 +19,25 @@ import {
   DividerBlock,
   IconBlock,
   TableBlock,
+  LayoutBlock,
 } from './blocks';
-import { TrashIcon, DocumentDuplicateIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 
 interface BlockRendererProps {
   block: Block;
   columnSpan?: number;
   onColumnSpanChange?: (span: number) => void;
+  onUpdate?: (block: Block) => void;
+  isEditing?: boolean;
 }
 
-export function BlockRenderer({ block, columnSpan = 1, onColumnSpanChange }: BlockRendererProps) {
-  const { selectedBlock, selectBlock, isPreviewMode, deleteBlock, duplicateBlock } = useEditorStore();
+export function BlockRenderer({ block, onUpdate, isEditing: propIsEditing }: BlockRendererProps) {
+  const { selectedBlock, selectBlock, isPreviewMode } = useEditorStore();
+
+  const isSelected = selectedBlock === block.id;
+  const isEditing = propIsEditing !== undefined ? propIsEditing : (!isPreviewMode && isSelected);
+
+  // Only use drag functionality for top-level blocks, not for subBlocks
+  const shouldUseDrag = propIsEditing === undefined;
 
   const {
     attributes,
@@ -44,9 +53,7 @@ export function BlockRenderer({ block, columnSpan = 1, onColumnSpanChange }: Blo
     },
   });
 
-  const isSelected = selectedBlock === block.id;
-
-  const style = transform ? {
+  const style = transform && shouldUseDrag ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
 
@@ -60,51 +67,36 @@ export function BlockRenderer({ block, columnSpan = 1, onColumnSpanChange }: Blo
   const renderBlockContent = () => {
     switch (block.type) {
       case 'heading':
-        return <HeadingBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <HeadingBlock block={block} isEditing={isEditing} onUpdate={onUpdate} />;
       case 'text':
-        return <TextBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <TextBlock block={block} isEditing={isEditing} onUpdate={onUpdate} />;
       case 'image':
-        return <ImageBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <ImageBlock block={block} isEditing={isEditing} onUpdate={onUpdate} />;
       case 'gallery':
-        return <GalleryBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <GalleryBlock block={block} isEditing={isEditing} />;
       case 'video':
-        return <VideoBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <VideoBlock block={block} isEditing={isEditing} />;
       case 'button':
-        return <ButtonBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <ButtonBlock block={block} isEditing={isEditing} onUpdate={onUpdate} />;
       case 'contact':
-        return <ContactBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <ContactBlock block={block} isEditing={isEditing} />;
       case 'reference':
-        return <ReferenceBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <ReferenceBlock block={block} isEditing={isEditing} />;
       case 'map':
-        return <MapBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <MapBlock block={block} isEditing={isEditing} />;
       case 'divider':
-        return <DividerBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <DividerBlock block={block} isEditing={isEditing} />;
       case 'icon':
-        return <IconBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <IconBlock block={block} isEditing={isEditing} />;
       case 'table':
-        return <TableBlock block={block} isEditing={!isPreviewMode && isSelected} />;
+        return <TableBlock block={block} isEditing={isEditing} />;
+      case 'layout':
+        return <LayoutBlock block={block} isEditing={isEditing} onUpdate={onUpdate} />;
       default:
         return <div>Neznámý typ bloku: {block.type}</div>;
     }
   };
 
-  const getBlockTypeLabel = (type: string) => {
-    const labels: Record<string, string> = {
-      heading: 'Nadpis',
-      text: 'Text',
-      image: 'Obrázek',
-      gallery: 'Galerie',
-      video: 'Video',
-      button: 'Tlačítko',
-      contact: 'Kontakt',
-      reference: 'Reference',
-      map: 'Mapa',
-      divider: 'Oddělovač',
-      icon: 'Ikona',
-      table: 'Tabulka',
-    };
-    return labels[type] || type;
-  };
 
   if (isPreviewMode) {
     return (
@@ -118,116 +110,56 @@ export function BlockRenderer({ block, columnSpan = 1, onColumnSpanChange }: Blo
     <motion.div
       ref={setNodeRef}
       style={style}
-      className={`relative cursor-move group rounded-xl border-2 transition-all duration-300 overflow-hidden ${
+      className={`relative cursor-move group rounded-lg border-2 transition-all duration-200 ${
         isSelected
-          ? 'border-indigo-400 bg-indigo-50/50 shadow-lg ring-2 ring-indigo-200'
-          : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/30 hover:shadow-md'
-      } ${isDragging ? 'shadow-2xl rotate-1 z-50' : ''}`}
-      onClick={handleClick}
-      {...listeners}
-      {...attributes}
+          ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
+          : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
+      } ${isDragging ? 'shadow-2xl z-50' : ''}`}
+      onClick={shouldUseDrag ? handleClick : undefined}
+      {...(shouldUseDrag ? { ...listeners, ...attributes } : {})}
       layout
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      {/* Block Header */}
-      <div className={`px-4 py-2 border-b transition-colors flex items-center justify-between ${
-        isSelected ? 'bg-indigo-100 border-indigo-200' : 'bg-gray-50 border-gray-100'
-      }`}>
-        <div className="flex items-center space-x-2">
-          <div className={`w-2 h-2 rounded-full transition-colors ${
-            isSelected ? 'bg-indigo-500' : 'bg-gray-400'
-          }`} />
-          <span className="text-xs font-medium text-gray-700">
-            {getBlockTypeLabel(block.type)}
-          </span>
-        </div>
-
-        {/* Block Inline Toolbar */}
-        {isSelected && (
-          <div className="flex items-center space-x-1">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                duplicateBlock(block.id);
-              }}
-              className="p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-100 rounded transition-colors"
-              title="Duplikovat blok"
-            >
-              <DocumentDuplicateIcon className="w-3 h-3" />
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                // Cycle through column spans: 1 -> 2 -> 3 -> 1
-                const newSpan = columnSpan >= 3 ? 1 : columnSpan + 1;
-                onColumnSpanChange?.(newSpan);
-              }}
-              className="p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-100 rounded transition-colors"
-              title={`Rozprostřít přes ${columnSpan >= 3 ? 1 : columnSpan + 1} sloupec/sloupce`}
-            >
-              <div className="flex space-x-0.5">
-                {Array.from({ length: columnSpan >= 3 ? 1 : columnSpan + 1 }).map((_, i) => (
-                  <div key={i} className="w-1 h-3 bg-current rounded-sm"></div>
-                ))}
-              </div>
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                // TODO: Open block settings (content, styling, etc.)
-              }}
-              className="p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-100 rounded transition-colors"
-              title="Nastavení bloku"
-            >
-              <Cog6ToothIcon className="w-3 h-3" />
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteBlock(block.id);
-              }}
-              className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-100 rounded transition-colors"
-              title="Smazat blok"
-            >
-              <TrashIcon className="w-3 h-3" />
-            </motion.button>
-          </div>
-        )}
-      </div>
-
-      {/* Block Content */}
-      <div className="w-full p-4 bg-white">
+      {/* Block Content - bez toolbaru */}
+      <AnimatedBlock
+        animation={block.styles.animation}
+        animationDuration={block.styles.animationDuration}
+        animationDelay={block.styles.animationDelay}
+        hoverEffect={block.styles.hoverEffect}
+        className="w-full p-4 bg-white rounded-lg"
+        style={{
+          display: block.styles.display || 'block',
+          flexDirection: block.styles.flexDirection as any,
+          flexWrap: block.styles.flexWrap as any,
+          justifyContent: block.styles.justifyContent,
+          alignItems: block.styles.alignItems,
+          gridTemplateColumns: block.styles.gridTemplateColumns,
+          gridTemplateRows: block.styles.gridTemplateRows,
+          gap: block.styles.gap,
+        }}
+      >
         {renderBlockContent()}
-      </div>
+      </AnimatedBlock>
 
       {/* Drag Handle Indicator */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="w-6 h-6 bg-gray-100 rounded border flex items-center justify-center">
-          <div className="flex flex-col space-y-0.5">
-            <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
-            <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
-            <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
+      {shouldUseDrag && (
+        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="w-6 h-6 bg-white rounded border border-gray-300 shadow-sm flex items-center justify-center">
+            <div className="flex flex-col space-y-0.5">
+              <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
+              <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
+              <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Selection Glow */}
+      {/* Selection Indicator */}
       {isSelected && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-xl pointer-events-none"
+          className="absolute inset-0 bg-blue-50/30 rounded-lg pointer-events-none"
         />
       )}
     </motion.div>

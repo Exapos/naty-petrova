@@ -1,3 +1,20 @@
+export interface BlogBlockSubItem {
+  id: string;
+  type: string;
+  content: any;
+  styles?: any;
+}
+
+export interface BlogBlock {
+  id: string;
+  type: string;
+  layout?: string;
+  content: any;
+  subBlocks?: BlogBlockSubItem[];
+  styles?: any;
+  responsive?: any;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -11,7 +28,7 @@ export interface BlogPost {
   categories?: string; // JSON string or comma-separated
   tags?: string; // Legacy support for keywords
   published: boolean;
-  editorMode?: 'markdown' | 'wysiwyg';
+  editorMode?: 'markdown' | 'wysiwyg' | 'block';
   readingTime?: number; // Auto-calculated reading time in minutes
   viewsCount?: number; // Track article views
   createdAt: Date;
@@ -22,6 +39,8 @@ export interface BlogPost {
     name: string;
     email: string;
   };
+  blocks?: BlogBlock[]; // Parsed block data for block editor mode
+  globalStyles?: any;
 }
 
 export interface BlogPostFormData {
