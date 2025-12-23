@@ -1,225 +1,330 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import BubbleMenuExtension from '@tiptap/extension-bubble-menu';
-import FloatingMenuExtension from '@tiptap/extension-floating-menu';
-import { TextStyle } from '@tiptap/extension-text-style';
-import Color from '@tiptap/extension-color';
-import Highlight from '@tiptap/extension-highlight';
-import DragHandleReact from '@tiptap/extension-drag-handle-react';
-import Dropcursor from '@tiptap/extension-dropcursor';
-import FileHandler from '@tiptap/extension-file-handler';
-import Focus from '@tiptap/extension-focus';
-import FontFamily from '@tiptap/extension-font-family';
-import FontSize from '@tiptap/extension-font-size';
-import Gapcursor from '@tiptap/extension-gapcursor';
-import InvisibleCharacters from '@tiptap/extension-invisible-characters';
-import ListKeymap from '@tiptap/extension-list-keymap';
-import Placeholder from '@tiptap/extension-placeholder';
-import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
-import { Table } from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableHeader from '@tiptap/extension-table-header';
-import TableCell from '@tiptap/extension-table-cell';
-import TableOfContents from '@tiptap/extension-table-of-contents';
-import TextAlign from '@tiptap/extension-text-align';
-import Typography from '@tiptap/extension-typography';
-import Underline from '@tiptap/extension-underline';
-import CharacterCount from '@tiptap/extension-character-count';
 
-import { motion } from 'framer-motion';
-import { Toolbar } from './TipTapToolbar';
-import './TipTapEditor.css';
+// Core extensions
+import StarterKit from '@tiptap/starter-kit';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import { Typography } from '@tiptap/extension-typography';
+import { CharacterCount as CharacterCountExt } from '@tiptap/extension-character-count';
+
+// Marks
+import { Underline } from '@tiptap/extension-underline';
+import { Highlight } from '@tiptap/extension-highlight';
+import { Link } from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import { Subscript } from '@tiptap/extension-subscript';
+import { Superscript } from '@tiptap/extension-superscript';
+
+// Nodes
+import { Image } from '@tiptap/extension-image';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TaskList } from '@tiptap/extension-task-list';
+import { TaskItem } from '@tiptap/extension-task-item';
+import { Youtube } from '@tiptap/extension-youtube';
+import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
+import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
+
+// Functionality
+import { TextAlign } from '@tiptap/extension-text-align';
+import { Focus } from '@tiptap/extension-focus';
+import { Dropcursor } from '@tiptap/extension-dropcursor';
+import { Gapcursor } from '@tiptap/extension-gapcursor';
+import { FontFamily } from '@tiptap/extension-font-family';
+import { FontSize } from '@tiptap/extension-font-size';
+
+// Lowlight for syntax highlighting
+import { common, createLowlight } from 'lowlight';
+
+// Local components
+import { EditorToolbar } from './EditorToolbar';
+import { LivePreview } from './LivePreview';
+import { CharacterCount } from './CharacterCount';
+import { InlineBubbleMenu } from './InlineBubbleMenu';
+import { BlockFloatingMenu } from './BlockFloatingMenu';
+
+// Custom extensions
+import { LineHeight, BackgroundColor, CopyMarkdown } from './extensions';
+
+// Styles
+import './editor.css';
+
+const lowlight = createLowlight(common);
 
 interface TipTapEditorProps {
-  value: string;
-  onChange: (content: string) => void;
+  value?: string;
+  onChange?: (html: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
   placeholder?: string;
+  characterLimit?: number;
+  showPreview?: boolean;
+  onImageUpload?: (file: File) => Promise<string>;
+  className?: string;
+  editable?: boolean;
 }
 
-export const TipTapEditor: React.FC<TipTapEditorProps> = ({
-  value,
+export function TipTapEditor({
+  value = '',
   onChange,
+  onBlur,
+  onFocus,
   placeholder = 'Začněte psát...',
-}) => {
+  characterLimit,
+  showPreview = true,
+  onImageUpload,
+  className = '',
+  editable = true,
+}: TipTapEditorProps) {
+  const [isMounted, setIsMounted] = useState(false);
+  const [previewMode, setPreviewMode] = useState<'split' | 'editor' | 'preview'>('split');
+  const [htmlContent, setHtmlContent] = useState(value);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
-        bulletList: {
-          keepMarks: true,
-          keepAttributes: false,
-        },
-        orderedList: {
-          keepMarks: true,
-          keepAttributes: false,
-        },
-      }),
-      BubbleMenuExtension.configure({
-        shouldShow: ({ editor }) => {
-          return editor.isActive('heading') || editor.isActive('paragraph');
+        codeBlock: false,
+        horizontalRule: false,
+        dropcursor: false,
+        gapcursor: false,
+        history: {
+          depth: 100,
         },
       }),
-      FloatingMenuExtension.configure({
-        shouldShow: ({ editor, state }) => {
-          return editor.isActive('paragraph') && state.selection.empty;
+      
+      Placeholder.configure({
+        placeholder,
+        emptyEditorClass: 'is-editor-empty',
+      }),
+      
+      Typography,
+      
+      CharacterCountExt.configure({
+        limit: characterLimit,
+      }),
+      
+      // Marks
+      Underline,
+      Highlight.configure({
+        multicolor: true,
+      }),
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        HTMLAttributes: {
+          class: 'text-blue-600 underline cursor-pointer hover:text-blue-800',
         },
       }),
       TextStyle,
       Color.configure({
         types: ['textStyle'],
       }),
-      Highlight.configure({
-        multicolor: true,
-      }),
-      DragHandleReact,
-      Dropcursor.configure({
-        width: 2,
-        class: 'ProseMirror-dropcursor',
-        color: '#3b82f6',
-      }),
-      FileHandler.configure({
-        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
-        onDrop: (currentEditor, files) => {
-          files.forEach((file) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-              currentEditor
-                .chain()
-                .insertContent({
-                  type: 'image',
-                  attrs: {
-                    src: reader.result,
-                  },
-                })
-                .focus()
-                .run();
-            };
-          });
+      Subscript,
+      Superscript,
+      
+      // Nodes
+      Image.configure({
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'rounded-lg max-w-full h-auto',
         },
-        onPaste: (currentEditor, files) => {
-          files.forEach((file) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-              currentEditor
-                .chain()
-                .insertContent({
-                  type: 'image',
-                  attrs: {
-                    src: reader.result,
-                  },
-                })
-                .focus()
-                .run();
-            };
-          });
+      }),
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: {
+          class: 'border-collapse',
         },
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      TaskList.configure({
+        HTMLAttributes: {
+          class: 'not-prose',
+        },
+      }),
+      TaskItem.configure({
+        nested: true,
+      }),
+      Youtube.configure({
+        width: 640,
+        height: 360,
+        HTMLAttributes: {
+          class: 'youtube-embed-wrapper',
+        },
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
+        HTMLAttributes: {
+          class: 'not-prose',
+        },
+      }),
+      HorizontalRule.configure({
+        HTMLAttributes: {
+          class: 'my-8 border-t-2 border-gray-200',
+        },
+      }),
+      
+      // Functionality
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
       }),
       Focus.configure({
         className: 'has-focus',
         mode: 'all',
       }),
+      Dropcursor.configure({
+        width: 2,
+        color: '#3b82f6',
+      }),
+      Gapcursor,
       FontFamily.configure({
         types: ['textStyle'],
       }),
       FontSize.configure({
         types: ['textStyle'],
       }),
-      Gapcursor,
-      InvisibleCharacters.configure({
-        HTML: false,
-      }),
-      ListKeymap,
-      Placeholder.configure({
-        placeholder,
-      }),
-      Image.configure({
-        allowBase64: true,
-        HTMLAttributes: {
-          class: 'prose-img',
-        },
-      }),
-      Link.configure({
-        openOnClick: true,
-        autolink: true,
-        linkOnPaste: true,
-      }),
-      Table.configure({
-        resizable: true,
-      }),
-      TableRow,
-      TableHeader,
-      TableCell,
-      TableOfContents.configure({
-        levels: [1, 2, 3],
-      }),
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-      Typography,
-      Underline,
-      CharacterCount.configure({
-        limit: 50000,
-      }),
+      
+      // Custom extensions
+      LineHeight,
+      BackgroundColor,
+      CopyMarkdown,
     ],
     content: value,
+    editable,
+    editorProps: {
+      attributes: {
+        class: 'tiptap-editor prose prose-gray max-w-none focus:outline-none min-h-[400px]',
+      },
+    },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      setHtmlContent(html);
+      onChange?.(html);
+    },
+    onBlur: () => {
+      onBlur?.();
+    },
+    onFocus: () => {
+      onFocus?.();
     },
   });
 
+  // Mount check for SSR
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Update editor content when value prop changes
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [editor, value]);
+
+  // Get character and word counts
+  const characterCount = editor?.storage.characterCount?.characters() || 0;
+  const wordCount = editor?.storage.characterCount?.words() || 0;
+
+  if (!isMounted) {
+    return (
+      <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2" />
+          <p className="text-gray-500 text-sm">Načítám editor...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col h-full bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
-    >
-      {/* Sticky Toolbar */}
-      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white">
-        <Toolbar editor={editor} showPreview={false} onPreviewToggle={() => {}} />
+    <div className={`flex flex-col h-full bg-white rounded-lg overflow-hidden ${className}`}>
+      {/* View Mode Switcher */}
+      {showPreview && (
+        <div className="flex items-center justify-end gap-1 px-2 py-1 bg-gray-100 border-b border-gray-200">
+          <button
+            onClick={() => setPreviewMode('editor')}
+            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              previewMode === 'editor'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Editor
+          </button>
+          <button
+            onClick={() => setPreviewMode('split')}
+            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              previewMode === 'split'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Split
+          </button>
+          <button
+            onClick={() => setPreviewMode('preview')}
+            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+              previewMode === 'preview'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Náhled
+          </button>
+        </div>
+      )}
+
+      {/* Toolbar */}
+      {previewMode !== 'preview' && (
+        <EditorToolbar editor={editor} onImageUpload={onImageUpload} />
+      )}
+
+      {/* Editor & Preview Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Editor */}
+        {previewMode !== 'preview' && (
+          <div
+            className={`${
+              previewMode === 'split' && showPreview ? 'w-1/2' : 'w-full'
+            } overflow-y-auto border-r border-gray-200 relative`}
+          >
+            {/* Inline Bubble Menu for text selection */}
+            {editor && <InlineBubbleMenu editor={editor} />}
+            
+            {/* Block Floating Menu for empty lines */}
+            {editor && <BlockFloatingMenu editor={editor} />}
+
+            <EditorContent editor={editor} className="h-full" />
+          </div>
+        )}
+
+        {/* Live Preview */}
+        {showPreview && previewMode !== 'editor' && (
+          <div
+            className={`${
+              previewMode === 'split' ? 'w-1/2' : 'w-full'
+            } overflow-y-auto bg-white`}
+          >
+            <LivePreview content={htmlContent} />
+          </div>
+        )}
       </div>
 
-      {/* Main Editor Area */}
-      <div className="flex-1 overflow-hidden flex flex-col">
-        {/* Editor Content - Full Width */}
-        <div className="flex-1 overflow-auto bg-white">
-          <div className="tiptap-container h-full">
-            <EditorContent editor={editor} className="tiptap-editor" />
-          </div>
-        </div>
-
-        {/* Status Bar */}
-        <div className="border-t border-gray-200 bg-gray-50 px-4 py-2 flex items-center justify-between text-xs text-gray-600">
-          <div className="flex gap-4">
-            <span>
-              {editor && editor.storage?.characterCount?.characters?.() 
-                ? `${editor.storage.characterCount.characters()} znaků` 
-                : '0 znaků'}
-            </span>
-            {editor && (
-              <span>
-                {editor.getJSON().content?.reduce((acc: number, node: any) => {
-                  if (node.type === 'paragraph' && node.content?.[0]?.text) {
-                    return acc + node.content[0].text.split(/\s+/).filter((w: string) => w).length;
-                  }
-                  return acc;
-                }, 0) || 0} slov
-              </span>
-            )}
-          </div>
-          <div className="text-gray-400">
-            {editor?.isActive('bold') && <span className="mr-2">Bold</span>}
-            {editor?.isActive('italic') && <span className="mr-2">Italic</span>}
-            {editor?.isActive('underline') && <span>Underline</span>}
-          </div>
-        </div>
-      </div>
-    </motion.div>
+      {/* Character Count Footer */}
+      <CharacterCount
+        characters={characterCount}
+        words={wordCount}
+        limit={characterLimit}
+      />
+    </div>
   );
-};
+}
+
+export default TipTapEditor;
