@@ -1,223 +1,199 @@
 'use client';
 
-import React, { useEffect, useCallback, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
 import {
-  ArrowUturnLeftIcon,
-  ArrowUturnRightIcon,
-  EyeIcon,
   CloudArrowUpIcon,
-  ShareIcon,
+  ArrowLeftIcon,
   Cog6ToothIcon,
-  DevicePhoneMobileIcon,
-  ComputerDesktopIcon,
-  DeviceTabletIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline';
-import { EditorCanvas } from '@/components/editor/EditorCanvas';
-import { OutlinePanel } from '@/components/editor/OutlinePanel';
-import { InspectorPanel } from '@/components/editor/InspectorPanel';
-import { useEditorStore } from '@/stores/editorStore';
+import { TipTapEditor } from '@/components/editor/TipTapEditor';
+import { toast } from 'react-toastify';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  featuredImage: string | null;
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string;
+  published: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export default function BlogEditorPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const postId = searchParams.get('id');
-  const [loadingPost, setLoadingPost] = useState(!!postId);
-  const {
-    undo,
-    redo,
-    saveDraft,
-    publishArticle,
-    exportToJSON,
-    reorderBlocks,
-    isPreviewMode,
-    setPreviewMode,
-    responsiveMode,
-    setResponsiveMode,
-    isSaving,
-    lastSavedAt,
-    lastError,
-  } = useEditorStore();
+
+  // Form state
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [content, setContent] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [keywords, setKeywords] = useState('');
+  const [featuredImage, setFeaturedImage] = useState<string | null>(null);
+  const [published, setPublished] = useState(false);
+
+  // UI state
+  const [loading, setLoading] = useState(!!postId);
+  const [saving, setSaving] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    })
-  );
-
-  // Keyboard shortcuts
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (event.ctrlKey || event.metaKey) {
-      switch (event.key) {
-        case 'z':
-          if (event.shiftKey) {
-            event.preventDefault();
-            redo();
-          } else {
-            event.preventDefault();
-            undo();
-          }
-          break;
-        case 'y':
-          event.preventDefault();
-          redo();
-          break;
-        case 'd':
-          event.preventDefault();
-          const { selectedBlock, duplicateBlock } = useEditorStore.getState();
-          if (selectedBlock) {
-            duplicateBlock(selectedBlock);
-          }
-          break;
-      }
-    }
-
-    if (event.key === 'Delete' || event.key === 'Backspace') {
-      // Handle delete selected block
-      const { selectedBlock, deleteBlock } = useEditorStore.getState();
-      if (selectedBlock) {
-        deleteBlock(selectedBlock);
-      }
-    }
-
-    // Arrow key navigation
-    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      event.preventDefault();
-      const { blocks, selectedBlock, selectBlock } = useEditorStore.getState();
-      if (selectedBlock) {
-        const currentIndex = blocks.findIndex(block => block.id === selectedBlock);
-        if (currentIndex !== -1) {
-          const nextIndex = event.key === 'ArrowUp' 
-            ? Math.max(0, currentIndex - 1)
-            : Math.min(blocks.length - 1, currentIndex + 1);
-          if (nextIndex !== currentIndex) {
-            selectBlock(blocks[nextIndex].id);
-          }
-        }
-      }
-    }
-
-    // Escape to clear selection
-    if (event.key === 'Escape') {
-      const { selectBlock } = useEditorStore.getState();
-      selectBlock(null);
-    }
-  }, [undo, redo]);
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
-  // Načtení existujícího blogu
+  // Load existing post
   useEffect(() => {
     if (postId) {
       const loadPost = async () => {
         try {
           const response = await fetch(`/api/blog/${postId}`);
-          if (!response.ok) {
-            throw new Error('Nepodařilo se načíst článek');
-          }
-          const post = await response.json();
-          
-          // Načíst data do store
-          const { setTitle, setSlug, setFeaturedImage, setState } = useEditorStore.getState();
-          setTitle(post.title || '');
-          setSlug(post.slug || '');
-          setFeaturedImage(post.featuredImage || null);
-          
-          // Načíst bloky pokud existují
-          if (post.content) {
-            try {
-              const contentData = JSON.parse(post.content);
-              if (contentData.blocks) {
-                setState({
-                  blocks: contentData.blocks,
-                  globalStyles: contentData.globalStyles || useEditorStore.getState().globalStyles,
-                  postId: post.id,
-                });
-              }
-            } catch (e) {
-              console.error('Chyba při parsování obsahu:', e);
-            }
-          }
-        } catch (error) {
-          console.error('Chyba při načítání článku:', error);
-          alert('Nepodařilo se načíst článek');
+          if (!response.ok) throw new Error('Nepodařilo se načíst článek');
+
+          const post: BlogPost = await response.json();
+          setTitle(post.title);
+          setSlug(post.slug);
+          setContent(post.content);
+          setExcerpt(post.excerpt);
+          setMetaTitle(post.metaTitle);
+          setMetaDescription(post.metaDescription);
+          setKeywords(post.keywords);
+          setFeaturedImage(post.featuredImage);
+          setPublished(post.published);
+        } catch (err) {
+          const message = err instanceof Error ? err.message : 'Chyba při načítání';
+          setError(message);
+          toast.error(message);
         } finally {
-          setLoadingPost(false);
+          setLoading(false);
         }
       };
-      
+
       loadPost();
     }
   }, [postId]);
 
-  // Auto-save functionality
+  // Auto-generate slug
   useEffect(() => {
-    const autoSaveInterval = setInterval(() => {
-      const { blocks } = useEditorStore.getState();
-      if (blocks.length > 0) {
-        // Save to localStorage as backup
-        localStorage.setItem('editor-auto-save', JSON.stringify({
-          blocks,
-          timestamp: Date.now(),
-        }));
-      }
-    }, 30000); // Auto-save every 30 seconds
-
-    return () => clearInterval(autoSaveInterval);
-  }, []);
-
-  // Load auto-save on mount
-  useEffect(() => {
-    const autoSaveData = localStorage.getItem('editor-auto-save');
-    if (autoSaveData) {
-      try {
-        const { blocks, timestamp } = JSON.parse(autoSaveData);
-        // Only load if auto-save is less than 1 hour old
-        if (Date.now() - timestamp < 3600000) {
-          useEditorStore.setState({ blocks });
-        }
-      } catch (error) {
-        console.error('Failed to load auto-save:', error);
-      }
+    if (!slug && title) {
+      const generatedSlug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      setSlug(generatedSlug);
     }
-  }, []);
+  }, [title, slug]);
 
-  const handleDragStart = () => {
-    // Handle drag start if needed
-  };
+  // Save draft
+  const handleSaveDraft = async () => {
+    if (!title.trim()) {
+      toast.error('Zadejte název článku');
+      return;
+    }
 
-  const handleDragOver = () => {
-    // Handle drag over for snap-to-grid logic
-  };
+    setSaving(true);
+    setError(null);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+    try {
+      const method = postId ? 'PUT' : 'POST';
+      const url = postId ? `/api/blog/${postId}` : '/api/blog';
 
-    if (!over) return;
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          slug,
+          content,
+          excerpt,
+          metaTitle,
+          metaDescription,
+          keywords,
+          featuredImage,
+          published: false,
+        }),
+      });
 
-    // Handle reordering blocks
-    if (active.data.current?.type === 'block' && over.data.current?.type === 'block') {
-      const activeIndex = active.data.current.index;
-      const overIndex = over.data.current.index;
+      if (!response.ok) throw new Error('Chyba při ukládání');
 
-      if (activeIndex !== overIndex) {
-        reorderBlocks(activeIndex, overIndex);
+      const data = await response.json();
+      setLastSaved(new Date());
+      toast.success('Koncept uložen');
+
+      if (!postId) {
+        router.push(`/admin/blog/editor?id=${data.id}`);
       }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Chyba při ukládání';
+      setError(message);
+      toast.error(message);
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (loadingPost) {
+  // Publish article
+  const handlePublish = async () => {
+    if (!title.trim()) {
+      toast.error('Zadejte název článku');
+      return;
+    }
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      const method = postId ? 'PUT' : 'POST';
+      const url = postId ? `/api/blog/${postId}` : '/api/blog';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          slug,
+          content,
+          excerpt,
+          metaTitle,
+          metaDescription,
+          keywords,
+          featuredImage,
+          published: true,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Chyba při publikování');
+
+      const data = await response.json();
+      setLastSaved(new Date());
+      toast.success('Článek publikován');
+      setPublished(true);
+
+      if (!postId) {
+        router.push(`/admin/blog/editor?id=${data.id}`);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Chyba při publikování';
+      setError(message);
+      toast.error(message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Načítám článek...</p>
         </div>
       </div>
@@ -225,265 +201,283 @@ export default function BlogEditorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">N</span>
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold text-gray-900">Nový článek</h1>
-                  <p className="text-sm text-gray-500">Upravujete obsah</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              {/* Undo/Redo */}
-              <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={undo}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-white rounded-md transition-colors"
-                  title="Vrátit zpět (Ctrl+Z)"
-                >
-                  <ArrowUturnLeftIcon className="w-4 h-4" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={redo}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-white rounded-md transition-colors"
-                  title="Znovu (Ctrl+Y)"
-                >
-                  <ArrowUturnRightIcon className="w-4 h-4" />
-                </motion.button>
-              </div>
-
-              {/* Responsive Controls */}
-              <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setResponsiveMode('desktop')}
-                  className={`p-2 rounded-md transition-colors ${
-                    responsiveMode === 'desktop'
-                      ? 'bg-white text-blue-700 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                  title="Desktop"
-                >
-                  <ComputerDesktopIcon className="w-4 h-4" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setResponsiveMode('tablet')}
-                  className={`p-2 rounded-md transition-colors ${
-                    responsiveMode === 'tablet'
-                      ? 'bg-white text-blue-700 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                  title="Tablet"
-                >
-                  <DeviceTabletIcon className="w-4 h-4" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setResponsiveMode('mobile')}
-                  className={`p-2 rounded-md transition-colors ${
-                    responsiveMode === 'mobile'
-                      ? 'bg-white text-blue-700 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                  title="Mobil"
-                >
-                  <DevicePhoneMobileIcon className="w-4 h-4" />
-                </motion.button>
-              </div>
-
-              {/* Preview Toggle */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setPreviewMode(!isPreviewMode)}
-                className={`p-2 rounded-lg transition-colors ${
-                  isPreviewMode
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-                title={isPreviewMode ? 'Upravit' : 'Náhled'}
-              >
-                <EyeIcon className="w-4 h-4" />
-              </motion.button>
-
-              {/* Settings */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowSettings(!showSettings)}
-                className={`p-2 rounded-lg transition-colors ${
-                  showSettings
-                    ? 'bg-purple-100 text-purple-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-                title="Nastavení"
-              >
-                <Cog6ToothIcon className="w-4 h-4" />
-              </motion.button>
-
-              {/* Export */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  const data = exportToJSON();
-                  const blob = new Blob([data], { type: 'application/json' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = 'article.json';
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Exportovat"
-              >
-                <ShareIcon className="w-4 h-4" />
-              </motion.button>
-
-              {/* Save Draft */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={saveDraft}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium text-sm disabled:opacity-60"
-                disabled={isSaving}
-              >
-                <CloudArrowUpIcon className="w-4 h-4 inline mr-2" />
-                {isSaving ? 'Ukládám...' : 'Uložit'}
-              </motion.button>
-
-              {/* Publish */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={publishArticle}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all font-medium text-sm shadow-lg hover:shadow-xl disabled:opacity-60"
-                disabled={isSaving}
-              >
-                <ShareIcon className="w-4 h-4 inline mr-2" />
-                {isSaving ? 'Publikuji...' : 'Publikovat'}
-              </motion.button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 flex items-center justify-between"
+        >
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/admin/blog')}
+              className="p-2 hover:bg-white rounded-lg transition-colors"
+              title="Zpět"
+            >
+              <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
+            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Blog Editor</h1>
+              <p className="text-gray-600 mt-1">
+                {postId ? 'Upravit článek' : 'Nový článek'}
+              </p>
             </div>
           </div>
-        </div>
-      </div>
 
-      {lastSavedAt && (
-        <div className="text-xs text-center py-1">
-          <span className="text-gray-500">
-            Naposledy uloženo: {new Date(lastSavedAt).toLocaleTimeString('cs-CZ')}
-          </span>
-          {lastError && (
-            <span className="ml-2 text-red-500">{lastError}</span>
-          )}
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-
-        {/* Left Outline */}
-        <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start h-[calc(100vh-6rem)]">
-          <OutlinePanel />
-        </aside>
-
-        {/* Canvas */}
-        <div className="flex-1 min-w-0 overflow-y-auto">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDragEnd={handleDragEnd}
-          >
-            <EditorCanvas />
-          </DndContext>
-        </div>
-
-        {/* Right Inspector */}
-        <aside className="hidden lg:block w-80 flex-shrink-0 sticky top-24 self-start h-[calc(100vh-6rem)]">
-          <InspectorPanel />
-        </aside>
-      </div>
-
-      {/* Settings Panel */}
-      <AnimatePresence>
-        {showSettings && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowSettings(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-96 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
+          <div className="flex items-center gap-3">
+            {published && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg">
+                <CheckCircleIcon className="w-5 h-5" />
+                <span className="text-sm font-medium">Publikováno</span>
+              </div>
+            )}
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              className="p-2 hover:bg-white rounded-lg transition-colors"
+              title="Nastavení"
             >
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Nastavení článku</h3>
-                <div className="space-y-4">
+              <Cog6ToothIcon className="w-6 h-6 text-gray-700" />
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Error Message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Editor - Main Column */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col"
+            style={{ height: 'calc(100vh - 200px)' }}
+          >
+            <TipTapEditor
+              value={content}
+              onChange={setContent}
+              placeholder="Začněte psát svůj článek..."
+            />
+          </motion.div>
+
+          {/* Sidebar */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-6"
+          >
+            {/* Quick Actions */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Akce</h3>
+              <div className="space-y-3">
+                <button
+                  onClick={handleSaveDraft}
+                  disabled={saving}
+                  className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors font-medium disabled:opacity-50"
+                >
+                  Uložit koncept
+                </button>
+                <button
+                  onClick={handlePublish}
+                  disabled={saving}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  <CloudArrowUpIcon className="w-4 h-4" />
+                  {saving ? 'Ukládá se...' : 'Publikovat'}
+                </button>
+              </div>
+
+              {lastSaved && (
+                <p className="text-xs text-gray-500 mt-4 text-center">
+                  Naposledy uloženo: {lastSaved.toLocaleTimeString('cs-CZ')}
+                </p>
+              )}
+            </div>
+
+            {/* Quick Info */}
+            <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
+              <h4 className="font-semibold text-blue-900 mb-2">Tipy</h4>
+              <ul className="text-xs text-blue-800 space-y-1">
+                <li>• Ctrl+Z vrátit zpět</li>
+                <li>• Ctrl+Y znovu</li>
+                <li>• Ctrl+B tučné</li>
+                <li>• Ctrl+I kurzíva</li>
+              </ul>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Settings Modal */}
+        <AnimatePresence>
+          {showSettings && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSettings(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 100, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 100, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-2xl sm:mx-4 shadow-2xl max-h-96 overflow-y-auto"
+              >
+                <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-gray-900">Nastavení článku</h2>
+                  <button
+                    onClick={() => setShowSettings(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="p-6 space-y-6">
+                  {/* Title */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Název článku
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Název
                     </label>
                     <input
                       type="text"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Zadejte název článku"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Název vašeho článku"
                     />
                   </div>
+
+                  {/* Slug */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Popis
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      URL
+                    </label>
+                    <input
+                      type="text"
+                      value={slug}
+                      onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="url-clanek"
+                    />
+                    <p className="text-xs text-gray-500 mt-2">
+                      {slug && `URL: /blog/${slug}`}
+                    </p>
+                  </div>
+
+                  {/* Excerpt */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Výtah
                     </label>
                     <textarea
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      value={excerpt}
+                      onChange={(e) => setExcerpt(e.target.value)}
                       rows={3}
-                      placeholder="Zadejte popis článku"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      placeholder="Krátký popis článku..."
                     />
                   </div>
+
+                  {/* Meta Title */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      SEO Nadpis
+                    </label>
+                    <input
+                      type="text"
+                      value={metaTitle}
+                      onChange={(e) => setMetaTitle(e.target.value)}
+                      maxLength={60}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="SEO nadpis (do 60 znaků)"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">{metaTitle.length}/60</p>
+                  </div>
+
+                  {/* Meta Description */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      SEO Popis
+                    </label>
+                    <textarea
+                      value={metaDescription}
+                      onChange={(e) => setMetaDescription(e.target.value)}
+                      maxLength={160}
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      placeholder="SEO popis (do 160 znaků)"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">{metaDescription.length}/160</p>
+                  </div>
+
+                  {/* Keywords */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Klíčová slova
+                    </label>
+                    <input
+                      type="text"
+                      value={keywords}
+                      onChange={(e) => setKeywords(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Oddělujte čárkami..."
+                    />
+                  </div>
+
+                  {/* Featured Image */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Hlavní obrázek
+                    </label>
+                    <input
+                      type="text"
+                      value={featuredImage || ''}
+                      onChange={(e) => setFeaturedImage(e.target.value || null)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="URL obrázku..."
+                    />
+                    {featuredImage && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={featuredImage}
+                        alt="Featured"
+                        className="w-full h-40 object-cover rounded-lg mt-3"
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="flex justify-end space-x-3 mt-6">
+
+                <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex gap-3">
                   <button
                     onClick={() => setShowSettings(false)}
-                    className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                    className="flex-1 px-4 py-2 text-gray-900 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                   >
-                    Zrušit
+                    Zavřít
                   </button>
                   <button
-                    onClick={() => setShowSettings(false)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    onClick={handleSaveDraft}
+                    disabled={saving}
+                    className="flex-1 px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
                   >
-                    Uložit
+                    {saving ? 'Ukládá se...' : 'Uložit'}
                   </button>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

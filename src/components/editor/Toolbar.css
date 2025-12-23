@@ -1,0 +1,238 @@
+/* Toolbar Styles */
+
+.toolbar {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  background: white;
+  position: relative;
+  z-index: 10;
+}
+
+/* Hide scrollbar but keep functionality */
+.toolbar-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.toolbar-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toolbar-row::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.toolbar-row::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 1.5rem;
+  background-color: #d1d5db;
+  margin: 0 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Toolbar Button */
+button[class*="p-2"][class*="rounded-md"] {
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+button[class*="p-2"][class*="rounded-md"]:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+button[class*="p-2"][class*="rounded-md"]:active:not(:disabled) {
+  background-color: #e5e7eb;
+}
+
+button[class*="p-2"][class*="rounded-md"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dropdowns - High Z-index */
+.toolbar-group.relative > div[class*="absolute"] {
+  z-index: 1000 !important;
+  background: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+/* Color Picker */
+.flex.gap-1.p-2.bg-white.border.border-gray-200.rounded-lg.shadow-lg {
+  z-index: 1000 !important;
+  position: absolute;
+  top: 100% !important;
+  left: 0 !important;
+  margin-top: 0.5rem;
+}
+
+/* Font Family & Size Dropdowns */
+.toolbar-group.relative {
+  position: relative;
+}
+
+.toolbar-group.relative button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.toolbar-group.relative button:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.toolbar-group.relative > div {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.25rem;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  min-width: 150px;
+}
+
+.toolbar-group.relative > div > button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background-color: transparent;
+  color: #374151;
+  font-size: 0.8125rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.toolbar-group.relative > div > button:hover {
+  background-color: #f3f4f6;
+}
+
+.toolbar-group.relative > div > button:active {
+  background-color: #e5e7eb;
+}
+
+/* Icon Styling */
+svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .toolbar-row {
+    gap: 0.25rem;
+    padding: 0.375rem;
+  }
+
+  .toolbar-divider {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar-row {
+    gap: 0.125rem;
+    padding: 0.25rem;
+  }
+
+  .toolbar-group {
+    gap: 0.125rem;
+  }
+
+  button[class*="p-2"][class*="rounded-md"] {
+    padding: 0.375rem;
+  }
+
+  .toolbar-group.relative button {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Active State Indicator */
+.bg-blue-100.text-blue-700 {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  box-shadow: inset 0 1px 2px rgba(30, 58, 138, 0.1);
+}
+
+/* Hover Effects */
+.text-gray-700:hover {
+  background-color: #f3f4f6;
+}
+
+/* Focus Ring for Accessibility */
+button:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #3b82f6;
+}
+
+/* Disabled Button State */
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Animation for Button Click */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+button:active {
+  animation: pulse 0.2s ease-out;
+}

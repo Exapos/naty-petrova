@@ -511,5 +511,10 @@
       "message": "Der Preis ist geschätzt und kann je nach spezifischen Projektanforderungen, Standort und anderen Faktoren variieren. Eine persönliche Beratung ist für ein verbindliches Preisangebot erforderlich."
     },
     "fromPrice": "Ab"
+  },
+  "Editor": {
+    "dragHandle": {
+      "title": "Zum Verschieben des Elements ziehen"
+    }
   }
 }

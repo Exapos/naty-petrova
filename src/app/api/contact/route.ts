@@ -3,6 +3,17 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req) {
   try {
+    // Validate environment variables
+    if (!process.env.EMAIL_HOST || !process.env.EMAIL_PORT || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Missing email environment variables:', {
+        EMAIL_HOST: !!process.env.EMAIL_HOST,
+        EMAIL_PORT: !!process.env.EMAIL_PORT,
+        EMAIL_USER: !!process.env.EMAIL_USER,
+        EMAIL_PASS: !!process.env.EMAIL_PASS,
+      });
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+    }
+
     const { 
       name, 
       email, 
@@ -76,7 +87,8 @@ ${message}`,
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: 'Email sent successfully' });
-  } catch {
+  } catch (error) {
+    console.error('Contact form error:', error);
     return NextResponse.json({ error: 'Error sending email' }, { status: 500 });
   }
 }

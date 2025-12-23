@@ -545,5 +545,10 @@
       "message": "Cena je orientační a může se lišit v závislosti na konkrétních požadavcích projektu, lokalitě a dalších faktorech. Pro závaznou cenovou nabídku je nutné osobní konzultace."
     },
     "fromPrice": "Od"
+  },
+  "Editor": {
+    "dragHandle": {
+      "title": "Přetažením můžete přesouvat prvek"
+    }
   }
 }

@@ -511,5 +511,10 @@
       "message": "The price is estimated and may vary depending on specific project requirements, location, and other factors. Personal consultation is necessary for a binding price quote."
     },
     "fromPrice": "From"
+  },
+  "Editor": {
+    "dragHandle": {
+      "title": "Drag to move element"
+    }
   }
 }
