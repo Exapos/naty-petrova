@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { BlogBlock } from '@/types/blog';
-
-const prisma = new PrismaClient();
 
 // GET blog post by slug with navigation and related posts
 export async function GET(

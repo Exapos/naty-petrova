@@ -5,7 +5,9 @@
     "about": "Über uns",
     "contact": "Kontakt",
     "career": "Karriere",
-    "references": "Referenzen"
+    "references": "Referenzen",
+    "blog": "Blog",
+    "calculator": "Rechner"
   },
   "Footer": {
     "description": "Planungsbüro für Ihre Bauvorhaben",
@@ -190,6 +192,8 @@
     }
   },
   "ReferencesPage": {
+    "metaTitle": "Referenzen | Maxprojekty",
+    "metaDescription": "Schauen Sie sich unsere erfolgreichen Projekte an. Referenzen aus Architektur, Planung und Bauwesen. Einfamilienhäuser, Gewerbegebäude, Renovierungen in Teplice und Umgebung.",
     "meta": {
       "title": "Referenzen | Maxprojekty",
       "description": "Schauen Sie sich unsere erfolgreichen Projekte an. Referenzen aus Architektur, Planung und Bauwesen. Einfamilienhäuser, Gewerbegebäude, Renovierungen in Teplice und Umgebung."
@@ -221,6 +225,8 @@
     "noProjectsYet": "Wir haben noch keine Referenzen erstellt. Hier finden Sie bald unsere realisierten Projekte."
   },
   "Career": {
+    "metaTitle": "Karriere | Maxprojekty",
+    "metaDescription": "Treten Sie dem Maxprojekty-Team bei. Wir suchen Architekten, Designer und andere Fachkräfte. Flexible Arbeitsbedingungen, internationale Projekte, moderne Technologie.",
     "meta": {
       "title": "Karriere | Maxprojekty",
       "description": "Treten Sie dem Maxprojekty-Team bei. Wir suchen Architekten, Designer und andere Fachkräfte. Flexible Arbeitsbedingungen, internationale Projekte, moderne Technologie."
@@ -493,7 +499,14 @@
     },
     "results": {
       "title": "Geschätzter Preis",
-      "vatNote": "Ohne MwSt."
+      "vatNote": "Ohne MwSt.",
+      "totalWithVAT": "Gesamtpreis inkl. MwSt.",
+      "breakdownTitle": "Berechnungsaufschlüsselung",
+      "basePrice": "Grundpreis",
+      "complexity": "Komplexität",
+      "totalWithoutVAT": "Summe ohne MwSt.",
+      "vat": "MwSt. 21%",
+      "totalFinal": "Gesamtpreis inkl. MwSt."
     },
     "breakdown": {
       "basePrice": "Grundpreis",
@@ -507,7 +520,7 @@
       "button": "Präzises Angebot erhalten"
     },
     "disclaimer": {
-      "title": "Warnung:",
+      "title": "Warnung",
       "message": "Der Preis ist geschätzt und kann je nach spezifischen Projektanforderungen, Standort und anderen Faktoren variieren. Eine persönliche Beratung ist für ein verbindliches Preisangebot erforderlich."
     },
     "fromPrice": "Ab"

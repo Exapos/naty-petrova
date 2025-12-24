@@ -232,6 +232,3 @@ const blogEditorIntegration = {
 };
 
 export default blogEditorIntegration;
-
-// Typy
-export type { BlogPostData };

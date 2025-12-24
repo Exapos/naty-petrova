@@ -48,13 +48,13 @@ export default function Header() {
             href="/blog" 
             className="nav-link"
           >
-            Blog
+            {t('blog')}
           </Link>
           <Link 
             href="/kalkulacka" 
             className="nav-link"
           >
-            Kalkulačka
+            {t('calculator')}
           </Link>
           <motion.div
             whileHover={{ scale: 1.07 }}
@@ -135,8 +135,8 @@ export default function Header() {
               <Link href="/references" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('references')}</Link>
               <Link href="/o-nas" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('about')}</Link>
               <Link href="/kariera" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('career')}</Link>
-              <Link href="/blog" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>Blog</Link>
-              <Link href="/kalkulacka" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>Kalkulačka</Link>
+              <Link href="/blog" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('blog')}</Link>
+              <Link href="/kalkulacka" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>{t('calculator')}</Link>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

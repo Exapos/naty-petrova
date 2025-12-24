@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Link } from '@/i18n/routing'
 import { generateArchitectStructuredData, generateLocalBusinessStructuredData } from '@/lib/structured-data'
 import AnalyticsWrapper from '@/components/AnalyticsWrapper/AnalyticsWrapper'
+import BlogSection from '@/components/BlogSection/BlogSection'
 import { 
   ArrowRightIcon,
   CheckCircleIcon,
@@ -411,6 +412,9 @@ export default function MainSection() {
           </motion.div>
         </div>
       </section>
+
+      {/* Blog Section - Nejnovější články */}
+      <BlogSection />
 
       {/* Finální CTA */}
       <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white">

@@ -17,7 +17,7 @@ export const Details = Node.create({
   
   addCommands() {
     return {
-      setDetails: () => ({ commands }) => {
+      setDetails: () => ({ commands }: any) => {
         return commands.insertContent({
           type: 'details',
           content: [
@@ -26,7 +26,7 @@ export const Details = Node.create({
           ],
         });
       },
-    };
+    } as any;
   },
 });
 
@@ -204,9 +204,30 @@ export const YouTubeEmbed = Node.create({
 });
 
 function extractYouTubeId(url: string): string | null {
-  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[7].length === 11 ? match[7] : null;
+  // Handle various YouTube URL formats
+  const patterns = [
+    // Standard watch URL: https://www.youtube.com/watch?v=VIDEO_ID
+    /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+    // Shortened URL: https://youtu.be/VIDEO_ID
+    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+    /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    // Shorts URL: https://www.youtube.com/shorts/VIDEO_ID
+    /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    // v= anywhere in query: ...?v=VIDEO_ID
+    /[?&]v=([a-zA-Z0-9_-]{11})/,
+    // Just the video ID (11 characters)
+    /^([a-zA-Z0-9_-]{11})$/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+  
+  return null;
 }
 
 // Copy Markdown Extension

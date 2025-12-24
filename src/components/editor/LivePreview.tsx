@@ -3,6 +3,7 @@
 import React from 'react';
 import DOMPurify from 'isomorphic-dompurify';
 import './editor.css';
+import './tiptap-content.css';
 
 interface LivePreviewProps {
   content: string;
@@ -10,11 +11,39 @@ interface LivePreviewProps {
 }
 
 export function LivePreview({ content, className = '' }: LivePreviewProps) {
-  // Sanitize HTML content for safe rendering
+  // Sanitize HTML content for safe rendering with YouTube support
   const sanitizedContent = React.useMemo(() => {
     return DOMPurify.sanitize(content, {
       ADD_TAGS: ['iframe'],
-      ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling', 'target'],
+      ADD_ATTR: [
+        'allow', 
+        'allowfullscreen', 
+        'frameborder', 
+        'scrolling', 
+        'target',
+        'src',
+        'width',
+        'height',
+        'style',
+        'class',
+        'data-youtube-video',
+        'loading',
+        'referrerpolicy',
+        'title',
+        'autoplay',
+        'disablekbcontrols',
+        'enableiframeapi',
+        'endtime',
+        'ivloadpolicy',
+        'loop',
+        'modestbranding',
+        'origin',
+        'playlist',
+        'progressbarcolor',
+        'rel',
+        'start',
+      ],
+      ALLOW_DATA_ATTR: true,
     });
   }, [content]);
 
@@ -31,7 +60,7 @@ export function LivePreview({ content, className = '' }: LivePreviewProps) {
   return (
     <div className={`editor-preview ${className}`}>
       <div 
-        className="ProseMirror prose prose-gray max-w-none"
+        className="tiptap-content prose prose-gray max-w-none"
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
     </div>

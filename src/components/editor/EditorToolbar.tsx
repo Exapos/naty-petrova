@@ -45,24 +45,47 @@ interface EditorToolbarProps {
   onImageUpload?: (file: File) => Promise<string>;
 }
 
-const FONT_SIZES = ['12', '14', '16', '18', '20', '24', '28', '32', '36', '48'];
+const FONT_SIZES = [
+  { size: '12', label: '12px - Malý' },
+  { size: '14', label: '14px - Základní' },
+  { size: '16', label: '16px - Normální' },
+  { size: '18', label: '18px - Střední' },
+  { size: '20', label: '20px - Větší' },
+  { size: '24', label: '24px - Velký' },
+  { size: '28', label: '28px - Nadpis' },
+  { size: '32', label: '32px - H3' },
+  { size: '36', label: '36px - H2' },
+  { size: '48', label: '48px - H1' },
+];
 const FONT_FAMILIES = [
-  { name: 'Sans Serif', value: 'Inter, sans-serif' },
-  { name: 'Serif', value: 'Georgia, serif' },
-  { name: 'Monospace', value: 'JetBrains Mono, monospace' },
+  { name: 'Inter', value: 'Inter, sans-serif' },
+  { name: 'Open Sans', value: 'Open Sans, sans-serif' },
+  { name: 'Roboto', value: 'Roboto, sans-serif' },
+  { name: 'Poppins', value: 'Poppins, sans-serif' },
+  { name: 'Lato', value: 'Lato, sans-serif' },
+  { name: 'Montserrat', value: 'Montserrat, sans-serif' },
+  { name: 'Playfair Display', value: 'Playfair Display, serif' },
+  { name: 'Merriweather', value: 'Merriweather, serif' },
+  { name: 'Georgia', value: 'Georgia, serif' },
+  { name: 'Source Code Pro', value: 'Source Code Pro, monospace' },
+  { name: 'JetBrains Mono', value: 'JetBrains Mono, monospace' },
 ];
 
 const COLORS = [
-  '#000000', '#374151', '#6b7280', '#9ca3af',
-  '#dc2626', '#ea580c', '#d97706', '#ca8a04',
-  '#16a34a', '#059669', '#0d9488', '#0891b2',
-  '#2563eb', '#4f46e5', '#7c3aed', '#9333ea',
-  '#c026d3', '#db2777', '#e11d48', '#f43f5e',
+  // Row 1 - Grays
+  '#000000', '#374151', '#6b7280', '#9ca3af', '#d1d5db', '#f3f4f6',
+  // Row 2 - Warm
+  '#dc2626', '#ea580c', '#d97706', '#ca8a04', '#84cc16', '#22c55e',
+  // Row 3 - Cool
+  '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6',
+  // Row 4 - Purple/Pink
+  '#a855f7', '#c026d3', '#db2777', '#e11d48', '#f43f5e', '#fb7185',
 ];
 
 const HIGHLIGHT_COLORS = [
   '#fef08a', '#bbf7d0', '#bfdbfe', '#ddd6fe',
   '#fbcfe8', '#fecaca', '#fed7aa', '#fef3c7',
+  '#a5f3fc', '#c7d2fe', '#f5d0fe', '#fce7f3',
 ];
 
 export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
@@ -75,6 +98,8 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [showYoutubeInput, setShowYoutubeInput] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [customColor, setCustomColor] = useState('#3b82f6');
+  const [customHighlight, setCustomHighlight] = useState('#fef08a');
 
   const handleImageUpload = useCallback(() => {
     const input = document.createElement('input');
@@ -113,10 +138,33 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
 
   const insertYoutube = useCallback(() => {
     if (youtubeUrl) {
-      editor?.chain().focus().setYoutubeVideo({ src: youtubeUrl }).run();
-      setYoutubeUrl('');
+      // Try to extract video ID to validate
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+        /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+        /[?&]v=([a-zA-Z0-9_-]{11})/,
+        /^([a-zA-Z0-9_-]{11})$/,
+      ];
+      
+      let videoId: string | null = null;
+      for (const pattern of patterns) {
+        const match = youtubeUrl.match(pattern);
+        if (match && match[1]) {
+          videoId = match[1];
+          break;
+        }
+      }
+      
+      if (videoId) {
+        editor?.chain().focus().setYoutubeVideo({ src: youtubeUrl }).run();
+        setYoutubeUrl('');
+        setShowYoutubeInput(false);
+      } else {
+        alert('Neplatná YouTube URL. Zkuste formát: https://www.youtube.com/watch?v=VIDEO_ID');
+      }
     }
-    setShowYoutubeInput(false);
   }, [editor, youtubeUrl]);
 
   if (!editor) return null;
@@ -173,7 +221,7 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
           <ChevronDown size={14} />
         </button>
         {showFontFamily && (
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-32">
+          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-48 max-h-64 overflow-y-auto">
             {FONT_FAMILIES.map((font) => (
               <button
                 key={font.value}
@@ -181,10 +229,10 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
                   editor.chain().focus().setFontFamily(font.value).run();
                   setShowFontFamily(false);
                 }}
-                className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-100"
+                className="block w-full px-3 py-2 text-left hover:bg-gray-100 border-b border-gray-50 last:border-0"
                 style={{ fontFamily: font.value }}
               >
-                {font.name}
+                <span className="text-sm">{font.name}</span>
               </button>
             ))}
           </div>
@@ -201,17 +249,20 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
           <ChevronDown size={14} />
         </button>
         {showFontSize && (
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
-            {FONT_SIZES.map((size) => (
+          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 w-44 max-h-64 overflow-y-auto">
+            {FONT_SIZES.map((item) => (
               <button
-                key={size}
+                key={item.size}
                 onClick={() => {
-                  editor.chain().focus().setFontSize(`${size}px`).run();
+                  editor.chain().focus().setFontSize(`${item.size}px`).run();
                   setShowFontSize(false);
                 }}
-                className="block w-full px-3 py-1.5 text-left text-sm hover:bg-gray-100"
+                className="flex items-center justify-between w-full px-3 py-2 text-left hover:bg-gray-100 border-b border-gray-50 last:border-0"
               >
-                {size}px
+                <span style={{ fontSize: `${Math.min(parseInt(item.size), 24)}px` }}>
+                  Aa
+                </span>
+                <span className="text-xs text-gray-500">{item.label}</span>
               </button>
             ))}
           </div>
@@ -295,8 +346,9 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
           <ChevronDown size={12} />
         </button>
         {showTextColor && (
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-2">
-            <div className="grid grid-cols-4 gap-1">
+          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 w-56">
+            <p className="text-xs text-gray-500 mb-2 font-medium">Barva textu</p>
+            <div className="grid grid-cols-6 gap-1.5 mb-3">
               {COLORS.map((color) => (
                 <button
                   key={color}
@@ -304,18 +356,45 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
                     editor.chain().focus().setColor(color).run();
                     setShowTextColor(false);
                   }}
-                  className="w-6 h-6 rounded border border-gray-200 hover:scale-110 transition-transform"
+                  className="w-7 h-7 rounded-md border border-gray-200 hover:scale-110 hover:shadow-md transition-all"
                   style={{ backgroundColor: color }}
                   title={color}
                 />
               ))}
+            </div>
+            <div className="border-t border-gray-200 pt-3">
+              <p className="text-xs text-gray-500 mb-2">Vlastní barva</p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="color"
+                  value={customColor}
+                  onChange={(e) => setCustomColor(e.target.value)}
+                  className="w-10 h-10 rounded cursor-pointer border-0"
+                />
+                <input
+                  type="text"
+                  value={customColor}
+                  onChange={(e) => setCustomColor(e.target.value)}
+                  className="flex-1 px-2 py-1.5 text-xs border border-gray-300 rounded"
+                  placeholder="#hex"
+                />
+                <button
+                  onClick={() => {
+                    editor.chain().focus().setColor(customColor).run();
+                    setShowTextColor(false);
+                  }}
+                  className="px-2 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  OK
+                </button>
+              </div>
             </div>
             <button
               onClick={() => {
                 editor.chain().focus().unsetColor().run();
                 setShowTextColor(false);
               }}
-              className="mt-2 w-full text-xs text-gray-600 hover:text-gray-900"
+              className="mt-3 w-full py-1.5 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded"
             >
               Odstranit barvu
             </button>
@@ -338,8 +417,9 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
           <ChevronDown size={12} />
         </button>
         {showHighlightColor && (
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-2">
-            <div className="grid grid-cols-4 gap-1">
+          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3 w-56">
+            <p className="text-xs text-gray-500 mb-2 font-medium">Zvýraznění</p>
+            <div className="grid grid-cols-4 gap-1.5 mb-3">
               {HIGHLIGHT_COLORS.map((color) => (
                 <button
                   key={color}
@@ -347,18 +427,45 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
                     editor.chain().focus().toggleHighlight({ color }).run();
                     setShowHighlightColor(false);
                   }}
-                  className="w-6 h-6 rounded border border-gray-200 hover:scale-110 transition-transform"
+                  className="w-10 h-7 rounded-md border border-gray-200 hover:scale-105 hover:shadow-md transition-all"
                   style={{ backgroundColor: color }}
                   title={color}
                 />
               ))}
+            </div>
+            <div className="border-t border-gray-200 pt-3">
+              <p className="text-xs text-gray-500 mb-2">Vlastní barva</p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="color"
+                  value={customHighlight}
+                  onChange={(e) => setCustomHighlight(e.target.value)}
+                  className="w-10 h-10 rounded cursor-pointer border-0"
+                />
+                <input
+                  type="text"
+                  value={customHighlight}
+                  onChange={(e) => setCustomHighlight(e.target.value)}
+                  className="flex-1 px-2 py-1.5 text-xs border border-gray-300 rounded"
+                  placeholder="#hex"
+                />
+                <button
+                  onClick={() => {
+                    editor.chain().focus().toggleHighlight({ color: customHighlight }).run();
+                    setShowHighlightColor(false);
+                  }}
+                  className="px-2 py-1.5 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                >
+                  OK
+                </button>
+              </div>
             </div>
             <button
               onClick={() => {
                 editor.chain().focus().unsetHighlight().run();
                 setShowHighlightColor(false);
               }}
-              className="mt-2 w-full text-xs text-gray-600 hover:text-gray-900"
+              className="mt-3 w-full py-1.5 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded"
             >
               Odstranit zvýraznění
             </button>

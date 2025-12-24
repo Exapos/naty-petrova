@@ -147,10 +147,15 @@ export function BlockFloatingMenu({ editor }: BlockFloatingMenuProps) {
       ref={menuRef}
       className="fixed z-50"
       style={{ top: position.top, left: position.left }}
+      onMouseDown={(e) => e.preventDefault()}
     >
       {!isExpanded ? (
         <button
-          onClick={() => setIsExpanded(true)}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded(true);
+          }}
           className="p-1.5 rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all"
           title="Přidat blok"
         >
@@ -161,7 +166,9 @@ export function BlockFloatingMenu({ editor }: BlockFloatingMenuProps) {
           {items.map((item, index) => (
             <button
               key={index}
-              onClick={() => {
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 item.action();
                 setIsExpanded(false);
               }}

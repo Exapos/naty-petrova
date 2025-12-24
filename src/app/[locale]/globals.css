@@ -648,3 +648,356 @@ body.admin-context .hover\:bg-gray-50:hover {
 .ProseMirror .drag-handle:active {
   cursor: grabbing;
 }
+
+/* ============================================
+   BLOG CONTENT STYLES - 1:1 matching TipTap Editor
+   ============================================ */
+.blog-content {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #1e293b;
+}
+
+.dark .blog-content {
+  color: #e2e8f0;
+}
+
+/* Headings */
+.blog-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 2rem 0 1rem 0;
+  color: #0f172a;
+}
+
+.blog-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1.75rem 0 0.875rem 0;
+  color: #0f172a;
+}
+
+.blog-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 1.5rem 0 0.75rem 0;
+  color: #0f172a;
+}
+
+.blog-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 1.25rem 0 0.625rem 0;
+  color: #0f172a;
+}
+
+.dark .blog-content h1,
+.dark .blog-content h2,
+.dark .blog-content h3,
+.dark .blog-content h4 {
+  color: #f1f5f9;
+}
+
+/* Paragraphs */
+.blog-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+/* Links */
+.blog-content a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.blog-content a:hover {
+  color: #1d4ed8;
+}
+
+.dark .blog-content a {
+  color: #60a5fa;
+}
+
+.dark .blog-content a:hover {
+  color: #93c5fd;
+}
+
+/* Bold & Italic */
+.blog-content strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dark .blog-content strong {
+  color: #f1f5f9;
+}
+
+.blog-content em {
+  font-style: italic;
+}
+
+/* Underline & Strikethrough */
+.blog-content u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.blog-content s {
+  text-decoration: line-through;
+}
+
+/* Lists */
+.blog-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.blog-content ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.blog-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+
+.blog-content li p {
+  margin-bottom: 0.25rem;
+}
+
+/* Nested lists */
+.blog-content ul ul,
+.blog-content ol ol,
+.blog-content ul ol,
+.blog-content ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Task Lists */
+.blog-content ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-content ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.blog-content ul[data-type="taskList"] li input[type="checkbox"] {
+  margin-top: 0.375rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: #2563eb;
+}
+
+/* Blockquote */
+.blog-content blockquote {
+  border-left: 4px solid #3b82f6;
+  background: #eff6ff;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  color: #1e40af;
+}
+
+.dark .blog-content blockquote {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+}
+
+.blog-content blockquote p {
+  margin: 0;
+}
+
+/* Code - inline */
+.blog-content code {
+  background: #f1f5f9;
+  color: #be185d;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+}
+
+.dark .blog-content code {
+  background: #1e293b;
+  color: #f472b6;
+}
+
+/* Code blocks */
+.blog-content pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.blog-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Images */
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Figure & Figcaption */
+.blog-content figure {
+  margin: 1.5rem 0;
+}
+
+.blog-content figcaption {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Horizontal Rule */
+.blog-content hr {
+  border: none;
+  border-top: 2px solid #e2e8f0;
+  margin: 2rem 0;
+}
+
+.dark .blog-content hr {
+  border-top-color: #334155;
+}
+
+/* Tables */
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.blog-content th,
+.blog-content td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.blog-content th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.dark .blog-content th {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+.dark .blog-content th,
+.dark .blog-content td {
+  border-color: #334155;
+}
+
+/* Highlight / Mark */
+.blog-content mark {
+  background-color: #fef08a;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.125rem;
+}
+
+/* Text colors - TipTap style attributes */
+.blog-content [style*="color"] {
+  /* Preserves inline color styles from TipTap */
+}
+
+/* Font families from TipTap */
+.blog-content [style*="font-family"] {
+  /* Preserves inline font-family styles from TipTap */
+}
+
+/* Text alignment */
+.blog-content [style*="text-align: center"] {
+  text-align: center;
+}
+
+.blog-content [style*="text-align: right"] {
+  text-align: right;
+}
+
+.blog-content [style*="text-align: justify"] {
+  text-align: justify;
+}
+
+/* YouTube Embeds */
+.blog-content .youtube-embed-wrapper,
+.blog-content [data-youtube-video] {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #000;
+}
+
+.blog-content .youtube-embed-wrapper iframe,
+.blog-content [data-youtube-video] iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Subscript & Superscript */
+.blog-content sub {
+  font-size: 0.75em;
+  vertical-align: sub;
+}
+
+.blog-content sup {
+  font-size: 0.75em;
+  vertical-align: super;
+}
+
+/* First paragraph - drop cap effect (optional) */
+.blog-content > p:first-of-type::first-letter {
+  font-size: 3rem;
+  font-weight: 700;
+  float: left;
+  line-height: 1;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+  color: #2563eb;
+}
+
+.dark .blog-content > p:first-of-type::first-letter {
+  color: #60a5fa;
+}

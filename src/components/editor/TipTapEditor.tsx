@@ -29,6 +29,7 @@ import { TaskItem } from '@tiptap/extension-task-item';
 import { Youtube } from '@tiptap/extension-youtube';
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
 import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
+import { History } from '@tiptap/extension-history';
 
 // Functionality
 import { TextAlign } from '@tiptap/extension-text-align';
@@ -93,9 +94,10 @@ export function TipTapEditor({
         horizontalRule: false,
         dropcursor: false,
         gapcursor: false,
-        history: {
-          depth: 100,
-        },
+      }),
+      
+      History.configure({
+        depth: 100,
       }),
       
       Placeholder.configure({

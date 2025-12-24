@@ -10,6 +10,47 @@ import '@/app/[locale]/globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider';
 import CookieConsent from '@/components/CookieConsent';
 import AnalyticsWrapper from '@/components/AnalyticsWrapper/AnalyticsWrapper';
+import { Inter, JetBrains_Mono, Merriweather, Poppins, Roboto, Source_Code_Pro } from 'next/font/google';
+
+// Only load fonts actually needed for UI - subset for performance
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
+});
+
+const merriweather = Merriweather({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-merriweather',
+});
+
+const poppins = Poppins({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
+
+const roboto = Roboto({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-roboto',
+});
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-source-code-pro',
+});
 
 
 export function generateStaticParams() {
@@ -31,7 +72,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${inter.variable} ${jetbrainsMono.variable} ${merriweather.variable} ${poppins.variable} ${roboto.variable} ${sourceCodePro.variable}`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

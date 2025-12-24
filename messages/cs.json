@@ -5,7 +5,9 @@
     "about": "O nás",
     "contact": "Kontakt",
     "career": "Kariéra",
-    "references": "Reference"
+    "references": "Reference",
+    "blog": "Blog",
+    "calculator": "Kalkulačka"
   },
   "Footer": {
     "description": "Projekční kancelář pro vaše stavební plány",
@@ -204,6 +206,8 @@
     }
   },
   "ReferencesPage": {
+    "metaTitle": "Reference | Maxprojekty",
+    "metaDescription": "Prohlédněte si naše úspěšné projekty. Reference z architektury, projekce a stavebnictví. Rodinné domy, komerční objekty, rekonstrukce v Teplicích a okolí.",
     "meta": {
       "title": "Reference | Maxprojekty",
       "description": "Prohlédněte si naše úspěšné projekty. Reference z architektury, projekce a stavebnictví. Rodinné domy, komerční objekty, rekonstrukce v Teplicích a okolí."
@@ -235,6 +239,8 @@
     "noProjectsYet": "Zatím jsme nevytvořili žádné reference. Brzy zde najdete naše realizované projekty."
   },
   "Career": {
+    "metaTitle": "Kariéra | Maxprojekty",
+    "metaDescription": "Připojte se k týmu Maxprojekty. Hledáme architekty, projektanty a další profesionály. Flexibilní pracovní podmínky, mezinárodní projekty, moderní technologie.",
     "meta": {
       "title": "Kariéra | Maxprojekty",
       "description": "Připojte se k týmu Maxprojekty. Hledáme architekty, projektanty a další profesionály. Flexibilní pracovní podmínky, mezinárodní projekty, moderní technologie."
@@ -527,7 +533,14 @@
     },
     "results": {
       "title": "Orientační cena",
-      "vatNote": "Bez DPH"
+      "vatNote": "Bez DPH",
+      "totalWithVAT": "Celková cena s DPH",
+      "breakdownTitle": "Rozpis výpočtu",
+      "basePrice": "Základní cena",
+      "complexity": "Složitost",
+      "totalWithoutVAT": "Celkem bez DPH",
+      "vat": "DPH 21%",
+      "totalFinal": "Celkem s DPH"
     },
     "breakdown": {
       "basePrice": "Základní cena",
@@ -541,7 +554,7 @@
       "button": "Získat přesnou nabídku"
     },
     "disclaimer": {
-      "title": "Upozornění:",
+      "title": "Upozornění",
       "message": "Cena je orientační a může se lišit v závislosti na konkrétních požadavcích projektu, lokalitě a dalších faktorech. Pro závaznou cenovou nabídku je nutné osobní konzultace."
     },
     "fromPrice": "Od"

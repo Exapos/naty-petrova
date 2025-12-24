@@ -201,13 +201,13 @@ export default function BlogEditorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+      <div className="max-w-full mx-auto px-2">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 flex items-center justify-between"
+          className="mb-4 flex items-center justify-between"
         >
           <div className="flex items-center gap-4">
             <button
@@ -218,20 +218,54 @@ export default function BlogEditorPage() {
               <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
             </button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Blog Editor</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-2xl font-bold text-gray-900">Blog Editor</h1>
+              <p className="text-gray-600 text-sm">
                 {postId ? 'Upravit článek' : 'Nový článek'}
               </p>
             </div>
           </div>
 
+          {/* Actions moved to header */}
           <div className="flex items-center gap-3">
+            {/* Tips Tooltip */}
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs">
+              <span>Ctrl+B tučné</span>
+              <span className="text-blue-300">|</span>
+              <span>Ctrl+I kurzíva</span>
+              <span className="text-blue-300">|</span>
+              <span>Ctrl+Z zpět</span>
+            </div>
+
+            {lastSaved && (
+              <span className="text-xs text-gray-500 hidden sm:block">
+                Uloženo: {lastSaved.toLocaleTimeString('cs-CZ')}
+              </span>
+            )}
+
             {published && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg">
-                <CheckCircleIcon className="w-5 h-5" />
-                <span className="text-sm font-medium">Publikováno</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg">
+                <CheckCircleIcon className="w-4 h-4" />
+                <span className="text-xs font-medium">Publikováno</span>
               </div>
             )}
+
+            <button
+              onClick={handleSaveDraft}
+              disabled={saving}
+              className="px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              Uložit koncept
+            </button>
+
+            <button
+              onClick={handlePublish}
+              disabled={saving}
+              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors text-sm font-medium disabled:opacity-50 flex items-center gap-2"
+            >
+              <CloudArrowUpIcon className="w-4 h-4" />
+              {saving ? 'Ukládá se...' : 'Publikovat'}
+            </button>
+
             <button
               onClick={() => setShowSettings(!showSettings)}
               className="p-2 hover:bg-white rounded-lg transition-colors"
@@ -253,68 +287,19 @@ export default function BlogEditorPage() {
           </motion.div>
         )}
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Editor - Main Column */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col"
-            style={{ height: 'calc(100vh - 200px)' }}
-          >
-            <TipTapEditor
-              value={content}
-              onChange={setContent}
-              placeholder="Začněte psát svůj článek..."
-            />
-          </motion.div>
-
-          {/* Sidebar */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-6"
-          >
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Akce</h3>
-              <div className="space-y-3">
-                <button
-                  onClick={handleSaveDraft}
-                  disabled={saving}
-                  className="w-full px-4 py-3 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors font-medium disabled:opacity-50"
-                >
-                  Uložit koncept
-                </button>
-                <button
-                  onClick={handlePublish}
-                  disabled={saving}
-                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <CloudArrowUpIcon className="w-4 h-4" />
-                  {saving ? 'Ukládá se...' : 'Publikovat'}
-                </button>
-              </div>
-
-              {lastSaved && (
-                <p className="text-xs text-gray-500 mt-4 text-center">
-                  Naposledy uloženo: {lastSaved.toLocaleTimeString('cs-CZ')}
-                </p>
-              )}
-            </div>
-
-            {/* Quick Info */}
-            <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
-              <h4 className="font-semibold text-blue-900 mb-2">Tipy</h4>
-              <ul className="text-xs text-blue-800 space-y-1">
-                <li>• Ctrl+Z vrátit zpět</li>
-                <li>• Ctrl+Y znovu</li>
-                <li>• Ctrl+B tučné</li>
-                <li>• Ctrl+I kurzíva</li>
-              </ul>
-            </div>
-          </motion.div>
-        </div>
+        {/* Main Content - Full Width Editor */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+          style={{ height: 'calc(100vh - 120px)' }}
+        >
+          <TipTapEditor
+            value={content}
+            onChange={setContent}
+            placeholder="Začněte psát svůj článek..."
+          />
+        </motion.div>
 
         {/* Settings Modal */}
         <AnimatePresence>
@@ -324,14 +309,14 @@ export default function BlogEditorPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowSettings(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end sm:items-center"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
             >
               <motion.div
-                initial={{ opacity: 0, y: 100, scale: 0.95 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 100, scale: 0.95 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-2xl sm:mx-4 shadow-2xl max-h-96 overflow-y-auto"
+                className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl max-h-[85vh] overflow-y-auto"
               >
                 <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
                   <h2 className="text-xl font-bold text-gray-900">Nastavení článku</h2>

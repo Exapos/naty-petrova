@@ -5,7 +5,9 @@
     "about": "About us",
     "contact": "Contact",
     "career": "Career",
-    "references": "References"
+    "references": "References",
+    "blog": "Blog",
+    "calculator": "Calculator"
   },
   "Footer": {
     "description": "Design office for your construction plans",
@@ -190,6 +192,8 @@
     }
   },
   "ReferencesPage": {
+    "metaTitle": "References | Maxprojekty",
+    "metaDescription": "Browse our successful projects. References from architecture, design and construction. Residential houses, commercial buildings, renovations in Teplice and surroundings.",
     "meta": {
       "title": "References | Maxprojekty",
       "description": "Browse our successful projects. References from architecture, design and construction. Residential houses, commercial buildings, renovations in Teplice and surroundings."
@@ -221,6 +225,8 @@
     "noProjectsYet": "We haven't created any references yet. You will soon find our completed projects here."
   },
   "Career": {
+    "metaTitle": "Career | Maxprojekty",
+    "metaDescription": "Join the Maxprojekty team. We are looking for architects, designers and other professionals. Flexible working conditions, international projects, modern technology.",
     "meta": {
       "title": "Career | Maxprojekty",
       "description": "Join the Maxprojekty team. We are looking for architects, designers and other professionals. Flexible working conditions, international projects, modern technology."
@@ -493,7 +499,14 @@
     },
     "results": {
       "title": "Estimated Price",
-      "vatNote": "Excluding VAT"
+      "vatNote": "Excluding VAT",
+      "totalWithVAT": "Total Price Including VAT",
+      "breakdownTitle": "Calculation Breakdown",
+      "basePrice": "Base Price",
+      "complexity": "Complexity",
+      "totalWithoutVAT": "Total Excluding VAT",
+      "vat": "VAT 21%",
+      "totalFinal": "Total Including VAT"
     },
     "breakdown": {
       "basePrice": "Base Price",
@@ -507,7 +520,7 @@
       "button": "Get Precise Quote"
     },
     "disclaimer": {
-      "title": "Warning:",
+      "title": "Warning",
       "message": "The price is estimated and may vary depending on specific project requirements, location, and other factors. Personal consultation is necessary for a binding price quote."
     },
     "fromPrice": "From"

@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../authOptions';
-
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { sanitizeInput } from '@/utils/sanitizeHtml';
 
-const prisma = new PrismaClient();
-
 export async function GET() {
-  const posts = await prisma.blogPost.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: { author: { select: { name: true, email: true } } }
-  });
-  return NextResponse.json(posts);
+  try {
+    const posts = await prisma.blogPost.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { author: { select: { name: true, email: true } } }
+    });
+    return NextResponse.json(posts);
+  } catch (error) {
+    console.error('GET /api/blog error:', error);
+    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest) {

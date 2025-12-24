@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../authOptions';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { sanitizeInput } from '@/utils/sanitizeHtml';
-
-const prisma = new PrismaClient();
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -1,33 +1,33 @@
 import { useEditor as useTipTapEditor } from '@tiptap/react';
 import { useCallback, useEffect, useState } from 'react';
 import StarterKit from '@tiptap/starter-kit';
-import BubbleMenu from '@tiptap/extension-bubble-menu';
-import FloatingMenu from '@tiptap/extension-floating-menu';
-import Color from '@tiptap/extension-color';
-import TextStyle from '@tiptap/extension-text-style';
-import TextAlign from '@tiptap/extension-text-align';
-import Typography from '@tiptap/extension-typography';
-import Placeholder from '@tiptap/extension-placeholder';
-import Focus from '@tiptap/extension-focus';
-import FontFamily from '@tiptap/extension-font-family';
-import DragHandleReact from '@tiptap/extension-drag-handle-react';
-import Dropcursor from '@tiptap/extension-dropcursor';
-import FileHandler from '@tiptap/extension-file-handler';
-import FontSize from '@tiptap/extension-font-size';
-import Gapcursor from '@tiptap/extension-gapcursor';
-import InvisibleCharacters from '@tiptap/extension-invisible-characters';
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableHeader from '@tiptap/extension-table-header';
-import TableCell from '@tiptap/extension-table-cell';
-import TableOfContents from '@tiptap/extension-table-of-contents';
-import Link from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image';
-import Underline from '@tiptap/extension-underline';
-import Superscript from '@tiptap/extension-superscript';
-import Subscript from '@tiptap/extension-subscript';
-import CharacterCount from '@tiptap/extension-character-count';
-import Highlight from '@tiptap/extension-highlight';
+import { BubbleMenu } from '@tiptap/extension-bubble-menu';
+import { FloatingMenu } from '@tiptap/extension-floating-menu';
+import { Color } from '@tiptap/extension-color';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { TextAlign } from '@tiptap/extension-text-align';
+import { Typography } from '@tiptap/extension-typography';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import { Focus } from '@tiptap/extension-focus';
+import { FontFamily } from '@tiptap/extension-font-family';
+import { Dropcursor } from '@tiptap/extension-dropcursor';
+import { FileHandler } from '@tiptap/extension-file-handler';
+import { FontSize } from '@tiptap/extension-font-size';
+import { Gapcursor } from '@tiptap/extension-gapcursor';
+import { InvisibleCharacters } from '@tiptap/extension-invisible-characters';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableOfContents } from '@tiptap/extension-table-of-contents';
+import { Link } from '@tiptap/extension-link';
+import { Image } from '@tiptap/extension-image';
+import { Underline } from '@tiptap/extension-underline';
+import { Superscript } from '@tiptap/extension-superscript';
+import { Subscript } from '@tiptap/extension-subscript';
+import { CharacterCount } from '@tiptap/extension-character-count';
+import { Highlight } from '@tiptap/extension-highlight';
+import { History } from '@tiptap/extension-history';
 import { Extension } from '@tiptap/core';
 
 // Copy Markdown extension
@@ -105,10 +105,9 @@ export function useBlogEditor({
 
   const editor = useTipTapEditor({
     extensions: [
-      StarterKit.configure({
-        history: {
-          depth: 100,
-        },
+      StarterKit,
+      History.configure({
+        depth: 100,
       }),
       BubbleMenu,
       FloatingMenu.configure({
@@ -138,7 +137,6 @@ export function useBlogEditor({
       FontFamily.configure({
         types: ['textStyle'],
       }),
-      DragHandleReact,
       Dropcursor.configure({
         width: 2,
         class: 'ProseMirror-dropcursor',
@@ -186,20 +184,14 @@ export function useBlogEditor({
         types: ['textStyle'],
       }),
       Gapcursor,
-      InvisibleCharacters.configure({
-        showSpaces: false,
-        showTabs: false,
-        showLinebreaks: false,
-      }),
+      InvisibleCharacters,
       Table.configure({
         resizable: true,
       }),
       TableRow,
       TableHeader,
       TableCell,
-      TableOfContents.configure({
-        levels: [1, 2, 3],
-      }),
+      TableOfContents,
       Link.configure({
         openOnClick: true,
         autolink: true,
