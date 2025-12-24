@@ -58,9 +58,10 @@ export function LivePreview({ content, className = '' }: LivePreviewProps) {
   }
 
   return (
-    <div className={`editor-preview ${className}`}>
+    <div className={`editor-preview overflow-x-hidden ${className}`}>
       <div 
-        className="tiptap-content prose prose-gray max-w-none"
+        className="tiptap-content prose prose-gray max-w-none break-words overflow-x-hidden"
+        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
     </div>

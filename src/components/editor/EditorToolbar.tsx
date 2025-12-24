@@ -38,6 +38,11 @@ import {
   Plus,
   RowsIcon,
   ColumnsIcon,
+  Eye,
+  EyeOff,
+  ToggleLeft,
+  Merge,
+  Split,
 } from 'lucide-react';
 
 interface EditorToolbarProps {
@@ -100,6 +105,7 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [customColor, setCustomColor] = useState('#3b82f6');
   const [customHighlight, setCustomHighlight] = useState('#fef08a');
+  const [showInvisibles, setShowInvisibles] = useState(false);
 
   const handleImageUpload = useCallback(() => {
     const input = document.createElement('input');
@@ -655,32 +661,107 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
           <ChevronDown size={12} />
         </button>
         {showTableMenu && (
-          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-2 min-w-48">
+          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-2 min-w-56">
+            <p className="px-3 py-1 text-xs text-gray-500 font-medium">Vložit tabulku</p>
             <button
               onClick={() => {
-                editor.chain().focus().insertTable({ rows: 3, cols: 3 }).run();
+                editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: false }).run();
                 setShowTableMenu(false);
               }}
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded"
             >
-              <Plus size={16} /> Vložit tabulku (3x3)
+              <Plus size={16} /> Tabulka 3×3 (bez záhlaví)
             </button>
-            <div className="border-t border-gray-200 my-1" />
+            <button
+              onClick={() => {
+                editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+                setShowTableMenu(false);
+              }}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded"
+            >
+              <Plus size={16} /> Tabulka 3×3 (se záhlavím)
+            </button>
+            <button
+              onClick={() => {
+                editor.chain().focus().insertTable({ rows: 4, cols: 4, withHeaderRow: true }).run();
+                setShowTableMenu(false);
+              }}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded"
+            >
+              <Plus size={16} /> Tabulka 4×4 (se záhlavím)
+            </button>
+            
+            <div className="border-t border-gray-200 my-2" />
+            <p className="px-3 py-1 text-xs text-gray-500 font-medium">Řádky a sloupce</p>
+            <button
+              onClick={() => editor.chain().focus().addColumnBefore().run()}
+              disabled={!editor.can().addColumnBefore()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <ColumnsIcon size={16} /> Přidat sloupec před
+            </button>
             <button
               onClick={() => editor.chain().focus().addColumnAfter().run()}
               disabled={!editor.can().addColumnAfter()}
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
             >
-              <ColumnsIcon size={16} /> Přidat sloupec
+              <ColumnsIcon size={16} /> Přidat sloupec za
+            </button>
+            <button
+              onClick={() => editor.chain().focus().addRowBefore().run()}
+              disabled={!editor.can().addRowBefore()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <RowsIcon size={16} /> Přidat řádek nad
             </button>
             <button
               onClick={() => editor.chain().focus().addRowAfter().run()}
               disabled={!editor.can().addRowAfter()}
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
             >
-              <RowsIcon size={16} /> Přidat řádek
+              <RowsIcon size={16} /> Přidat řádek pod
             </button>
-            <div className="border-t border-gray-200 my-1" />
+            
+            <div className="border-t border-gray-200 my-2" />
+            <p className="px-3 py-1 text-xs text-gray-500 font-medium">Záhlaví a buňky</p>
+            <button
+              onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+              disabled={!editor.can().toggleHeaderRow()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <ToggleLeft size={16} /> Přepnout záhlaví řádku
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHeaderColumn().run()}
+              disabled={!editor.can().toggleHeaderColumn()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <ToggleLeft size={16} /> Přepnout záhlaví sloupce
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHeaderCell().run()}
+              disabled={!editor.can().toggleHeaderCell()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <ToggleLeft size={16} /> Přepnout záhlaví buňky
+            </button>
+            <button
+              onClick={() => editor.chain().focus().mergeCells().run()}
+              disabled={!editor.can().mergeCells()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <Merge size={16} /> Sloučit buňky
+            </button>
+            <button
+              onClick={() => editor.chain().focus().splitCell().run()}
+              disabled={!editor.can().splitCell()}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded disabled:opacity-50"
+            >
+              <Split size={16} /> Rozdělit buňku
+            </button>
+            
+            <div className="border-t border-gray-200 my-2" />
+            <p className="px-3 py-1 text-xs font-medium text-red-600">Smazat</p>
             <button
               onClick={() => editor.chain().focus().deleteColumn().run()}
               disabled={!editor.can().deleteColumn()}
@@ -703,11 +784,27 @@ export function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
               disabled={!editor.can().deleteTable()}
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-gray-100 rounded text-red-600 disabled:opacity-50"
             >
-              <Trash2 size={16} /> Smazat tabulku
+              <Trash2 size={16} /> Smazat celou tabulku
             </button>
           </div>
         )}
       </div>
+
+      <Divider />
+
+      {/* Invisible Characters Toggle */}
+      <ToolbarButton
+        onClick={() => {
+          const newState = !showInvisibles;
+          setShowInvisibles(newState);
+          // Use the proper TipTap command
+          editor.chain().focus().toggleInvisibleCharacters().run();
+        }}
+        isActive={showInvisibles}
+        title="Zobrazit neviditelné znaky (mezery, odstavce)"
+      >
+        {showInvisibles ? <Eye size={18} /> : <EyeOff size={18} />}
+      </ToolbarButton>
 
       <Divider />
 

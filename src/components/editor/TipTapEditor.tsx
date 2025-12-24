@@ -38,6 +38,10 @@ import { Gapcursor } from '@tiptap/extension-gapcursor';
 import { FontFamily } from '@tiptap/extension-font-family';
 import { FontSize } from '@tiptap/extension-font-size';
 
+// New extensions
+import { FileHandler } from '@tiptap/extension-file-handler';
+import { InvisibleCharacters, SpaceCharacter, HardBreakNode, ParagraphNode } from '@tiptap/extension-invisible-characters';
+
 // Lowlight for syntax highlighting
 import { common, createLowlight } from 'lowlight';
 
@@ -188,6 +192,68 @@ export function TipTapEditor({
         types: ['textStyle'],
       }),
       
+      // File Handler - drag & drop, paste images
+      FileHandler.configure({
+        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+        onDrop: (currentEditor, files, pos) => {
+          files.forEach(async (file) => {
+            if (onImageUpload) {
+              try {
+                const url = await onImageUpload(file);
+                // Insert image at the drop position, not cursor position
+                currentEditor
+                  .chain()
+                  .insertContentAt(pos, { type: 'image', attrs: { src: url } })
+                  .focus()
+                  .run();
+              } catch (error) {
+                console.error('Image upload failed:', error);
+              }
+            } else {
+              // Fallback to base64
+              const reader = new FileReader();
+              reader.onload = () => {
+                currentEditor
+                  .chain()
+                  .insertContentAt(pos, { type: 'image', attrs: { src: reader.result as string } })
+                  .focus()
+                  .run();
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        },
+        onPaste: (currentEditor, files) => {
+          files.forEach(async (file) => {
+            if (onImageUpload) {
+              try {
+                const url = await onImageUpload(file);
+                currentEditor.chain().focus().setImage({ src: url }).run();
+              } catch (error) {
+                console.error('Image upload failed:', error);
+              }
+            } else {
+              const reader = new FileReader();
+              reader.onload = () => {
+                currentEditor.chain().focus().setImage({ src: reader.result as string }).run();
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        },
+      }),
+      
+      // Invisible Characters - show spaces, tabs, etc.
+      InvisibleCharacters.configure({
+        visible: false, // Toggle with command via toolbar
+        injectCSS: true,
+        builders: [
+          new SpaceCharacter(),
+          new HardBreakNode(),
+          new ParagraphNode(),
+        ],
+      }),
+      
       // Custom extensions
       LineHeight,
       BackgroundColor,
@@ -290,7 +356,7 @@ export function TipTapEditor({
           <div
             className={`${
               previewMode === 'split' && showPreview ? 'w-1/2' : 'w-full'
-            } overflow-y-auto border-r border-gray-200 relative`}
+            } overflow-y-auto overflow-x-hidden border-r border-gray-200 relative`}
           >
             {/* Inline Bubble Menu for text selection */}
             {editor && <InlineBubbleMenu editor={editor} />}
@@ -298,7 +364,7 @@ export function TipTapEditor({
             {/* Block Floating Menu for empty lines */}
             {editor && <BlockFloatingMenu editor={editor} />}
 
-            <EditorContent editor={editor} className="h-full" />
+            <EditorContent editor={editor} className="h-full overflow-x-hidden" />
           </div>
         )}
 
@@ -307,7 +373,7 @@ export function TipTapEditor({
           <div
             className={`${
               previewMode === 'split' ? 'w-1/2' : 'w-full'
-            } overflow-y-auto bg-white`}
+            } overflow-y-auto overflow-x-hidden bg-white`}
           >
             <LivePreview content={htmlContent} />
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -91,6 +91,25 @@ export default function BlogEditorPage() {
       setSlug(generatedSlug);
     }
   }, [title, slug]);
+
+  // Image upload handler for TipTap editor
+  const handleImageUpload = useCallback(async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('/api/upload/blog-image', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Nepodařilo se nahrát obrázek');
+    }
+
+    const data = await response.json();
+    return data.url;
+  }, []);
 
   // Save draft
   const handleSaveDraft = async () => {
@@ -297,6 +316,7 @@ export default function BlogEditorPage() {
           <TipTapEditor
             value={content}
             onChange={setContent}
+            onImageUpload={handleImageUpload}
             placeholder="Začněte psát svůj článek..."
           />
         </motion.div>

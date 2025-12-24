@@ -1,6 +1,15 @@
 // Custom Extensions for TipTap Editor
 import { Extension, Node } from '@tiptap/core';
 
+// Module augmentation for custom commands
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    tableOfContentsNode: {
+      insertToc: () => ReturnType;
+    };
+  }
+}
+
 // Details Node (Collapsible content)
 export const Details = Node.create({
   name: 'details',
@@ -270,5 +279,36 @@ export const TrailingNode = Extension.create({
   addProseMirrorPlugins() {
     // TODO: Implement trailing node plugin if needed
     return [];
+  },
+});
+
+// Table of Contents Node - renders a TOC placeholder in the editor
+export const TocNode = Node.create({
+  name: 'tableOfContentsNode',
+  group: 'block',
+  atom: true,
+  
+  parseHTML() {
+    return [
+      { tag: 'div[data-type="toc"]' },
+      { tag: 'div[data-type="tableOfContents"]' },
+    ];
+  },
+  
+  renderHTML() {
+    return ['div', { 
+      'data-type': 'toc',
+      'class': 'toc-node',
+    }, '📑 Obsah bude vygenerován automaticky z nadpisů'];
+  },
+  
+  addCommands() {
+    return {
+      insertToc: () => ({ chain }) => {
+        return chain()
+          .insertContent({ type: this.name })
+          .run();
+      },
+    };
   },
 });
