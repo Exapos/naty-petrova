@@ -15,7 +15,7 @@ const TIME_PERIODS = [
 
 export function WebVitalsAnalytics({ className = '', days = 30 }: WebVitalsAnalyticsProps) {
   const [selectedPeriod, setSelectedPeriod] = useState(days);
-  const { data, loading, error, refetch, isRealData } = useWebVitals(selectedPeriod);
+  const { data, loading, error, refetch, isRealData, totalSamples } = useWebVitals(selectedPeriod);
 
   // Synchronizace s parent komponentou
   useEffect(() => {
@@ -186,7 +186,7 @@ export function WebVitalsAnalytics({ className = '', days = 30 }: WebVitalsAnaly
             Žádná Web Vitals data nejsou k dispozici
           </p>
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-            Data se zobrazí po prvních návštěvách s aktivovanými cookies
+            Data se začnou sbírat automaticky při návštěvách webu (vyžaduje souhlas s cookies)
           </p>
         </div>
       ) : (
@@ -216,8 +216,11 @@ export function WebVitalsAnalytics({ className = '', days = 30 }: WebVitalsAnaly
                   {info.description}
                 </p>
 
-                <div className="text-xs text-gray-500 dark:text-gray-500">
-                  Dobré: {info.good} | Špatné: {info.poor}
+                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500">
+                  <span>Dobré: {info.good} | Špatné: {info.poor}</span>
+                  {metric.sampleSize && (
+                    <span className="text-gray-400">({metric.sampleSize} vzorků)</span>
+                  )}
                 </div>
               </div>
             );
@@ -226,18 +229,18 @@ export function WebVitalsAnalytics({ className = '', days = 30 }: WebVitalsAnaly
       )}
 
       {/* Informace o datech */}
-      {!isRealData && (
-        <div className="mt-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+      {isRealData && totalSamples > 0 && (
+        <div className="mt-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
           <div className="flex items-start space-x-3">
-            <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <h4 className="font-medium text-yellow-800 dark:text-yellow-200">
-                Zobrazujete demo data
+              <h4 className="font-medium text-green-800 dark:text-green-200">
+                Reálná data z vašeho webu
               </h4>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                Pro zobrazení skutečných Web Vitals dat dokončete nastavení Google Analytics podle návodu v GA4_SETUP.md
+              <p className="text-sm text-green-700 dark:text-green-300 mt-1">
+                Zobrazujete data z {totalSamples} měření za posledních {selectedPeriod} dní
               </p>
             </div>
           </div>
@@ -247,7 +250,7 @@ export function WebVitalsAnalytics({ className = '', days = 30 }: WebVitalsAnaly
       <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
           <span>
-            Data z posledních 30 dní • Aktualizováno každých 24 hodin
+            Data z posledních {selectedPeriod} dní • Sbírána automaticky z návštěv webu
           </span>
           <a
             href="https://developers.google.com/search/docs/appearance/core-web-vitals"

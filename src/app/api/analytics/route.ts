@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/authOptions';
 import { GoogleAnalyticsService } from '@/lib/analytics';
 import { prisma } from '@/lib/prisma';
+import { decodePrivateKey } from '@/lib/env-keys';
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,25 +22,41 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
-    // Získání konfigurace z databáze nebo environment variables
-    const gaPropertyId = await prisma.settings.findUnique({
+    // Získání konfigurace - priorita: .env > databáze
+    const gaPropertyIdDb = await prisma.settings.findUnique({
       where: { key: 'gaPropertyId' }
     });
 
-    const gaEmail = await prisma.settings.findUnique({
+    const gaEmailDb = await prisma.settings.findUnique({
       where: { key: 'gaServiceAccountEmail' }
     });
 
-    const gaPrivateKey = await prisma.settings.findUnique({
+    const gaPrivateKeyDb = await prisma.settings.findUnique({
       where: { key: 'gaServiceAccountPrivateKey' }
     });
 
-    // Property ID z databáze (bez fallback - musí být explicitně nastaveno)
-    const propertyId = gaPropertyId?.value || '';
-    const serviceAccountEmail = gaEmail?.value || '';
-    const privateKey = gaPrivateKey?.value || '';
+    // Priorita: environment variable > databáze
+    const propertyId = process.env.GA_PROPERTY_ID || gaPropertyIdDb?.value || '';
+    const serviceAccountEmail = process.env.GA_SERVICE_ACCOUNT_EMAIL || gaEmailDb?.value || '';
+    
+    // Dekóduj private key z base64
+    let privateKey = '';
+    try {
+      if (process.env.GA_SERVICE_ACCOUNT_PRIVATE_KEY_BASE64) {
+        privateKey = decodePrivateKey(process.env.GA_SERVICE_ACCOUNT_PRIVATE_KEY_BASE64);
+      } else if (gaPrivateKeyDb?.value) {
+        privateKey = gaPrivateKeyDb.value;
+      }
+    } catch (error) {
+      console.error('Failed to decode private key:', error);
+    }
 
-
+    // Info o zdroji konfigurace pro debugging
+    const configSource = {
+      propertyId: process.env.GA_PROPERTY_ID ? 'env' : (gaPropertyIdDb?.value ? 'database' : 'none'),
+      serviceAccountEmail: process.env.GA_SERVICE_ACCOUNT_EMAIL ? 'env' : (gaEmailDb?.value ? 'database' : 'none'),
+      privateKey: process.env.GA_SERVICE_ACCOUNT_PRIVATE_KEY_BASE64 ? 'env-base64' : (gaPrivateKeyDb?.value ? 'database' : 'none'),
+    };
 
     // Inicializace Analytics Service
     const analyticsService = new GoogleAnalyticsService({
@@ -55,10 +72,13 @@ export async function GET(request: NextRequest) {
     // Načtení analytics dat
     const analyticsData = await analyticsService.getAnalyticsData(days);
 
+    const isConfigured = !!(propertyId && serviceAccountEmail && privateKey);
+
     return NextResponse.json({
       success: true,
       data: analyticsData,
-      isRealData: !!(propertyId && serviceAccountEmail && privateKey),
+      isRealData: isConfigured,
+      configSource,
     });
 
   } catch (error) {

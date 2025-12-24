@@ -106,6 +106,17 @@ export default function JobDetailPage() {
         throw new Error(errorData.error || 'Chyba při odesílání žádosti');
       }
 
+      // Track successful job application in Google Analytics
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'job_application_submit', {
+          event_category: 'Job Application',
+          event_label: position.title,
+          job_position_id: position.id,
+          job_position_title: position.title,
+          job_department: position.department,
+        });
+      }
+
       setApplicationSubmitted(true);
       setShowApplication(false);
       setFormData({

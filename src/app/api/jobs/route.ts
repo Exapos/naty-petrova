@@ -89,6 +89,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    console.log('Created job position:', position);
     return NextResponse.json({ position }, { status: 201 });
   } catch (error) {
     console.error('Error creating job position:', error);

@@ -6,10 +6,12 @@ interface WebVitalsMetric {
   value: number;
   rating: 'good' | 'needs-improvement' | 'poor';
   id: string;
+  sampleSize?: number;
 }
 
 export function useWebVitals(days: number = 30) {
   const [data, setData] = useState<WebVitalsMetric[]>([]);
+  const [totalSamples, setTotalSamples] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isRealData, setIsRealData] = useState(false);
@@ -19,7 +21,8 @@ export function useWebVitals(days: number = 30) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/analytics/web-vitals?days=${days}`);
+      // Zkusíme nejdříve naše vlastní API
+      const response = await fetch(`/api/web-vitals?days=${days}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -29,6 +32,7 @@ export function useWebVitals(days: number = 30) {
 
       if (result.success) {
         setData(result.data.metrics || []);
+        setTotalSamples(result.data.totalSamples || 0);
         setIsRealData(result.isRealData || false);
       } else {
         throw new Error(result.error || 'Failed to fetch WebVitals data');
@@ -51,6 +55,7 @@ export function useWebVitals(days: number = 30) {
 
   return {
     data,
+    totalSamples,
     loading,
     error,
     isRealData,

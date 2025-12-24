@@ -111,3 +111,48 @@ README-ADMIN-SETUP.md
 
 # Uploads (keep structure but ignore files)
 /public/uploads/*
+!public/uploads/.gitkeep
+
+# Dočasné soubory pro encoding/dekódování (never commit)
+encode-key.js
+base64-key.txt
+
+# Environment files - nikdy necommituj real credentials
+# Měj jen .env.example v repo
+.env
+.env.production.local
+.env.test.local
+
+# Prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+prisma/*.db
+
+# Redis (pokud bude)
+dump.rdb
+
+# Node
+node_modules/
+.npm
+
+# Turbopack
+.turbo/
+turbopack-cache/
+
+# Next.js
+.next/
+out/
+build/
+
+# IDE specificky
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
+.env.local

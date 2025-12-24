@@ -1,14 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
+import Image from 'next/image';
 import { 
   UserIcon, 
   ShieldCheckIcon,
   GlobeAltIcon,
   CheckCircleIcon,
   XMarkIcon,
-  ComputerDesktopIcon 
+  ComputerDesktopIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  ClockIcon,
+  MapPinIcon,
+  DevicePhoneMobileIcon
 } from '@heroicons/react/24/outline';
+
+// Typ pro zdroj integrace
+type IntegrationSource = 'env' | 'database' | 'none';
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
@@ -34,6 +43,10 @@ export default function SettingsPage() {
     gaServiceAccountPrivateKey: '',
     gaPropertyId: '',
   });
+
+  // Zdroje integrací (env/database/none)
+  const [integrationSources, setIntegrationSources] = useState<Record<string, IntegrationSource>>({});
+  const [envVariables, setEnvVariables] = useState<Record<string, string>>({});
 
   const [sessions, setSessions] = useState<any[]>([]);
 
@@ -75,10 +88,40 @@ export default function SettingsPage() {
       if (response.ok) {
         const data = await response.json();
         setIntegrations(data.integrations);
+        setIntegrationSources(data.sources || {});
+        setEnvVariables(data.envVariables || {});
       }
     } catch (error) {
       console.error('Error loading integrations:', error);
     }
+  };
+
+  // Helper pro získání barvy a textu zdroje integrace
+  const getSourceBadge = (key: string) => {
+    const source = integrationSources[key];
+    const envVar = envVariables[key];
+    
+    if (source === 'env') {
+      return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800" title={`Hodnota z environment variable: ${envVar}`}>
+          <CheckCircleIcon className="w-3 h-3 mr-1" />
+          .env
+        </span>
+      );
+    } else if (source === 'database') {
+      return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800" title="Hodnota z databáze">
+          <InformationCircleIcon className="w-3 h-3 mr-1" />
+          Databáze
+        </span>
+      );
+    }
+    return null;
+  };
+
+  // Je pole editovatelné? (pouze pokud není v .env)
+  const isFieldEditable = (key: string) => {
+    return integrationSources[key] !== 'env';
   };
 
   const showNotification = (type: 'success' | 'error', message: string) => {
@@ -439,50 +482,105 @@ export default function SettingsPage() {
 
         {activeTab === 'security' && (
           <div className="p-6 space-y-6">
-            <h3 className="text-lg font-medium text-gray-900">Zabezpečení</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-gray-900">Zabezpečení</h3>
+              <span className="text-sm text-gray-500">
+                Spravujte přihlášení a zabezpečení vašeho účtu
+              </span>
+            </div>
             
             <div className="space-y-6">
               {/* Aktivní relace */}
-              <div>
-                <h4 className="text-md font-medium text-gray-900 mb-4">Aktivní relace</h4>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-md font-medium text-gray-900 flex items-center">
+                    <ComputerDesktopIcon className="w-5 h-5 mr-2 text-gray-600" />
+                    Aktivní relace
+                  </h4>
+                  <button
+                    onClick={loadSessions}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    Obnovit
+                  </button>
+                </div>
+                
                 {loading ? (
-                  <div className="p-4 text-center text-gray-500">Načítání relací...</div>
-                ) : sessions.length === 0 ? (
                   <div className="p-4 text-center text-gray-500">
-                    Žádné aktivní relace nenalezeny. Session tracking bude implementován při příštím přihlášení.
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="mt-2">Načítání relací...</p>
+                  </div>
+                ) : sessions.length === 0 ? (
+                  <div className="p-6 text-center bg-white rounded-lg border border-dashed border-gray-300">
+                    <ComputerDesktopIcon className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                    <p className="text-gray-500">Žádné aktivní relace nenalezeny</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Session tracking bude aktivován při příštím přihlášení
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {sessions.map((session, index) => {
-                      const isCurrentSession = index === 0; // První session jako současná
-                      const timeAgo = new Date(session.lastActivity).toLocaleString('cs-CZ');
+                    {sessions.map((sessionItem, index) => {
+                      const isCurrentSession = index === 0;
+                      const lastActivity = new Date(sessionItem.lastActivity);
+                      const timeAgo = lastActivity.toLocaleString('cs-CZ');
+                      
+                      // Detekce typu zařízení z user agent
+                      const isMobile = sessionItem.userAgent?.toLowerCase().includes('mobile');
+                      const DeviceIcon = isMobile ? DevicePhoneMobileIcon : ComputerDesktopIcon;
                       
                       return (
-                        <div key={session.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                          <div className="flex items-center">
-                            <ComputerDesktopIcon className="w-8 h-8 text-gray-400 mr-3" />
-                            <div>
-                              <h5 className="text-sm font-medium text-gray-900">
-                                {isCurrentSession ? 'Současná relace' : 'Jiné zařízení'}
-                              </h5>
-                              <p className="text-xs text-gray-500">
-                                {timeAgo} • {session.userAgent || 'Neznámé zařízení'}
-                              </p>
-                              {session.location && (
-                                <p className="text-xs text-gray-400">{session.location}</p>
+                        <div 
+                          key={sessionItem.id} 
+                          className={`flex items-center justify-between p-4 bg-white rounded-lg border ${
+                            isCurrentSession ? 'border-green-200 bg-green-50' : 'border-gray-200'
+                          }`}
+                        >
+                          <div className="flex items-center flex-1">
+                            <div className={`p-2 rounded-lg mr-4 ${
+                              isCurrentSession ? 'bg-green-100' : 'bg-gray-100'
+                            }`}>
+                              <DeviceIcon className={`w-6 h-6 ${
+                                isCurrentSession ? 'text-green-600' : 'text-gray-500'
+                              }`} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center space-x-2">
+                                <h5 className="text-sm font-medium text-gray-900">
+                                  {isCurrentSession ? 'Současná relace' : (isMobile ? 'Mobilní zařízení' : 'Desktop')}
+                                </h5>
+                                {isCurrentSession && (
+                                  <span className="px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">
+                                    Aktivní
+                                  </span>
+                                )}
+                              </div>
+                              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                                <span className="flex items-center">
+                                  <ClockIcon className="w-3 h-3 mr-1" />
+                                  {timeAgo}
+                                </span>
+                                {sessionItem.ipAddress && (
+                                  <span className="flex items-center">
+                                    <MapPinIcon className="w-3 h-3 mr-1" />
+                                    {sessionItem.ipAddress}
+                                  </span>
+                                )}
+                              </div>
+                              {sessionItem.userAgent && (
+                                <p className="text-xs text-gray-400 mt-1 truncate max-w-md">
+                                  {sessionItem.userAgent}
+                                </p>
                               )}
                             </div>
                           </div>
-                          {isCurrentSession ? (
-                            <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
-                              Aktivní
-                            </span>
-                          ) : (
+                          
+                          {!isCurrentSession && (
                             <button 
-                              onClick={() => handleTerminateSession(session.id)}
-                              className="text-red-600 hover:text-red-800 text-sm"
+                              onClick={() => handleTerminateSession(sessionItem.id)}
+                              className="ml-4 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors flex-shrink-0"
                             >
-                              Odhlásit
+                              Ukončit
                             </button>
                           )}
                         </div>
@@ -492,23 +590,68 @@ export default function SettingsPage() {
                 )}
               </div>
 
+              {/* Dvoufaktorové ověření */}
+              <TwoFactorSection showNotification={showNotification} />
+
               {/* Bezpečnostní akce */}
-              <div className="border-t pt-6">
-                <h4 className="text-md font-medium text-gray-900 mb-4">Bezpečnostní akce</h4>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h4 className="text-md font-medium text-gray-900 mb-4 flex items-center">
+                  <ExclamationTriangleIcon className="w-5 h-5 mr-2 text-red-500" />
+                  Bezpečnostní akce
+                </h4>
                 <div className="space-y-3">
                   <button
                     onClick={handleTerminateAllSessions}
-                    className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                    className="w-full flex items-center justify-between px-4 py-3 bg-white border border-red-200 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
                   >
-                    Odhlásit se ze všech zařízení
+                    <div className="flex items-center">
+                      <XMarkIcon className="w-5 h-5 mr-3" />
+                      <div className="text-left">
+                        <p className="font-medium">Odhlásit ze všech zařízení</p>
+                        <p className="text-xs text-red-400">Ukončí všechny aktivní relace včetně této</p>
+                      </div>
+                    </div>
                   </button>
+                  
                   <button
-                    onClick={() => signOut()}
-                    className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+                    onClick={() => signOut({ callbackUrl: '/admin' })}
+                    className="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                   >
-                    Odhlásit se z tohoto zařízení
+                    <div className="flex items-center">
+                      <UserIcon className="w-5 h-5 mr-3" />
+                      <div className="text-left">
+                        <p className="font-medium">Odhlásit se</p>
+                        <p className="text-xs text-gray-400">Odhlásí vás z tohoto zařízení</p>
+                      </div>
+                    </div>
                   </button>
                 </div>
+              </div>
+
+              {/* Bezpečnostní tipy */}
+              <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
+                <h4 className="text-md font-medium text-blue-900 mb-3 flex items-center">
+                  <InformationCircleIcon className="w-5 h-5 mr-2" />
+                  Bezpečnostní doporučení
+                </h4>
+                <ul className="space-y-2 text-sm text-blue-800">
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>Používejte silné a unikátní heslo pro váš účet</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>Pravidelně kontrolujte aktivní relace a ukončujte neznámé</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>Nepoužívejte veřejné Wi-Fi sítě pro přístup k administraci</span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckCircleIcon className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>Po dokončení práce se vždy odhlaste</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -516,7 +659,33 @@ export default function SettingsPage() {
 
         {activeTab === 'integrations' && (
           <div className="p-6 space-y-6">
-            <h3 className="text-lg font-medium text-gray-900">Integrace</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-gray-900">Integrace</h3>
+              <button
+                onClick={loadIntegrations}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Obnovit
+              </button>
+            </div>
+
+            {/* Info o prioritě .env */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start">
+                <InformationCircleIcon className="h-5 w-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+                <div>
+                  <h4 className="text-sm font-medium text-blue-900">Priorita konfigurace</h4>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Hodnoty se primárně načítají z <code className="px-1 py-0.5 bg-blue-100 rounded">.env</code> souboru. 
+                    Pokud tam nejsou nastaveny, můžete je konfigurovat zde a uloží se do databáze.
+                  </p>
+                  <p className="text-xs text-blue-600 mt-2">
+                    Pole označená <span className="px-1.5 py-0.5 bg-green-100 text-green-800 rounded text-xs">.env</span> jsou 
+                    nastavena v environment variables a nelze je zde měnit.
+                  </p>
+                </div>
+              </div>
+            </div>
             
             {/* Formulář pro integrace */}
             <div className="space-y-6">
@@ -525,79 +694,100 @@ export default function SettingsPage() {
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Measurement ID
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Measurement ID
+                      </label>
+                      {getSourceBadge('googleAnalytics')}
+                    </div>
                     <input
                       type="text"
                       value={integrations.googleAnalytics}
                       onChange={(e) => handleIntegrationsChange('googleAnalytics', e.target.value)}
                       placeholder="G-XXXXXXXXXX"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={!isFieldEditable('googleAnalytics')}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        !isFieldEditable('googleAnalytics') ? 'bg-gray-100 cursor-not-allowed' : ''
+                      }`}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Measurement ID z Google Analytics (pro tracking)
+                      Measurement ID z Google Analytics (pro tracking) • ENV: <code className="text-xs">NEXT_PUBLIC_GA_MEASUREMENT_ID</code>
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Property ID
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Property ID
+                      </label>
+                      {getSourceBadge('gaPropertyId')}
+                    </div>
                     <input
                       type="text"
                       value={integrations.gaPropertyId}
                       onChange={(e) => handleIntegrationsChange('gaPropertyId', e.target.value)}
                       placeholder="123456789"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={!isFieldEditable('gaPropertyId')}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        !isFieldEditable('gaPropertyId') ? 'bg-gray-100 cursor-not-allowed' : ''
+                      }`}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Číselné Property ID z Google Analytics (pro API) - najdeš v Admin → Property Settings
+                      Číselné Property ID z Google Analytics (pro API) • ENV: <code className="text-xs">GA_PROPERTY_ID</code>
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Service Account Email
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Service Account Email
+                      </label>
+                      {getSourceBadge('gaServiceAccountEmail')}
+                    </div>
                     <input
                       type="email"
                       value={integrations.gaServiceAccountEmail}
                       onChange={(e) => handleIntegrationsChange('gaServiceAccountEmail', e.target.value)}
                       placeholder="ga-service-account@project.iam.gserviceaccount.com"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={!isFieldEditable('gaServiceAccountEmail')}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        !isFieldEditable('gaServiceAccountEmail') ? 'bg-gray-100 cursor-not-allowed' : ''
+                      }`}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      E-mail adresa Service Account z Google Cloud Console
+                      E-mail Service Account z Google Cloud • ENV: <code className="text-xs">GA_SERVICE_ACCOUNT_EMAIL</code>
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Private Key
-                    </label>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Private Key
+                      </label>
+                      {getSourceBadge('gaServiceAccountPrivateKey')}
+                    </div>
                     <textarea
-                      value={integrations.gaServiceAccountPrivateKey}
+                      value={integrationSources['gaServiceAccountPrivateKey'] === 'env' ? '***NASTAVENO V .ENV***' : integrations.gaServiceAccountPrivateKey}
                       onChange={(e) => handleIntegrationsChange('gaServiceAccountPrivateKey', e.target.value)}
                       placeholder="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
                       rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-xs"
+                      disabled={!isFieldEditable('gaServiceAccountPrivateKey')}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-xs ${
+                        !isFieldEditable('gaServiceAccountPrivateKey') ? 'bg-gray-100 cursor-not-allowed' : ''
+                      }`}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Privátní klíč ze souboru JSON (včetně -----BEGIN PRIVATE KEY----- a -----END PRIVATE KEY-----)
+                      Privátní klíč ze souboru JSON • ENV: <code className="text-xs">GA_SERVICE_ACCOUNT_PRIVATE_KEY</code>
                     </p>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
                     <div className="flex">
-                      <div className="flex-shrink-0">
-                        <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm text-blue-700">
-                          <strong>Pro GA4 Reporting API:</strong> Postupujte podle návodu v GA4_SETUP.md pro vytvoření Service Account a nastavení oprávnění.
+                      <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500 mr-3 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-yellow-800">
+                          <strong>Doporučení:</strong> Pro produkční prostředí použijte environment variables v <code className="px-1 bg-yellow-100 rounded">.env</code> souboru. 
+                          Hodnoty uložené v databázi jsou méně bezpečné.
                         </p>
                       </div>
                     </div>
@@ -605,84 +795,111 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Facebook Pixel ID
-                </label>
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Facebook Pixel ID
+                  </label>
+                  {getSourceBadge('facebookPixel')}
+                </div>
                 <input
                   type="text"
                   value={integrations.facebookPixel}
                   onChange={(e) => handleIntegrationsChange('facebookPixel', e.target.value)}
                   placeholder="123456789012345"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!isFieldEditable('facebookPixel')}
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    !isFieldEditable('facebookPixel') ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Pro sledování konverzí a remarketing
+                  Pro sledování konverzí a remarketing • ENV: <code className="text-xs">NEXT_PUBLIC_FB_PIXEL_ID</code>
                 </p>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Google Tag Manager ID
-                </label>
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Google Tag Manager ID
+                  </label>
+                  {getSourceBadge('googleTagManager')}
+                </div>
                 <input
                   type="text"
                   value={integrations.googleTagManager}
                   onChange={(e) => handleIntegrationsChange('googleTagManager', e.target.value)}
                   placeholder="GTM-XXXXXXX"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!isFieldEditable('googleTagManager')}
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    !isFieldEditable('googleTagManager') ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Pro centralizované správu tagů
+                  Pro centralizované správu tagů • ENV: <code className="text-xs">NEXT_PUBLIC_GTM_ID</code>
                 </p>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Hotjar Site ID
-                </label>
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Hotjar Site ID
+                  </label>
+                  {getSourceBadge('hotjar')}
+                </div>
                 <input
                   type="text"
                   value={integrations.hotjar}
                   onChange={(e) => handleIntegrationsChange('hotjar', e.target.value)}
                   placeholder="1234567"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!isFieldEditable('hotjar')}
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    !isFieldEditable('hotjar') ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Heatmapy a nahrávky uživatelských relací
+                  Heatmapy a nahrávky uživatelských relací • ENV: <code className="text-xs">NEXT_PUBLIC_HOTJAR_ID</code>
                 </p>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Mailchimp API Key
-                </label>
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Mailchimp API Key
+                  </label>
+                  {getSourceBadge('mailchimp')}
+                </div>
                 <input
                   type="text"
                   value={integrations.mailchimp}
                   onChange={(e) => handleIntegrationsChange('mailchimp', e.target.value)}
                   placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-us1"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!isFieldEditable('mailchimp')}
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    !isFieldEditable('mailchimp') ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Pro e-mail marketing a newslettery
+                  Pro e-mail marketing a newslettery • ENV: <code className="text-xs">MAILCHIMP_API_KEY</code>
                 </p>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-4 flex items-center space-x-4">
                 <button 
                   onClick={handleSaveIntegrations}
                   disabled={loading}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                  className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 font-medium transition-colors"
                 >
                   {loading ? 'Ukládám...' : 'Uložit integrace'}
                 </button>
+                <span className="text-sm text-gray-500">
+                  Ukládá pouze hodnoty, které nejsou nastaveny v .env
+                </span>
               </div>
             </div>
 
             {/* Dostupné integrace */}
             <div className="border-t pt-6">
-              <h4 className="text-sm font-medium text-gray-900 mb-4">Dostupné integrace</h4>
+              <h4 className="text-sm font-medium text-gray-900 mb-4">Stav integrací</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center">
@@ -776,6 +993,334 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Komponenta pro 2FA nastavení
+function TwoFactorSection({ showNotification }: { showNotification: (type: 'success' | 'error', message: string) => void }) {
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [setupMode, setSetupMode] = useState(false);
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [secret, setSecret] = useState<string | null>(null);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [backupCodes, setBackupCodes] = useState<string[] | null>(null);
+  const [disableMode, setDisableMode] = useState(false);
+  const [disablePassword, setDisablePassword] = useState('');
+  const [disableCode, setDisableCode] = useState('');
+
+  // Load 2FA status on mount
+  useEffect(() => {
+    load2FAStatus();
+  }, []);
+
+  const load2FAStatus = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/two-factor');
+      if (response.ok) {
+        const data = await response.json();
+        setTwoFactorEnabled(data.enabled || false);
+      }
+    } catch (error) {
+      console.error('Error loading 2FA status:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startSetup = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/two-factor');
+      if (response.ok) {
+        const data = await response.json();
+        if (!data.enabled) {
+          setQrCode(data.qrCode);
+          setSecret(data.manualEntry);
+          setSetupMode(true);
+        }
+      }
+    } catch {
+      showNotification('error', 'Nepodařilo se zahájit nastavení 2FA');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyAndEnable = async () => {
+    if (verificationCode.length !== 6) {
+      showNotification('error', 'Zadejte 6místný kód');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/two-factor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: verificationCode }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setBackupCodes(data.backupCodes);
+        setTwoFactorEnabled(true);
+        showNotification('success', '2FA bylo úspěšně aktivováno');
+      } else {
+        showNotification('error', data.error || 'Neplatný kód');
+      }
+    } catch {
+      showNotification('error', 'Nepodařilo se aktivovat 2FA');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const disable2FA = async () => {
+    if (!disablePassword || !disableCode) {
+      showNotification('error', 'Vyplňte heslo a kód');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/two-factor', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: disablePassword, code: disableCode }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setTwoFactorEnabled(false);
+        setDisableMode(false);
+        setDisablePassword('');
+        setDisableCode('');
+        showNotification('success', '2FA bylo deaktivováno');
+      } else {
+        showNotification('error', data.error || 'Nepodařilo se deaktivovat 2FA');
+      }
+    } catch {
+      showNotification('error', 'Nepodařilo se deaktivovat 2FA');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelSetup = () => {
+    setSetupMode(false);
+    setQrCode(null);
+    setSecret(null);
+    setVerificationCode('');
+    setBackupCodes(null);
+  };
+
+  if (loading && !setupMode && !disableMode) {
+    return (
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-64"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Zobrazení záložních kódů po aktivaci
+  if (backupCodes) {
+    return (
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="flex items-center mb-4">
+          <ShieldCheckIcon className="w-6 h-6 text-green-600 mr-2" />
+          <h4 className="text-md font-medium text-gray-900">2FA bylo aktivováno!</h4>
+        </div>
+        
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <h5 className="font-medium text-yellow-800 mb-2">Uložte si záložní kódy</h5>
+          <p className="text-sm text-yellow-700 mb-3">
+            Tyto kódy můžete použít pro přihlášení, pokud ztratíte přístup k autentikační aplikaci.
+            Každý kód lze použít pouze jednou.
+          </p>
+          <div className="grid grid-cols-2 gap-2 font-mono text-sm bg-white p-3 rounded border border-yellow-300">
+            {backupCodes.map((code, i) => (
+              <div key={i} className="text-gray-800">{code}</div>
+            ))}
+          </div>
+        </div>
+        
+        <button
+          onClick={() => setBackupCodes(null)}
+          className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+        >
+          Rozumím, uložil jsem si kódy
+        </button>
+      </div>
+    );
+  }
+
+  // Setup mode - zobrazení QR kódu
+  if (setupMode) {
+    return (
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-md font-medium text-gray-900 flex items-center">
+            <ShieldCheckIcon className="w-5 h-5 mr-2 text-gray-600" />
+            Nastavení 2FA
+          </h4>
+          <button
+            onClick={cancelSetup}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Zrušit
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            1. Naskenujte QR kód pomocí autentikační aplikace (Google Authenticator, Authy, atd.)
+          </p>
+          
+          {qrCode && (
+            <div className="flex justify-center">
+              <Image src={qrCode} alt="2FA QR Code" width={192} height={192} className="border rounded-lg" />
+            </div>
+          )}
+
+          {secret && (
+            <div className="bg-white p-3 rounded-lg border">
+              <p className="text-xs text-gray-500 mb-1">Nebo zadejte kód ručně:</p>
+              <p className="font-mono text-sm select-all break-all">{secret}</p>
+            </div>
+          )}
+
+          <p className="text-sm text-gray-600">
+            2. Zadejte 6místný kód z aplikace pro ověření:
+          </p>
+
+          <input
+            type="text"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            placeholder="000000"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-2xl font-mono tracking-widest"
+            maxLength={6}
+          />
+
+          <button
+            onClick={verifyAndEnable}
+            disabled={loading || verificationCode.length !== 6}
+            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+          >
+            {loading ? 'Ověřuji...' : 'Aktivovat 2FA'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Disable mode
+  if (disableMode) {
+    return (
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-md font-medium text-gray-900 flex items-center">
+            <ExclamationTriangleIcon className="w-5 h-5 mr-2 text-red-500" />
+            Deaktivovat 2FA
+          </h4>
+          <button
+            onClick={() => setDisableMode(false)}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Zrušit
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Pro deaktivaci 2FA zadejte své heslo a aktuální kód z autentikační aplikace.
+          </p>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Heslo</label>
+            <input
+              type="password"
+              value={disablePassword}
+              onChange={(e) => setDisablePassword(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              placeholder="Zadejte heslo"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">2FA kód</label>
+            <input
+              type="text"
+              value={disableCode}
+              onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-center tracking-widest"
+              placeholder="000000"
+              maxLength={6}
+            />
+          </div>
+
+          <button
+            onClick={disable2FA}
+            disabled={loading || !disablePassword || disableCode.length !== 6}
+            className="w-full py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+          >
+            {loading ? 'Deaktivuji...' : 'Deaktivovat 2FA'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Default view - status
+  return (
+    <div className="bg-gray-50 rounded-lg p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h4 className="text-md font-medium text-gray-900 flex items-center">
+            <ShieldCheckIcon className="w-5 h-5 mr-2 text-gray-600" />
+            Dvoufaktorové ověření (2FA)
+          </h4>
+          <p className="text-sm text-gray-500 mt-1">
+            {twoFactorEnabled 
+              ? 'Váš účet je chráněn dvoufaktorovým ověřením'
+              : 'Přidejte další vrstvu zabezpečení k vašemu účtu'}
+          </p>
+        </div>
+        <span className={`px-3 py-1 text-xs rounded-full ${
+          twoFactorEnabled 
+            ? 'bg-green-100 text-green-800' 
+            : 'bg-gray-100 text-gray-600'
+        }`}>
+          {twoFactorEnabled ? 'Aktivní' : 'Neaktivní'}
+        </span>
+      </div>
+
+      <div className="mt-4">
+        {twoFactorEnabled ? (
+          <button
+            onClick={() => setDisableMode(true)}
+            className="px-4 py-2 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+          >
+            Deaktivovat 2FA
+          </button>
+        ) : (
+          <button
+            onClick={startSetup}
+            disabled={loading}
+            className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+          >
+            {loading ? 'Načítání...' : 'Nastavit 2FA'}
+          </button>
         )}
       </div>
     </div>

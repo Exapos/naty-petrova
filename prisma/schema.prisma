@@ -11,14 +11,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      Role     @default(ADMIN)
-  createdAt DateTime @default(now())
-  posts     BlogPost[]
-  sessions  UserSession[]
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String
+  name                String?
+  role                Role     @default(ADMIN)
+  twoFactorEnabled    Boolean  @default(false)
+  twoFactorSecret     String?
+  twoFactorBackupCodes String?  // JSON array of hashed backup codes
+  createdAt           DateTime @default(now())
+  posts               BlogPost[]
+  sessions            UserSession[]
 }
 
 enum Role {
@@ -125,4 +128,18 @@ model Settings {
   value               String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+}
+
+// Web Vitals metriky sbírané z webu
+model WebVitalsMetric {
+  id        String   @id @default(uuid())
+  name      String   // LCP, FID, CLS, FCP, TTFB, INP
+  value     Float
+  rating    String   // good, needs-improvement, poor
+  page      String?  // URL stránky
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([name])
+  @@index([createdAt])
 }
