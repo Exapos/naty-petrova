@@ -27,7 +27,6 @@ import { Superscript } from '@tiptap/extension-superscript';
 import { Subscript } from '@tiptap/extension-subscript';
 import { CharacterCount } from '@tiptap/extension-character-count';
 import { Highlight } from '@tiptap/extension-highlight';
-import { History } from '@tiptap/extension-history';
 import { Extension } from '@tiptap/core';
 
 // Copy Markdown extension
@@ -106,9 +105,6 @@ export function useBlogEditor({
   const editor = useTipTapEditor({
     extensions: [
       StarterKit,
-      History.configure({
-        depth: 100,
-      }),
       BubbleMenu,
       FloatingMenu.configure({
         shouldShow: ({ state }) => {

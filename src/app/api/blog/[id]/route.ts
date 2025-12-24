@@ -80,6 +80,15 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if (!session || !session.user || session.user.role !== 'ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  await prisma.blogPost.delete({ where: { id } });
-  return NextResponse.json({ ok: true });
+  
+  try {
+    await prisma.blogPost.delete({ where: { id } });
+    return NextResponse.json({ ok: true });
+  } catch (error: any) {
+    if (error.code === 'P2025') {
+      return NextResponse.json({ error: 'Blog post not found' }, { status: 404 });
+    }
+    console.error('DELETE /api/blog/[id] error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }
