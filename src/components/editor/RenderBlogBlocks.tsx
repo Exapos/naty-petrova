@@ -40,7 +40,6 @@ export function RenderBlogBlocks({ blocks }: RenderBlogBlocksProps) {
 
       case 'heading': {
         const level = block.content?.level || 2;
-        const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
         const headingClasses = {
           h1: 'text-4xl font-bold mb-6 mt-8',
           h2: 'text-3xl font-bold mb-4 mt-6',
@@ -48,10 +47,10 @@ export function RenderBlogBlocks({ blocks }: RenderBlogBlocksProps) {
           h4: 'text-xl font-bold mb-3 mt-3',
         }[`h${level}`] || 'text-lg font-bold mb-2 mt-2';
 
-        return (
-          <HeadingTag key={index} style={blockStyle} className={headingClasses}>
-            {block.content?.text || block.content}
-          </HeadingTag>
+        return React.createElement(
+          `h${level}` as any,
+          { key: index, style: blockStyle, className: headingClasses },
+          block.content?.text || block.content
         );
       }
 
