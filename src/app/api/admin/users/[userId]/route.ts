@@ -92,7 +92,15 @@ export async function PUT(
 
     // Ověření, že uživatel existuje
     const existingUser = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
+      select: { 
+        id: true,
+        email: true, 
+        name: true, 
+        bio: true, 
+        title: true, 
+        role: true 
+      }
     });
 
     if (!existingUser) {

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import { 
@@ -69,6 +69,25 @@ export default function SettingsPage() {
 
   const tabs = getTabs();
 
+  const loadUserProfile = useCallback(async () => {
+    try {
+      const response = await fetch('/api/user/profile');
+      if (response.ok) {
+        const data = await response.json();
+        setUserSettings(prev => ({
+          ...prev,
+          bio: data.bio || '',
+          title: data.title || '',
+        }));
+      } else {
+        showNotification('error', 'Nepodařilo se načíst profilová data');
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+      showNotification('error', 'Nepodařilo se načíst profilová data');
+    }
+  }, []);
+
   useEffect(() => {
     if (session?.user) {
       setUserSettings(prev => ({
@@ -85,7 +104,7 @@ export default function SettingsPage() {
         loadIntegrations();
       }
     }
-  }, [session]);
+  }, [session, loadUserProfile]);
 
   const loadIntegrations = async () => {
     try {
@@ -98,25 +117,6 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error('Error loading integrations:', error);
-    }
-  };
-
-  const loadUserProfile = async () => {
-    try {
-      const response = await fetch('/api/user/profile');
-      if (response.ok) {
-        const data = await response.json();
-        setUserSettings(prev => ({
-          ...prev,
-          bio: data.bio || '',
-          title: data.title || '',
-        }));
-      } else {
-        showNotification('error', 'Nepodařilo se načíst profilová data');
-      }
-    } catch (error) {
-      console.error('Error loading user profile:', error);
-      showNotification('error', 'Nepodařilo se načíst profilová data');
     }
   };
 
