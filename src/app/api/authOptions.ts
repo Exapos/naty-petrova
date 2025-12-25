@@ -100,4 +100,6 @@ export const authOptions = {
   pages: {
     signIn: "/admin",
   },
+  // Trust only our own origins for redirects
+  trustHost: true,
 };

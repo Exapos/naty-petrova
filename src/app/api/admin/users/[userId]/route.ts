@@ -29,7 +29,7 @@ export async function GET(
 
     // Získat uživatele pomocí raw SQL
     const users = await prisma.$queryRaw`
-      SELECT id, email, name, role, "createdAt"
+      SELECT id, email, name, bio, title, role, "createdAt"
       FROM "User"
       WHERE id = ${userId}
     ` as any[];
@@ -72,7 +72,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Access denied - Admin required' }, { status: 403 });
     }
 
-    const { email, password, name, role } = await request.json();
+    const { email, password, name, bio, title, role } = await request.json();
 
     // Validace role
     if (role && role !== 'ADMIN' && role !== 'EDITOR') {
@@ -112,6 +112,8 @@ export async function PUT(
         SET email = ${email || existingUser.email}, 
             password = ${hashedPassword}, 
             name = ${name !== undefined ? name : existingUser.name}, 
+            bio = ${bio !== undefined ? bio : existingUser.bio}, 
+            title = ${title !== undefined ? title : existingUser.title}, 
             role = ${role || existingUser.role}::"Role"
         WHERE id = ${userId}
       `;
@@ -120,6 +122,8 @@ export async function PUT(
         UPDATE "User" 
         SET email = ${email || existingUser.email}, 
             name = ${name !== undefined ? name : existingUser.name}, 
+            bio = ${bio !== undefined ? bio : existingUser.bio}, 
+            title = ${title !== undefined ? title : existingUser.title}, 
             role = ${role || existingUser.role}::"Role"
         WHERE id = ${userId}
       `;

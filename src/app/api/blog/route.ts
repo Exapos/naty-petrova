@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const posts = await prisma.blogPost.findMany({
       orderBy: { createdAt: 'desc' },
-      include: { author: { select: { name: true, email: true } } }
+      include: { author: { select: { name: true, email: true, bio: true, title: true } } }
     });
     return NextResponse.json(posts);
   } catch (error) {
@@ -19,15 +19,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('POST /api/blog');
-    
     const session = await getServerSession(authOptions);
-    console.log('Session:', session ? { user: session.user, role: session.user?.role } : 'No session');
     
     if (!session || !session.user || session.user.role !== 'ADMIN') {
-      console.log('Authorization failed');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+  
+  const body = await request.json();
   
   const { 
     title, 
@@ -40,10 +38,16 @@ export async function POST(request: NextRequest) {
     keywords, 
     published,
     editorMode 
-  } = await request.json();
+  } = body;
   
-  if (!title || !content) {
-    return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
+  if (!title) {
+    return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+  }
+  
+  // Allow empty content for drafts, but require content for published posts
+  if (!content && published) {
+    console.log('Validation failed: Content is required for published posts');
+    return NextResponse.json({ error: 'Content is required for published posts' }, { status: 400 });
   }
   
   // Generate slug if not provided
@@ -82,6 +86,12 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(post, { status: 201 });
   } catch (error) {
     console.error('POST /api/blog error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    return NextResponse.json({ 
+      error: 'Internal server error'
+    }, { status: 500 });
   }
 }

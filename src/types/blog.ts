@@ -38,6 +38,8 @@ export interface BlogPost {
     id: string;
     name: string;
     email: string;
+    bio?: string | null;
+    title?: string | null;
   };
   blocks?: BlogBlock[]; // Parsed block data for block editor mode
   globalStyles?: any;

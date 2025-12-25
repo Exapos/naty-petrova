@@ -28,6 +28,8 @@ export default function SettingsPage() {
   const [userSettings, setUserSettings] = useState({
     name: '',
     email: '',
+    bio: '',
+    title: '',
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
@@ -75,6 +77,9 @@ export default function SettingsPage() {
         email: session.user?.email || '',
       }));
       
+      // Načtení bio a title z API
+      loadUserProfile();
+      
       // Načtení integrací pro admin uživatele
       if (session.user.role === 'ADMIN') {
         loadIntegrations();
@@ -93,6 +98,25 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error('Error loading integrations:', error);
+    }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      const response = await fetch('/api/user/profile');
+      if (response.ok) {
+        const data = await response.json();
+        setUserSettings(prev => ({
+          ...prev,
+          bio: data.bio || '',
+          title: data.title || '',
+        }));
+      } else {
+        showNotification('error', 'Nepodařilo se načíst profilová data');
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+      showNotification('error', 'Nepodařilo se načíst profilová data');
     }
   };
 
@@ -151,6 +175,8 @@ export default function SettingsPage() {
         body: JSON.stringify({
           name: userSettings.name,
           email: userSettings.email,
+          bio: userSettings.bio,
+          title: userSettings.title,
         }),
       });
 
@@ -408,6 +434,31 @@ export default function SettingsPage() {
                       placeholder="Zadejte váš e-mail"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Titul (např. &quot;Architektonický expert&quot;)
+                    </label>
+                    <input
+                      type="text"
+                      value={userSettings.title}
+                      onChange={(e) => handleUserSettingsChange('title', e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      placeholder="Zadejte váš profesní titul"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Bio / Popisek
+                  </label>
+                  <textarea
+                    value={userSettings.bio}
+                    onChange={(e) => handleUserSettingsChange('bio', e.target.value)}
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                    placeholder="Profesionální architektonické a projekční služby s více než 10letou praxí v oboru..."
+                  />
                 </div>
                 
                 <div className="flex justify-end">

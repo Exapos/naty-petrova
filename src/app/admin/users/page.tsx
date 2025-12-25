@@ -8,6 +8,8 @@ interface User {
   id: string;
   email: string;
   name: string | null;
+  bio: string | null;
+  title: string | null;
   role: 'ADMIN' | 'EDITOR';
   createdAt: string;
 }
@@ -16,6 +18,8 @@ interface NewUser {
   email: string;
   password: string;
   name: string;
+  bio: string;
+  title: string;
   role: 'ADMIN' | 'EDITOR';
 }
 
@@ -31,6 +35,8 @@ export default function UsersManagement() {
     email: '',
     password: '',
     name: '',
+    bio: '',
+    title: '',
     role: 'EDITOR'
   });
 
@@ -78,7 +84,7 @@ export default function UsersManagement() {
 
       if (response.ok) {
         setShowCreateForm(false);
-        setNewUser({ email: '', password: '', name: '', role: 'EDITOR' });
+        setNewUser({ email: '', password: '', name: '', bio: '', title: '', role: 'EDITOR' });
         fetchUsers();
       } else {
         setError(data.error || 'Chyba při vytváření uživatele');
@@ -202,6 +208,29 @@ export default function UsersManagement() {
                   value={newUser.name}
                   onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Titul (např. &quot;Architektonický expert&quot;)
+                </label>
+                <input
+                  type="text"
+                  value={newUser.title}
+                  onChange={(e) => setNewUser({ ...newUser, title: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Bio / Popisek
+                </label>
+                <textarea
+                  value={newUser.bio}
+                  onChange={(e) => setNewUser({ ...newUser, bio: e.target.value })}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                  placeholder="Profesionální architektonické a projekční služby..."
                 />
               </div>
               <div>
@@ -330,6 +359,8 @@ export default function UsersManagement() {
                 const updates: Partial<User> = {
                   name: formData.get('name') as string,
                   email: formData.get('email') as string,
+                  bio: formData.get('bio') as string,
+                  title: formData.get('title') as string,
                   role: formData.get('role') as 'ADMIN' | 'EDITOR',
                 };
                 const password = formData.get('password') as string;
@@ -359,6 +390,29 @@ export default function UsersManagement() {
                       type="email"
                       defaultValue={editingUser.email}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Titul (např. &quot;Architektonický expert&quot;)
+                    </label>
+                    <input
+                      name="title"
+                      type="text"
+                      defaultValue={editingUser.title || ''}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Bio / Popisek
+                    </label>
+                    <textarea
+                      name="bio"
+                      rows={3}
+                      defaultValue={editingUser.bio || ''}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                      placeholder="Profesionální architektonické a projekční služby..."
                     />
                   </div>
                   <div>

@@ -19,7 +19,6 @@ const nextConfig = {
         hostname: 'localhost',
       },
     ],
-    domains: ['localhost'],
   },
 };
  

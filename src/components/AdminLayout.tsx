@@ -91,7 +91,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/admin', redirect: true });
+    // Logout with proper redirect - NextAuth will use NEXTAUTH_URL from env
+    await signOut({ redirect: true, callbackUrl: '/admin' });
   };
 
   // Filtruj navigaci podle rolí

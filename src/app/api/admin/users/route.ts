@@ -29,6 +29,8 @@ export async function GET() {
         id: true,
         email: true,
         name: true,
+        bio: true,
+        title: true,
         role: true,
         createdAt: true
       },
@@ -67,7 +69,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Access denied - Admin required' }, { status: 403 });
     }
 
-    const { email, password, name, role } = await request.json();
+    const { email, password, name, bio, title, role } = await request.json();
 
     // Validace
     if (!email || !password || !role) {
@@ -105,12 +107,16 @@ export async function POST(request: NextRequest) {
         email,
         password: hashedPassword,
         name: name || null,
+        bio: bio || null,
+        title: title || null,
         role: role as 'ADMIN' | 'EDITOR'
       },
       select: {
         id: true,
         email: true,
         name: true,
+        bio: true,
+        title: true,
         role: true,
         createdAt: true
       }
